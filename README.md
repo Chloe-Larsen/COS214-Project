@@ -1,568 +1,690 @@
-# TIVIDY – Workflow Management System
+# COS214 Project – TIVIDY
 
-## COS 214 – Practical 6
-
-**Project:** TIVIDY – Workflow Management System
-**Module:** COS 214
+**Workflow Management System**
+**COS 214 – Practical 6**
 **Year:** 2026
-**Language:** C++11
-**Team Size:** 5 members
 
-
-**GitHub Repository:**
-`<INSERT GITHUB REPOSITORY LINK>`
+**GitHub Repository:** Chloe-Larsen/COS214-Project
 
 ---
 
-# 1. Project Overview
+# Team Members
 
-TIVIDY is a **generic Workflow Management System (WfMS)** designed to model, manage and execute structured workflows.
-
-The system separates the definition of a workflow from the individual running instances created from that definition. This allows the same workflow engine to support different business processes while keeping each running instance independent.
-
-For this practical, the selected application scenario is **employee onboarding across HR, IT, Finance and Training departments**.
-
-The employee-onboarding scenario is an application of TIVIDY rather than the definition of TIVIDY itself. The underlying workflow engine is intended to support other workflow scenarios through different workflow definitions, rules, participants and integrations.
-
----
-
-# 2. Project Objectives
-
-The main objectives of TIVIDY are to:
-
-* Represent reusable and versioned workflow definitions.
-* Create independent running workflow instances from definitions.
-* Represent individual work items, stages and nested sub-processes.
-* Support sequential, conditional and parallel workflow execution.
-* Manage dependencies between activities.
-* Determine when work becomes available.
-* Assign work to suitable participants according to configurable policies.
-* Manage work-item lifecycles and valid state transitions.
-* Support approval, rejection, correction, cancellation and escalation.
-* Support deadlines and exception handling.
-* Allow workflow behaviour to vary through configurable strategies and policies.
-* Publish events for notifications, monitoring and auditing.
-* Integrate with external systems through common interfaces.
-* Maintain workflow history and audit information.
-* Support necessary rollback or restoration of workflow state.
-* Allow workflow definitions to evolve through versioning.
-* Keep the core workflow engine independent from specific business applications.
+| Name            | Student Number |
+| --------------- | -------------- |
+| Caleb Jennings  | 25173805       |
+| Anchen Kruger   | 25073703       |
+| Chloe Larsen    | 25004141       |
+| Caitlin Moodley | 25128443       |
+| Shanna Reinecke | 25008260       |
 
 ---
 
-# 3. Workflow Management System Research
+# Task 1: Research Workflow Management Systems
 
-Research into Workflow Management Systems showed that a workflow consists of structured activities, rules and control information used to coordinate work.
+## Workflow and Workflow Management Systems
 
-A Workflow Management System provides the runtime environment that interprets workflow definitions, creates workflow instances and coordinates people and external applications.
+The Workflow Management Coalition (WfMC) defines a workflow as the computerised automation of a business process, in whole or in part. A Workflow Management System (WfMS) provides the run-time environment that interprets process definitions, creates workflow instances, and interacts with the people and applications that perform activities [1].
 
-The research identified several important concepts that influence the design of TIVIDY:
+The WfMC reference model separates the workflow engine from definition tools, worklist clients, invoked applications, other workflow engines and monitoring tools. These components communicate through defined interfaces [1].
 
-* Workflow definitions describe the structure and rules of a process.
-* Workflow instances represent individual executions of a definition.
-* Work items represent units of work within a workflow.
-* Sub-processes allow workflows to contain groups of related activities.
-* Dependencies determine when activities may proceed.
-* Assignment determines which participant performs a work item.
-* Routing determines which activity or branch executes next.
-* Events allow other components to react to workflow occurrences.
-* External systems can be integrated through defined interfaces.
-* History and monitoring provide information about workflow execution.
-* Versioning allows definitions to change without unexpectedly changing running instances.
+## Workflow Definitions and Instances
 
-The research therefore supports separating **workflow definition**, **workflow execution**, **work management**, **routing**, **assignment**, **events**, **integration** and **monitoring** into appropriate responsibilities.
+A workflow definition describes the structure and rules of a process. It contains activities, routing rules, roles and control information. Multiple workflow instances can be created from the same definition, with each instance maintaining its own state and data [1][2].
 
-Detailed research and references are provided in the project documentation.
+TIVIDY therefore separates:
+
+* **Workflow Definition** – the reusable blueprint of a workflow.
+* **Workflow Instance** – one running execution of that definition.
+
+The definition contains the structure, rules, roles and data requirements. The instance contains its current state, actual data, assignments, decisions and history.
+
+Workflow definitions are versioned. Existing instances remain associated with the definition version from which they were created. Changes to a workflow definition therefore create a new version rather than unexpectedly changing existing running instances [5][6].
+
+## Work Items, Hierarchy and Dependencies
+
+A workflow consists of activities or work items that may be organised into stages and sub-processes [1][2].
+
+BPMN also supports sub-processes and reusable call activities [7]. Workflow patterns identify common control-flow structures such as:
+
+* Sequential execution.
+* Choice and conditional routing.
+* Parallel execution.
+* Synchronisation and joins.
+* Iteration and repetition [3].
+
+TIVIDY therefore requires a hierarchy capable of representing individual work items, stages and nested sub-processes.
+
+Dependencies determine when work is allowed to proceed. A work item may remain blocked until its required dependencies have been completed.
+
+## Participants, Assignment and Routing
+
+Workflow research separates control-flow, data and resource perspectives [3][4].
+
+The resource perspective concerns who performs work and how work is distributed. Assignment may be based on:
+
+* Roles.
+* Explicit participants.
+* Workload.
+* Availability.
+* Business rules [4].
+
+Routing and assignment are separate responsibilities:
+
+* **Routing** determines what activity or branch happens next.
+* **Assignment** determines who performs the selected work.
+
+TIVIDY therefore allows these policies to vary independently.
+
+## Approval, Rejection, Escalation and Failure
+
+Approval and rejection are workflow outcomes rather than special cases inside the workflow engine.
+
+The workflow may support:
+
+* Approval.
+* Rejection.
+* Revision and rework.
+* Escalation.
+* Deadlines.
+* Exception handling.
+* Cancellation.
+
+In the employee-onboarding scenario, approval begins with the Line Manager. If the request exceeds the manager's authority, it is passed to the Director. If neither has sufficient authority, the request remains pending for HR to resolve.
+
+## Events and External Systems
+
+Workflow events allow other components to react to workflow occurrences.
+
+Examples include:
+
+* Work-item completion.
+* Dependency changes.
+* Notifications.
+* Audit events.
+* Monitoring events.
+* External-service failures.
+
+External applications are accessed through defined interfaces rather than being embedded directly inside the workflow engine [1][7].
+
+## History, Monitoring and Reporting
+
+Workflow monitoring and administration are separate concerns within the WfMC reference model [1].
+
+TIVIDY therefore records workflow history such as:
+
+* Actions.
+* State changes.
+* Decisions.
+* Timestamps.
+* Assignees.
+* Notifications.
+* Rollback checkpoints.
+
+This information can be used by monitoring, auditing and reporting components.
+
+## Reusability and Configurability
+
+The research identified several responsibilities that should remain configurable:
+
+* Workflow definitions.
+* Workflow execution.
+* Assignment.
+* Routing.
+* Approval.
+* Escalation.
+* Events.
+* External integrations.
+* History and monitoring.
+
+The workflow engine should remain generic while workflow-specific rules and policies can vary between definitions.
+
+## Design Implications for TIVIDY
+
+The research resulted in the following design implications:
+
+1. Separate workflow definitions from workflow instances.
+2. Give each instance its own data, state and history.
+3. Represent work using a hierarchy of items, stages and sub-processes.
+4. Make assignment, routing, approval and escalation configurable.
+5. Give work items state-dependent lifecycles.
+6. Represent dependencies so that unavailable work can become blocked.
+7. Keep external systems behind interfaces and adapters.
+8. Allow events to notify independent components.
+9. Support workflow history and appropriate rollback.
+10. Keep workflow definitions versioned and immutable once published.
+
+## References
+
+[1] Hollingsworth, D. (1995). *Workflow Reference Model*. Winchester, Hampshire, UK: Workflow Management Coalition.
+
+[2] Workflow Management Coalition. *Terminology & Glossary*. Available at: https://wfmc.org/wp-content/uploads/2022/09/TC-1011_term_glossary_v3.pdf.
+
+[3] van der Aalst, W.M.P., ter Hofstede, A.H.M., Kiepuszewski, B. and Barros, A.P. (2003). *Workflow Patterns*. Distributed and Parallel Databases, 14(1), pp. 5–51. doi:10.1023/a:1022883727209.
+
+[4] Russell, N., ter Hofstede, A.H.M., Edmond, D. and van der Aalst, W.M.P. (2005). *Workflow Resource Patterns*. Queensland University of Technology and Eindhoven University of Technology. Available at: [www.workflowpatterns.com](http://www.workflowpatterns.com).
+
+[5] Camunda.io. (2026). *Versioning Process Definitions*. Camunda 8 Documentation. Available at: https://docs.camunda.io/docs/components/best-practices/operations/versioning-process-definitions/.
+
+[6] Camunda 7 Community. (2026). *Process Instance Migration*. Available at: https://docs.camunda.org/manual/latest/webapps/cockpit/bpmn/process-instance-migration/.
+
+[7] Object Management Group. (2011). *Business Process Model and Notation (BPMN) Version 2.0*.
 
 ---
 
-# 4. Selected Scenario – Employee Onboarding
+# Task 2: Define the Scenario and System
 
-## 4.1 Scenario Description
+## Selected Scenario
 
-The selected scenario is employee onboarding in a medium-sized organisation containing:
+The selected scenario is **employee onboarding across HR, IT, Finance/Payroll and Training**.
 
-* HR
-* IT
-* Finance/Payroll
-* Training
+TIVIDY itself is a generic Workflow Management System. Employee onboarding is the selected application scenario used to demonstrate how the workflow engine can coordinate a real process.
 
-The workflow starts after an employee accepts an offer and HR creates an onboarding instance.
-
-The workflow coordinates the preparation required for the employee to join the organisation.
-
-A successful workflow ends when:
-
-1. Employee information has been accepted.
-2. The onboarding plan has been approved.
-3. Required IT preparation has been completed.
-4. Payroll registration has been confirmed.
-5. Orientation has been completed.
-6. Any additional required work has been completed.
-7. HR has completed the final readiness review.
-8. The external employee record has been successfully updated.
-
-Rejected and cancelled instances retain their history and reasons.
+The same workflow engine could support other processes by using different workflow definitions, rules, participants and external integrations.
 
 ---
 
-# 5. Main Workflow
+## Initial Scope of TIVIDY
 
-The employee-onboarding workflow follows the general process below:
+TIVIDY stores reusable, versioned workflow definitions and manages independent running workflow instances.
 
-```text
-Employee accepts offer
-        |
-        v
-HR creates onboarding instance
-        |
-        v
-Employee submits information
-        |
-        v
-HR verifies information
-        |
-   +----+----+
-   |         |
-Invalid    Valid
-   |         |
-   v         v
-Correction  Approval
-   |         |
-   +---------+
-             |
-             v
-      Approval decision
-        /      |       \
-   Approve   Revise   Reject
-      |         |        |
-      |         |        v
-      |         |      End
-      |         |
-      |         +----> Correction
-      |
-      v
-Parallel preparation
-   /       |        \
-  IT    Payroll   Orientation
-   \       |        /
-    \      |       /
-     +-----+------+
-           |
-           v
-    HR readiness review
-           |
-      +----+----+
-      |         |
-   Defect      Ready
-      |         |
-      v         v
- Correction   Update
-                 |
-                 v
-              Complete
-```
+A **workflow definition** describes a process.
 
-The workflow also supports additional tasks based on conditions such as work location and job role.
+A **workflow instance** represents one execution of that process and maintains its own:
+
+* Data.
+* Work-item states.
+* Assignees.
+* Progress.
+* Decisions.
+* History.
+
+Completing work in one instance does not affect another instance.
+
+Published workflow definitions are treated as immutable. Changes create a new definition version for future instances, while existing instances continue using their selected version.
 
 ---
 
-# 6. TIVIDY System Scope
+## Main Responsibilities of the Workflow Manager
 
-TIVIDY is responsible for:
+The workflow manager is responsible for:
 
-* Workflow definition management.
-* Workflow instance creation and tracking.
-* Work-item availability.
-* Work-item assignment.
-* Workflow routing.
-* Dependency management.
-* Work-item lifecycle management.
-* Approval and escalation coordination.
-* Event publication.
+* Representing individual work items, stages and nested sub-processes.
+* Traversing workflow structures.
+* Determining when work becomes available.
+* Assigning work to suitable participants.
+* Enforcing valid work-item actions.
+* Managing completion, rejection, cancellation and escalation.
+* Supporting sequential, conditional and parallel workflow execution.
+* Managing joins between parallel branches.
+* Managing dependencies between work items.
+* Applying optional validation, security, priority and auditing behaviour.
+* Executing participant actions through consistent commands.
+* Maintaining workflow history.
+* Supporting appropriate rollback and restoration.
+* Publishing workflow events.
+* Communicating with external systems through common interfaces.
+
+---
+
+## System Boundaries
+
+TIVIDY controls:
+
+* Work availability.
+* Assignment.
+* Workflow progression.
+* Routing.
+* Tracking.
+* Approval coordination.
+* Escalation.
+* Events.
 * Workflow history.
-* Integration with external systems.
 
-TIVIDY does **not** directly perform the specialised work of external systems.
+TIVIDY does **not** directly perform specialised external work.
 
 For example:
 
 * IT performs account and equipment provisioning.
-* Payroll systems perform payroll registration.
+* Payroll performs employee registration.
 * Email services deliver notifications.
 * External employee-record systems store employee information.
 
-TIVIDY coordinates these activities and records their results.
+Organisational approval limits and process rules are supplied through configurable policies.
+
+Participants make approval decisions, while external systems perform their own specialised functions.
 
 ---
 
-# 7. Workflow Definitions and Instances
+# Workflow Definitions and Running Instances
 
-TIVIDY distinguishes between a **Workflow Definition** and a **Workflow Instance**.
-
-### Workflow Definition
-
-A workflow definition is the reusable blueprint for a process.
-
-It contains information such as:
-
-* Workflow ID
-* Name
-* Version
-* Work items
-* Stages
-* Sub-processes
-* Dependencies
-* Required roles
-* Validation rules
-* Routing rules
-* Approval rules
-* Deadline configuration
-
-### Workflow Instance
-
-A workflow instance represents one execution of a workflow definition.
-
-It contains its own:
-
-* Instance ID
-* Current state
-* Employee data
-* Work-item states
-* Actual assignees
-* Decisions
-* Progress
-* History
-* Notifications
-* Rollback checkpoints
-
-Multiple instances can therefore execute the same definition independently.
-
-A change to one instance does not affect another instance.
-
-Published workflow definitions are treated as immutable. Changes create a new version for future instances, while existing instances continue using their selected definition version.
+| Information | Workflow Definition                                | Running Instance                                                           |
+| ----------- | -------------------------------------------------- | -------------------------------------------------------------------------- |
+| Identity    | Definition ID, name and version                    | Instance ID and selected definition version                                |
+| Work        | Work-item stages, sub-processes and dependencies   | Independent work items, states and progress                                |
+| Rules       | Roles, validation, routing, approval and deadlines | Selected branches, evaluated decisions and actual deadlines                |
+| Data        | Required input fields and initial setup            | Employee details, documents, review results and service responses          |
+| People      | Participant and role requirements                  | Actual assignees and decisions                                             |
+| History     | Definition/version information                     | Actions, timestamps, state changes, notifications and rollback checkpoints |
 
 ---
 
-# 8. Major Workflow Responsibilities
+## Parts of the System That Can Vary
 
-## 8.1 Work Items
+Different workflow definitions can vary in:
 
-A work item represents an individual piece of work that must be completed.
+* Work structure.
+* Required roles.
+* Deadlines.
+* Approval limits.
+* Validation rules.
+* Routing rules.
+* Assignment rules.
+* External services.
+* Optional work-item behaviour.
 
-Examples include:
+Routing and assignment vary independently.
 
-* Verify employee information
-* Approve onboarding plan
-* Create employee account
-* Register employee for payroll
-* Complete orientation
-* Perform final readiness review
+**Routing** determines which activity or branch proceeds next.
 
-Work items have their own lifecycle and can only perform valid actions for their current state.
+**Assignment** determines which eligible participant performs the work.
 
 ---
 
-## 8.2 Stages and Sub-processes
+# Employee Onboarding Scenario
 
-Related work items can be grouped into stages or sub-processes.
+## Organisation and Environment
 
-For example, IT preparation is a nested sub-process containing:
+The scenario takes place in a medium-sized organisation containing:
 
-1. Create account.
-2. Prepare access.
-3. Prepare equipment.
+* HR.
+* IT.
+* Finance/Payroll.
+* Training.
+
+After an employee accepts an offer, HR creates the onboarding instance.
+
+---
+
+## Process Being Managed
+
+The process coordinates the preparation required for a newly hired employee to join the organisation.
+
+It begins when:
+
+1. The employee accepts the offer.
+2. HR creates the onboarding instance.
+3. Employee information is submitted and verified.
+
+It ends when:
+
+* Required preparation has been completed.
+* HR has completed the final readiness review.
+* The external employee record has been successfully updated.
+
+An instance can also end through rejection or cancellation.
+
+Each employee has a separate onboarding instance.
+
+The instance stores information such as:
+
+* Department.
+* Job role.
+* Work location.
+* Start date.
+* Resource requirements.
+
+---
+
+## Participants and Responsibilities
+
+| Participant / Role      | Responsibility                                                                                                                                 |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| New Employee            | Submit information and documents; correct missing or incorrect details; attend orientation                                                     |
+| HR Officer              | Create the instance; verify information; coordinate corrections; review revised plans; perform final readiness review; resolve approval issues |
+| Line Manager            | Check approval authority; review required access/resources; approve, revise or reject                                                          |
+| Director                | Handle requests outside lower approval authority; approve, revise or reject escalated requests                                                 |
+| IT Staff                | Prepare accounts, role-appropriate access and required equipment                                                                               |
+| Finance / Payroll Staff | Verify payroll information and confirm payroll registration                                                                                    |
+| Training Coordinator    | Arrange the initial orientation briefing and record completion                                                                                 |
+
+---
+
+# Major Pieces of Work
+
+## 1. Prepare the Onboarding Instance
+
+Based on the selected workflow definition version, HR creates the onboarding instance.
+
+The instance stores:
+
+* Employee reference.
+* Department.
+* Job role.
+* Start date.
+* Work location.
+* Resource requirements.
+
+Required preparation work is then made available and assigned to eligible participants.
+
+---
+
+## 2. Check Information and Obtain Approval
+
+The employee submits the required information.
+
+HR verifies whether the information is complete and valid.
+
+If information is missing or incorrect:
+
+```text
+Employee
+   |
+   v
+Correct Information
+   |
+   v
+HR Reviews Information
+   |
+   v
+Information Valid?
+```
+
+The correction and review cycle continues until the required information is accepted.
+
+Once the information is accepted, TIVIDY creates and routes the approval request.
+
+---
+
+## 3. Approval and Escalation
+
+Approval begins with the **Line Manager**.
+
+The manager first checks whether they have sufficient approval authority.
+
+```text
+Route Request
+      |
+      v
+Line Manager Checks Authority
+      |
+   +--+--+
+   |     |
+  Yes    No
+   |     |
+   v     v
+Manager Director
+Decision Checks Authority
+         |
+      +--+--+
+      |     |
+     Yes    No
+      |     |
+      v     v
+ Director  HR Resolves
+ Decision  Approval Issue
+```
+
+The first authorised handler makes the decision.
+
+The decision can be:
+
+* **Approve** – departmental preparation begins.
+* **Revise** – the plan is returned for correction and review.
+* **Reject** – the rejection is recorded and the approval route ends.
+
+If the Line Manager does not have sufficient authority, the request is passed to the Director.
+
+If the Director also lacks sufficient authority, the request remains pending for HR to resolve.
+
+---
+
+## 4. Prepare the Employee in Parallel
+
+After approval, TIVIDY activates the required preparation branches.
+
+The main branches are:
+
+```text
+              Approved
+                  |
+            +-----+-----+
+            |     |     |
+            v     v     v
+           IT   Payroll Orientation
+            |     |     |
+            +-----+-----+
+                  |
+                 Join
+```
+
+### IT Preparation
+
+IT prepares:
+
+1. Employee account.
+2. Required access.
+3. Equipment.
+
+The IT preparation is a nested sub-process.
 
 Account creation must be completed before account access can be granted.
 
-This hierarchy allows TIVIDY to represent both individual work and larger groups of work.
+### Payroll Preparation
+
+Finance/Payroll:
+
+1. Verifies payroll information.
+2. Registers the employee.
+3. Provides confirmation of registration.
+
+### Orientation
+
+Training:
+
+1. Schedules the orientation.
+2. Conducts the initial briefing.
+3. Records completion.
+
+These branches can progress independently.
+
+The workflow does not require separate execution threads merely because the branches are logically parallel.
 
 ---
 
-## 8.3 Routing
+## 5. Conditional Additional Work
 
-Routing determines what happens next in a workflow.
+Additional tasks may be activated according to workflow conditions.
 
-TIVIDY supports:
+For example:
 
-* Sequential routing.
-* Conditional routing.
-* Parallel branches.
-* Joins.
-* Loops.
-* Rework.
-* Rejection.
-* Escalation.
+* Remote employees may require remote-access preparation.
+* On-site employees may require site-access preparation.
+* Certain job roles may require additional equipment or access.
 
-For example, invalid employee information routes back to the employee for correction, while valid information continues to approval.
+Only tasks activated by the selected workflow route contribute to the completion conditions.
 
 ---
 
-## 8.4 Assignment
+## 6. Join the Branches and Review Readiness
 
-Assignment determines which eligible participant should perform a work item.
+The required branches join before the final HR review.
 
-Assignment can be based on:
+All required branches and activated additional tasks must be completed before the join can proceed.
 
-* Role.
-* Business rules.
-* Workload.
-* Availability.
-* Other configured policies.
+HR then performs the final readiness review.
 
-Assignment is kept separate from routing because routing determines **what happens next**, while assignment determines **who performs the work**.
-
----
-
-## 8.5 Events
-
-Events allow components to react to workflow occurrences.
-
-Examples include:
-
-* Work item completed.
-* Work item overdue.
-* Approval rejected.
-* Instance completed.
-* Notification required.
-* External update failed.
-
-Events can be used by monitoring, notification and auditing components without placing all of this behaviour inside the workflow engine.
-
----
-
-# 9. Selected Design Patterns
-
-TIVIDY uses ten GoF design patterns to address different responsibilities within the workflow system.
-
-| Pattern                     | TIVIDY Application                                                                                                                |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| **Composite**               | Represents individual work items and groups/nested sub-processes as a common hierarchy.                                           |
-| **Iterator**                | Provides a consistent way to traverse workflow items without exposing the underlying collection structure.                        |
-| **State**                   | Manages the lifecycle and valid transitions of work items and workflow instances.                                                 |
-| **Strategy**                | Allows assignment and routing policies to vary independently from the workflow engine.                                            |
-| **Decorator**               | Adds optional behaviour such as validation, security, priority or auditing to selected work items.                                |
-| **Command**                 | Encapsulates workflow actions such as approve, reject, complete, cancel and escalate.                                             |
-| **Observer**                | Allows monitoring, notification and auditing components to react to workflow events.                                              |
-| **Memento**                 | Stores checkpoints of workflow state to support restoration or rollback where appropriate.                                        |
-| **Adapter**                 | Allows TIVIDY to communicate with external systems that have incompatible interfaces.                                             |
-| **Chain of Responsibility** | Supports approval escalation by passing a request through authorised handlers until an appropriate handler can make the decision. |
-| **Abstract Factory**        | Provides compatible families of workflow-related objects for different workflow definitions or configurations.                    |
-
-The patterns are not included simply to increase the number of patterns. Each pattern addresses a specific design problem within TIVIDY.
-
----
-
-# 10. Pattern Responsibilities
-
-## Composite
-
-The Composite pattern represents individual work items and groups of work items through a common interface.
-
-This is useful because TIVIDY must support:
-
-* Individual work items.
-* Stages.
-* Nested sub-processes.
-* Groups of related activities.
-
-A workflow can therefore be treated as a hierarchy without the client needing separate logic for individual and grouped work.
-
----
-
-## Iterator
-
-The Iterator pattern allows TIVIDY to traverse workflow structures without exposing how the underlying collection is stored.
-
-It can be used to:
-
-* Visit workflow items.
-* Find pending work.
-* Calculate progress.
-* Traverse nested workflow structures.
-
----
-
-## State
-
-The State pattern manages the lifecycle of workflow items.
-
-Example states include:
+If a defect is found:
 
 ```text
-Pending
-   |
-   v
-Available
-   |
-   v
-Assigned
-   |
-   v
-In Progress
-   |
-   +---------> Rejected
-   |
-   +---------> Cancelled
-   |
-   v
-Completed
+Final Readiness Review
+          |
+       +--+--+
+       |     |
+    Defect  Ready
+       |     |
+       v     v
+ Correction Update
 ```
 
-Different states allow or prevent different actions.
+The affected work is corrected and the workflow returns to the readiness review.
 
 ---
 
-## Strategy
+## 7. Record the Outcome and Close the Instance
 
-The Strategy pattern allows assignment and routing algorithms to be changed without modifying the workflow engine.
+Once HR accepts the required results, the external employee record is updated.
 
-Examples include:
+The workflow is only successfully completed once the external system confirms the update.
 
-* Assign by role.
-* Assign by workload.
-* Assign by business rule.
-* Route sequentially.
-* Route conditionally.
+```text
+HR Readiness Review
+        |
+        v
+External Employee Record Update
+        |
+        v
+Confirmation Received
+        |
+        v
+Workflow Completed
+```
 
----
-
-## Decorator
-
-The Decorator pattern allows optional behaviour to be attached to work items without changing the original work-item implementation.
-
-Possible decorators include:
-
-* Validation.
-* Security checking.
-* Priority handling.
-* Auditing.
-
-This supports the requirement that optional behaviour can be applied only where needed.
+TIVIDY then publishes a completion event for monitoring, auditing and notification components.
 
 ---
 
-## Command
+# Important Decisions and Routing Points
 
-The Command pattern represents workflow actions as objects.
+The employee-onboarding workflow follows these rules:
 
-Examples include:
-
-* Complete work item.
-* Approve.
-* Reject.
-* Cancel.
-* Escalate.
-* Roll back.
-
-This separates the request for an action from the object that performs it and also supports recording or reversing appropriate operations.
-
----
-
-## Observer
-
-The Observer pattern allows multiple components to react when workflow events occur.
-
-For example, when an onboarding instance is completed:
-
-* Monitoring can update statistics.
-* Auditing can record the event.
-* Notification services can send completion notices.
-
-The workflow engine does not need to contain all of this behaviour itself.
+1. Missing or invalid information is returned to the employee for correction.
+2. HR must verify the corrected information before approval.
+3. Approval is selected according to resource requirements and configured approval authority.
+4. The Line Manager is checked first.
+5. Requests outside the manager's authority are passed to the Director.
+6. The first authorised approval handler makes the decision.
+7. Approval activates departmental preparation.
+8. Revision sends the plan back for correction and review.
+9. Rejection ends the approval route.
+10. If neither manager nor director has sufficient authority, HR resolves the approval issue.
+11. IT, Payroll and Orientation run as parallel branches.
+12. The join waits for all required branches and activated tasks.
+13. HR performs the final readiness review.
+14. The external employee-record update must be confirmed before successful closure.
+15. Overdue work may trigger reminders, reassignment or escalation depending on configured rules.
 
 ---
 
-## Memento
+# Dependencies
 
-The Memento pattern stores workflow state at appropriate checkpoints.
-
-This can support:
-
-* Rollback.
-* Recovery.
-* Restoration of workflow state.
-
-Memento is intended for workflow state restoration rather than pretending that every external side effect can automatically be undone.
-
----
-
-## Adapter
-
-The Adapter pattern allows TIVIDY to communicate with external systems through a common interface.
-
-Examples include adapters for:
-
-* Payroll systems.
-* IT provisioning systems.
-* Employee-record systems.
-* Email services.
-
-This keeps external system-specific APIs outside the core workflow model.
-
----
-
-## Chain of Responsibility
-
-The Chain of Responsibility pattern is used for approval escalation.
+Dependencies control whether work can progress.
 
 For example:
 
 ```text
-Approval Request
+Create IT Account
        |
        v
-Line Manager
+Prepare Account Access
        |
-       | insufficient authority
        v
-Director
-       |
-       | insufficient authority
-       v
-Pending / HR Resolution
+Prepare Equipment
 ```
 
-Each handler checks whether it has sufficient authority to handle the request.
+A work item cannot progress if its required dependencies are not satisfied.
+
+The `Item` design therefore maintains dependencies between work items.
+
+When dependencies are not satisfied, an item may enter the **Blocked** state.
 
 ---
 
-## Abstract Factory
+# Failures and Exception Routes
 
-The Abstract Factory pattern can provide compatible families of workflow-related objects based on a selected workflow definition or configuration.
-
-This allows different workflow configurations to create compatible:
-
-* Work-item components.
-* Routing components.
-* Assignment components.
-* Approval components.
-
-The main workflow coordinator does not need to know the concrete classes being created.
+| Condition                               | Workflow Response                                                           |
+| --------------------------------------- | --------------------------------------------------------------------------- |
+| Missing or invalid information          | Request correction, record the reason and repeat verification               |
+| Approval requires revision              | Return the plan for correction and review                                   |
+| Approval is rejected                    | Record the reason and stop the approval route                               |
+| Assignee unavailable or deadline passed | Keep pending, reassign or escalate                                          |
+| Departmental preparation fails          | Keep the final join blocked and retry/correct the affected work             |
+| Required external update fails          | Record the response and retry/escalate; successful closure remains blocked  |
+| Notification delivery fails             | Record delivery failure and arrange a retry                                 |
+| Employee withdraws or HR cancels        | Cancel remaining internal work, retain history and perform required cleanup |
 
 ---
 
-# 11. UML Design
+# External Systems
 
-The UML diagrams document both the structure and runtime behaviour of TIVIDY.
+TIVIDY communicates with external systems through interfaces and adapters.
 
-## Activity Diagrams
+External systems include:
 
-Three Activity Diagrams are included to demonstrate the workflow at different levels.
+* **Email service** – assignment, correction, escalation and completion notifications.
+* **Employee-record / legacy contact system** – final employee-record update.
+* **IT provisioning system** – account, access and equipment preparation.
+* **Payroll system** – employee payroll registration.
 
-### Activity Diagram 1
+TIVIDY coordinates these services and records their results rather than performing their specialised functions itself.
 
-Provides the high-level employee-onboarding workflow.
+---
 
-### Activity Diagram 2
+# Expected Outcome
 
-Provides a more detailed view of workflow coordination, routing, assignment and parallel processing.
+A successfully completed onboarding instance records:
 
-### Activity Diagram 3
+* Accepted employee information.
+* An approved onboarding plan.
+* Completed IT preparation.
+* Confirmed payroll registration.
+* Completed orientation.
+* Completed required additional preparation.
+* Successful final readiness review.
+* Confirmed external employee-record update.
+* Complete workflow history.
 
-Provides a detailed view of a selected employee-onboarding process or sub-process.
+Rejected and cancelled instances retain their reasons and the work already performed.
 
-The activity diagrams demonstrate concepts including:
+---
+
+# Task 3: UML Activity Diagrams
+
+Three Activity Diagrams are included in the project documentation.
+
+## Activity Diagram 1
+
+The high-level employee-onboarding workflow.
+
+It shows the overall progression from onboarding initiation through approval, preparation, readiness review and completion.
+
+## Activity Diagram 2 – Handling Component Events
+
+This diagram demonstrates how workflow component events are handled.
+
+It focuses on event-driven interactions between workflow components and interested observers such as:
+
+* Dependency handling.
+* Notifications.
+* Audit logging.
+* Monitoring.
+
+## Activity Diagram 3 – Employee Onboarding Approval and Escalation
+
+This diagram provides the detailed approval flow for the employee-onboarding scenario.
+
+It includes:
+
+* Routing the approval request.
+* Line Manager authority checking.
+* Director escalation.
+* Approval.
+* Revision.
+* Rejection.
+* HR resolution when neither authority is sufficient.
+* Correction and re-review loops.
+
+The activity diagrams demonstrate:
 
 * Actions.
 * Decisions.
@@ -571,332 +693,813 @@ The activity diagrams demonstrate concepts including:
 * Parallel branches.
 * Forks and joins.
 * Swimlanes.
-* Sub-processes.
+* Workflow responsibilities.
 
 ---
 
-## Class Diagram
+# Task 4: Design Patterns
 
-The Class Diagram represents the static structure of TIVIDY.
+TIVIDY uses **10 GoF design patterns**.
 
-It identifies:
-
-* Core workflow classes.
-* Workflow definitions.
-* Workflow instances.
-* Work items.
-* Composite structures.
-* State classes.
-* Strategies.
-* Commands.
-* Observers.
-* Adapters.
-* Approval handlers.
-* Factories.
-
-The class diagram is designed to remain consistent with the selected design patterns and activity/sequence/state diagrams.
+| #  | Pattern                 | TIVIDY Application                                                                 |
+| -- | ----------------------- | ---------------------------------------------------------------------------------- |
+| 1  | Composite               | Represents individual work items, stages and nested sub-processes as a hierarchy   |
+| 2  | Iterator                | Traverses workflow structures without exposing their internal representation       |
+| 3  | State                   | Manages the lifecycle and valid transitions of work items                          |
+| 4  | Strategy                | Provides configurable assignment and routing algorithms                            |
+| 5  | Decorator               | Adds optional validation, priority, security and auditing behaviour                |
+| 6  | Command                 | Encapsulates workflow actions such as assign, start, complete, reject and escalate |
+| 7  | Observer                | Allows dependencies, notifications, auditing and monitoring to react to events     |
+| 8  | Memento                 | Stores workflow checkpoints for restoration and rollback                           |
+| 9  | Adapter                 | Provides a common interface to external systems                                    |
+| 10 | Chain of Responsibility | Handles multi-level approval and escalation                                        |
 
 ---
 
-## Sequence Diagrams
+## Composite
 
-Two Sequence Diagrams demonstrate important runtime interactions.
+### Structure
+
+* **Component:** `WorkComponent`
+* **Leaf:** `Item`
+* **Composite:** `Stage`, `SubProcess`
+* **Client:** `WorkflowInstance`, `WorkflowManager`
+
+### Design Problem
+
+TIVIDY's work is hierarchical. A workflow instance can contain stages, work items and nested sub-processes.
+
+The system should treat individual items and groups of items uniformly.
+
+### Collaboration
+
+`WorkflowInstance` holds the root of a `WorkComponent` tree.
+
+`execute()` can be called on the root and propagated recursively.
+
+`Stage` and `SubProcess` delegate execution to their children, while `Item` performs the actual work.
+
+### Why Appropriate
+
+The Composite pattern directly supports TIVIDY's requirement for hierarchical workflow structures.
+
+---
+
+# Iterator
+
+### Structure
+
+* **Iterator:** `WorkflowIterator`
+* **Concrete Iterators:** `DepthFirst`, `BreadthFirst`, `Filtered`
+* **Aggregate:** `WorkComponent`
+* **Concrete Aggregates:** `Stage`, `SubProcess`, `Item`
+
+### Design Problem
+
+TIVIDY needs to traverse workflow structures without exposing how the internal hierarchy is stored.
+
+### Collaboration
+
+`WorkComponent` provides `createIterator()`.
+
+Different iterators provide different traversal approaches:
+
+* Depth-first.
+* Breadth-first.
+* Filtered traversal.
+
+### Why Appropriate
+
+The Iterator pattern separates traversal logic from the Composite hierarchy.
+
+---
+
+# State
+
+### Structure
+
+* **Context:** `Item`
+* **State:** `State`
+* **Concrete States:**
+
+  * `Created`
+  * `Available`
+  * `Assigned`
+  * `InProgress`
+  * `Completed`
+  * `Rejected`
+  * `Cancelled`
+  * `Escalated`
+  * `Blocked`
+
+### Design Problem
+
+A work item has a complex lifecycle with different valid operations depending on its current state.
+
+### Collaboration
+
+`Item` delegates lifecycle operations to its current `State`.
 
 Examples include:
 
-1. Employee onboarding approval and escalation.
-2. Parallel departmental preparation and workflow completion.
+* `start()`
+* `complete()`
+* `reject()`
+* `escalate()`
+* `cancel()`
+* `assign()`
+* `unassign()`
 
-The diagrams demonstrate communication between TIVIDY components and external systems.
+Each concrete state determines which operations are valid.
+
+The `Blocked` state is used when required dependencies prevent an item from progressing.
+
+### Why Appropriate
+
+The State pattern prevents large conditional statements and localises lifecycle behaviour inside the appropriate state classes.
 
 ---
+
+# Strategy
+
+### Structure
+
+**Assignment:**
+
+* **Context:** `Item`
+* **Strategy:** `AssignmentStrategy`
+* **Concrete Strategies:** `RoleBased`, `WorkloadBased`, `RuleBased`
+
+**Routing:**
+
+* **Context:** `WorkflowInstance`
+* **Strategy:** `Routing`
+* **Concrete Strategies:** `Sequential`, `Parallel`, `Conditional`
+
+### Design Problem
+
+Different workflow definitions may use different assignment and routing rules.
+
+### Collaboration
+
+`Item` delegates assignment to its selected `AssignmentStrategy`.
+
+`WorkflowInstance` delegates routing decisions to its selected `Routing` strategy.
+
+### Why Appropriate
+
+The Strategy pattern allows assignment and routing algorithms to vary without modifying the main workflow engine.
+
+---
+
+# Decorator
+
+### Structure
+
+* **Component:** `WorkComponent`
+* **Concrete Component:** `Item`
+* **Decorator:** `ItemDecorator`
+* **Concrete Decorators:**
+
+  * `Validation`
+  * `Priority`
+  * `Audit`
+  * `Security`
+
+### Design Problem
+
+Some work items require additional behaviour without requiring a new work-item class.
+
+### Collaboration
+
+`ItemDecorator` wraps a `WorkComponent` and provides the same interface.
+
+Multiple decorators can be combined.
+
+### Why Appropriate
+
+The Decorator pattern allows optional behaviour to be added dynamically while keeping the underlying work-item structure unchanged.
+
+---
+
+# Command
+
+### Structure
+
+* **Command:** `WorkflowCommand`
+* **Concrete Commands:**
+
+  * `Assign`
+  * `Start`
+  * `Complete`
+  * `Reject`
+  * `Escalate`
+* **Receiver:** `Item`, `WorkflowInstance`
+* **Invoker:** `CommandInvoker`
+* **Client:** `WorkflowManager`
+
+### Design Problem
+
+Workflow actions need to be represented consistently and recorded for history and appropriate rollback.
+
+### Collaboration
+
+Each workflow action is represented by a `WorkflowCommand`.
+
+`CommandInvoker` executes commands and maintains command history.
+
+The command delegates the actual operation to its receiver.
+
+The Command pattern works with Memento to support appropriate undo/rollback behaviour.
+
+### Why Appropriate
+
+Command decouples the object requesting an action from the object performing it and allows actions to be recorded and managed consistently.
+
+---
+
+# Observer
+
+### Structure
+
+* **Subject:** `EventSource`
+* **Concrete Subject:** `WorkComponent`
+* **Observer:** `Observer`
+* **Concrete Observers:**
+
+  * `Dependency`
+  * `Notification`
+  * `AuditLogger`
+  * `Monitoring`
+
+### Design Problem
+
+Several components may need to react when a workflow event occurs.
+
+For example, completing one item may affect the availability of another item.
+
+### Collaboration
+
+When a `WorkComponent` changes state, observers receive an event.
+
+Observers react independently:
+
+* `Dependency` updates dependent work.
+* `Notification` sends notifications.
+* `AuditLogger` records the event.
+* `Monitoring` updates monitoring information.
+
+### Why Appropriate
+
+New observers can be added without modifying the workflow component producing the event.
+
+---
+
+# Memento
+
+### Structure
+
+* **Originator:** `Item`, `WorkflowInstance`
+* **Memento:** `WorkflowMemento`
+* **Caretaker:** `HistoryCaretaker`
+
+### Design Problem
+
+TIVIDY requires appropriate rollback and restoration of workflow state.
+
+### Collaboration
+
+Before an operation that may need restoration, the originator creates a `WorkflowMemento`.
+
+`HistoryCaretaker` stores the memento.
+
+If restoration is required, the originator restores its previous state from the memento.
+
+`CommandInvoker` works with Memento to support command rollback.
+
+### Why Appropriate
+
+Memento preserves the internal state of workflow objects without exposing their internal implementation to the caretaker.
+
+It is used for workflow state restoration and does not imply that external side effects can always be automatically undone.
+
+---
+
+# Adapter
+
+### Structure
+
+* **Target:** `ExternalSystemInterface`
+* **Adapters:**
+
+  * `LegacyCRMAdapter`
+  * `PaymentGatewayAdapter`
+  * `EmailServiceAdapter`
+* **Adaptees:**
+
+  * `LegacyCRM`
+  * `PaymentGateway`
+  * `EmailService`
+* **Clients:** `Item`, `WorkflowManager`
+
+### Design Problem
+
+TIVIDY must communicate with external systems that may expose different interfaces.
+
+### Collaboration
+
+The client communicates through `ExternalSystemInterface`.
+
+The adapter translates TIVIDY's request into the interface required by the external system.
+
+### Why Appropriate
+
+The Adapter pattern prevents external-system-specific interfaces from becoming part of the core workflow model.
+
+---
+
+# Chain of Responsibility
+
+### Structure
+
+* **Handler:** `ApprovalHandler`
+* **Concrete Handlers:**
+
+  * `ManagerApproval`
+  * `DirectorApproval`
+  * `VPApproval`
+  * `EscalationHandler`
+* **Clients:** `Item`, `WorkflowManager`
+
+### Design Problem
+
+Some approval requests require multiple levels of authority.
+
+### Collaboration
+
+An approval request is passed through the approval chain.
+
+The Line Manager is checked first.
+
+If the manager has sufficient authority, the manager handles the request.
+
+If not, the request is passed to the Director.
+
+If the Director also lacks authority, the request is passed to the appropriate escalation/resolution mechanism.
+
+In the selected employee-onboarding scenario, the demonstrated chain is:
+
+```text
+Line Manager
+     |
+     | insufficient authority
+     v
+Director
+     |
+     | insufficient authority
+     v
+HR Resolution
+```
+
+### Why Appropriate
+
+The Chain of Responsibility pattern supports configurable multi-level approval and escalation without requiring the workflow manager to contain all approval-level logic.
+
+---
+
+# Task 5: UML Class Diagram
+
+The UML Class Diagram documents the static structure of TIVIDY.
+
+The class diagram includes the main workflow concepts and their relationships, including:
+
+* Workflow definitions.
+* Workflow instances.
+* Work components.
+* Items.
+* Stages.
+* Sub-processes.
+* States.
+* Assignment strategies.
+* Routing strategies.
+* Commands.
+* Observers.
+* Mementos.
+* External-system adapters.
+* Approval handlers.
+* Dependencies.
+
+The current class diagram is stored in the repository as both an image and a Visual Paradigm project file.
+
+---
+
+# Task 6: Runtime Behaviour Diagrams
+
+## Sequence Diagram 1 – Linking to External Services
+
+This sequence diagram demonstrates how TIVIDY communicates with external systems through an interface and adapter.
+
+It demonstrates the separation between the workflow manager and external-system-specific implementations.
+
+## Sequence Diagram 2 – Execute Parallel Work
+
+This sequence diagram demonstrates how TIVIDY activates multiple independent workflow branches and waits for the required branches to complete before continuing.
+
+The scenario uses:
+
+* IT preparation.
+* Payroll preparation.
+* Orientation.
+
+The branches eventually join before the final readiness review.
 
 ## State Diagram
 
-The State Diagram describes the lifecycle of a workflow item or workflow instance.
+The State Diagram represents the lifecycle of a workflow item.
 
-It demonstrates valid transitions such as:
+The states include:
 
-```text
-Pending
-   ↓
-Available
-   ↓
-Assigned
-   ↓
-In Progress
-   ↓
-Completed
-```
+* Created.
+* Available.
+* Assigned.
+* In Progress.
+* Completed.
+* Rejected.
+* Cancelled.
+* Escalated.
+* Blocked.
 
-with alternative transitions for:
-
-* Rejection.
-* Cancellation.
-* Escalation.
-* Rework.
-* Failure.
+The `Blocked` state represents an item that cannot currently progress because required dependencies have not been satisfied.
 
 ---
 
-# 12. Design Decisions
+# Task 7: Design Decisions and Revisions
 
-The main design decisions made for TIVIDY include:
+## Design Decisions
 
 ### DD-01 – Separate Workflow Definitions from Instances
 
-Workflow definitions are reusable and versioned, while instances contain their own state, data, assignments and history.
+Workflow definitions are reusable and versioned, while running instances contain their own data, state and history.
 
-**Reason:** This prevents one running workflow from affecting another and allows definitions to evolve safely.
-
----
+**Reason:** This prevents one running instance from affecting another and allows workflow definitions to evolve safely.
 
 ### DD-02 – Use Composite for Workflow Hierarchy
 
-Individual work items and groups of work are represented using a common hierarchy.
+Work items, stages and sub-processes are represented through a common hierarchy.
 
-**Reason:** TIVIDY must support stages and nested sub-processes as well as individual activities.
-
----
+**Reason:** The workflow is not flat and must support nested work.
 
 ### DD-03 – Use Strategy for Assignment and Routing
 
-Assignment and routing behaviour can vary without modifying the main workflow engine.
+Assignment and routing behaviour can vary independently.
 
-**Reason:** Different organisations and workflow definitions may use different policies.
-
----
+**Reason:** Different workflow definitions may require different policies.
 
 ### DD-04 – Use State for Work-Item Lifecycle
 
-Work items use explicit states and valid transitions.
+Work items use explicit states and state-specific behaviour.
 
-**Reason:** This prevents invalid operations and makes workflow behaviour easier to understand and maintain.
-
----
+**Reason:** This prevents invalid actions and avoids large conditional statements.
 
 ### DD-05 – Use Parallel Workflow Branches
 
-After onboarding approval, IT, Payroll and Orientation may progress independently before joining at the final readiness review.
+IT, Payroll and Orientation can progress independently after approval.
 
-**Reason:** These activities do not always depend on one another and therefore do not need to execute sequentially.
-
----
+**Reason:** These activities do not necessarily depend on one another and can therefore be represented as parallel branches.
 
 ### DD-06 – Keep External Systems Behind Interfaces
 
 External services are accessed through common interfaces and adapters.
 
-**Reason:** The workflow engine should not depend directly on a particular external system implementation.
+**Reason:** The workflow engine should not depend directly on a specific external implementation.
+
+### DD-07 – Represent Work-Item Dependencies Explicitly
+
+Items maintain references to their dependencies.
+
+**Reason:** A work item cannot always progress until its required dependencies have been completed. This also supports the `Blocked` state.
 
 ---
 
-# 13. Revision History
+# Revisions
 
-| Version | Date        | Revision                                 | Reason                                       |
-| ------- | ----------- | ---------------------------------------- | -------------------------------------------- |
-| 0.1     | 29 Sep 2026 | Initial workflow-management research     | Establish system concepts and terminology    |
-| 0.2     | 30 Sep 2026 | Employee onboarding selected as scenario | Provide a concrete application of TIVIDY     |
-| 0.3     | Oct 2026    | Initial pattern selection                | Map GoF patterns to TIVIDY responsibilities  |
-| 0.4     | Oct 2026    | UML design developed                     | Align system structure and runtime behaviour |
-| 1.0     | 6 Oct 2026  | Practical 6 submission                   | Finalise research and initial design         |
+## Revision 1 – Adding the Blocked State
 
-*Dates and revisions should be updated to reflect the team's actual Git history.*
+### Problem
+
+The original design did not adequately represent work items that cannot progress because required dependencies have not been completed.
+
+### Change
+
+The `Blocked` state was added to the State pattern.
+
+The following functions were also introduced:
+
+* `evaluateReadiness()`
+* `dependencySatisfied()`
+
+### Reason
+
+The change provides the necessary interface for determining whether an item is ready to progress.
+
+### UML Updates
+
+* `Blocked` was added as a concrete state.
+* `dependencySatisfied()` was added to `State`.
+* `evaluateReadiness()` was added to `State`.
+* `evaluateReadiness()` was added to `Item`.
 
 ---
 
-# 14. GitHub Workflow
+## Revision 2 – Adding Missing Functions to Item
+
+### Problem
+
+The original class design did not contain all functions required for the selected design patterns to interact correctly with `Item`.
+
+### Missing Functionality
+
+The original design did not contain:
+
+* An accessor for `currentState`.
+* A mutator for `currentState`.
+* Assignment functionality.
+* Unassignment functionality.
+* A function to initiate the approval chain.
+* Memento save functionality.
+* Memento restore functionality.
+
+### Change
+
+The following functions were added:
+
+```text
+getState()
+setState()
+assign(person : Participant)
+unassign()
+save()
+restore(memento : WorkflowMemento)
+```
+
+### Reason
+
+The selected patterns require `Item` to interact with State, Strategy, Command, Chain of Responsibility and Memento.
+
+---
+
+## Revision 3 – Adding Missing State Functions
+
+### Problem
+
+The State class did not contain the functions required to support assignment and unassignment.
+
+### Change
+
+The following functions were added:
+
+```text
+assign(item : Item*, person : Participant*)
+unassign()
+```
+
+### Reason
+
+The functions allow the Assigned state to correctly manage assignment behaviour.
+
+---
+
+## Revision 4 – Adding Dependencies to Item
+
+### Problem
+
+The original design represented dependency behaviour through the Observer pattern but did not explicitly store the dependencies on the `Item` itself.
+
+### Change
+
+The `Item` class was updated to maintain a collection of dependencies:
+
+```text
+vector<Item*> dependencies
+```
+
+The following functions were added:
+
+```text
+addDependency(item : Item*)
+removeDependency(item : Item*)
+```
+
+### Reason
+
+A work item cannot progress if its required dependencies have not been satisfied. Explicit dependency storage allows TIVIDY to determine whether work is ready to proceed.
+
+---
+
+# Task 8: GitHub Workflow
 
 The project is maintained using Git and GitHub.
 
-Team members should:
+The team uses GitHub to:
 
-* Work on separate branches where appropriate.
-* Create meaningful commits.
-* Push work regularly.
-* Use descriptive commit messages.
-* Open pull requests when team review is required.
-* Review and integrate team members' work.
-* Keep the main branch in a usable state.
+* Store the project documentation.
+* Store UML diagrams.
+* Store Visual Paradigm project files.
+* Track changes.
+* Record contributions.
+* Maintain the project history.
 
-Example commit messages include:
-
-```text
-Add workflow management research
-Define employee onboarding scenario
-Add activity diagram design
-Document Composite and Iterator patterns
-Add initial class diagram
-Add sequence diagrams
-Update TIVIDY design decisions
-Complete Practical 6 documentation
-```
-
-The Git history should demonstrate genuine development over time rather than a single final upload.
+Team members should use meaningful commits and keep the repository organised.
 
 ---
 
-# 15. Repository Structure
+## Current Team Contribution Statement
 
-The repository is organised to separate documentation, diagrams and future implementation.
+| Team Member     | Current Contribution                                  |
+| --------------- | ----------------------------------------------------- |
+| Shanna Reinecke | Workflow Management System research and documentation |
+| Chloe Larsen    | UML Class Diagram                                     |
+| Caleb Jennings  | To be completed                                       |
+| Anchen Kruger   | To be completed                                       |
+| Caitlin Moodley | To be completed                                       |
+
+The contribution statement should be updated as additional work is committed to the repository.
+
+---
+
+# Repository Structure
+
+The current repository structure is:
 
 ```text
 COS214-Project/
 │
+├── .gitignore
 ├── README.md
 │
-├── docs/
-│   ├── research/
-│   │   ├── workflow-management-research.md
-│   │   └── references.md
-│   │
-│   ├── diagrams/
-│   │   ├── activity-diagrams/
-│   │   ├── class-diagram/
-│   │   ├── sequence-diagrams/
-│   │   └── state-diagrams/
-│   │
-│   ├── design-decisions/
-│   │   └── design-decisions.md
-│   │
-│   └── pattern-documentation/
-│       └── design-patterns.md
-│
-└── src/
-    └── implementation/
+└── docs/
+    ├── Scenario+System.md
+    │
+    ├── umlImages/
+    │   ├── Activity Diagram 2.jpg
+    │   ├── Activity Diagram 3.jpg
+    │   ├── Class Diagram.jpg
+    │   ├── Sequence Diagram 1.jpg
+    │   ├── Sequence_Diagram_2.jpg
+    │   └── State diagram .jpg
+    │
+    └── visualParadigm/
+        ├── Activity Diagram 2.vpp
+        ├── Activity_Diagram_3.vpp
+        ├── Class Diagram.vpp
+        ├── Sequence Diagram 1.vpp
+        ├── Sequence_Diagram_2.vpp
+        └── StateDiagram.vpp
 ```
 
-The `src` directory is reserved for future implementation work where applicable.
+The repository currently focuses on the **research, scenario definition and UML design** for TIVIDY.
+
+There is currently no `src/` implementation directory in the repository, so the README does not claim that an implementation structure exists.
 
 ---
 
-# 16. Documentation
+# Documentation Files
 
-The project documentation covers the following practical requirements:
-
-| Task   | Documentation                                         |
-| ------ | ----------------------------------------------------- |
-| Task 1 | Workflow Management System research and references    |
-| Task 2 | Employee onboarding scenario and TIVIDY system scope  |
-| Task 3 | Three UML Activity Diagrams                           |
-| Task 4 | Ten GoF design patterns and their TIVIDY applications |
-| Task 5 | UML Class Diagram                                     |
-| Task 6 | Two Sequence Diagrams and one State Diagram           |
-| Task 7 | Design decisions and revision history                 |
-| Task 8 | GitHub workflow and team contribution statement       |
+| File / Location           | Purpose                                               |
+| ------------------------- | ----------------------------------------------------- |
+| `README.md`               | Overall project documentation and submission overview |
+| `docs/Scenario+System.md` | Detailed scenario and system definition               |
+| `docs/umlImages/`         | Exported UML diagrams                                 |
+| `docs/visualParadigm/`    | Editable Visual Paradigm UML project files            |
 
 ---
 
-# 17. Team Members
+# Project Deliverables
 
-| Name     | Student Number     | Role / Contribution |
-| -------- | ------------------ | ------------------- |
-| `Anchen Kruger` | `u25073703` | `<Contribution>`    |
-| `Caitlin Moodley` | `u25128443` | `<Contribution>`    |
-| `Caleb Jennings` | `u25173805` | `<Contribution>`    |
-| `Chloe Larsen` | `u25004141` | `<Contribution>`    |
-| `Shanna Reinecke` | `u25008260` | `<Contribution>`    |
-
-
-Remove unused rows if the team contains five members.
-
----
-
-# 18. Team Contribution Statement
-
-Each team member contributed to the research, design and documentation of TIVIDY.
-
-Contributions include:
-
-* Workflow management research.
-* Scenario definition.
-* GoF design-pattern research and mapping.
-* UML activity diagrams.
-* UML class diagram.
-* UML sequence diagrams.
-* UML state diagram.
-* Design decisions and revision history.
-* GitHub repository management.
-* Final documentation and review.
-
-The detailed contribution of each member should be recorded in the final submission.
+| Task   | Deliverable                                               |
+| ------ | --------------------------------------------------------- |
+| Task 1 | Workflow Management System research and references        |
+| Task 2 | Employee onboarding scenario and TIVIDY system definition |
+| Task 3 | Three UML Activity Diagrams                               |
+| Task 4 | Ten GoF design patterns and their TIVIDY applications     |
+| Task 5 | UML Class Diagram                                         |
+| Task 6 | Two Sequence Diagrams and one State Diagram               |
+| Task 7 | Design decisions and revision history                     |
+| Task 8 | GitHub workflow and team contribution statement           |
 
 ---
 
-# 19. Project Status
+# Current UML Files
+
+The repository currently contains the following UML artefacts:
+
+### Activity Diagrams
+
+* `docs/umlImages/Activity Diagram 2.jpg`
+* `docs/umlImages/Activity Diagram 3.jpg`
+* `docs/visualParadigm/Activity Diagram 2.vpp`
+* `docs/visualParadigm/Activity_Diagram_3.vpp`
+
+### Class Diagram
+
+* `docs/umlImages/Class Diagram.jpg`
+* `docs/visualParadigm/Class Diagram.vpp`
+
+### Sequence Diagrams
+
+* `docs/umlImages/Sequence Diagram 1.jpg`
+* `docs/umlImages/Sequence_Diagram_2.jpg`
+* `docs/visualParadigm/Sequence Diagram 1.vpp`
+* `docs/visualParadigm/Sequence_Diagram_2.vpp`
+
+### State Diagram
+
+* `docs/umlImages/State diagram .jpg`
+* `docs/visualParadigm/StateDiagram.vpp`
+
+---
+
+# Project Status
+
+## Research and Scenario
 
 * [x] Workflow Management System research
-* [x] Workflow scenario selected
-* [x] TIVIDY scope defined
+* [x] References documented
+* [x] Employee onboarding scenario selected
+* [x] TIVIDY system scope defined
 * [x] Workflow definition and instance distinction defined
 * [x] Main workflow responsibilities identified
-* [x] Initial design patterns selected
-* [ ] Activity Diagram 1 completed
-* [ ] Activity Diagram 2 completed
-* [ ] Activity Diagram 3 completed
-* [ ] Class Diagram completed
-* [ ] Sequence Diagram 1 completed
-* [ ] Sequence Diagram 2 completed
-* [ ] State Diagram completed
-* [ ] Design decisions documented
-* [ ] Revision history finalised
-* [ ] Team contribution statement completed
-* [ ] Final documentation reviewed
-* [ ] GitHub repository finalised
+* [x] Approval and escalation process defined
+* [x] Parallel preparation process defined
+* [x] Failure and exception routes defined
+
+## Design Patterns
+
+* [x] Composite
+* [x] Iterator
+* [x] State
+* [x] Strategy
+* [x] Decorator
+* [x] Command
+* [x] Observer
+* [x] Memento
+* [x] Adapter
+* [x] Chain of Responsibility
+
+## UML
+
+* [x] Activity Diagram 2
+* [x] Activity Diagram 3
+* [x] Class Diagram
+* [x] Sequence Diagram 1
+* [x] Sequence Diagram 2
+* [x] State Diagram
+* [ ] Activity Diagram 1 added to repository, if required
+
+## Documentation
+
+* [x] Design decisions documented
+* [x] Revision history documented
+* [x] Repository structure documented
+* [x] Team members documented
+* [ ] Remaining team contributions completed
+* [ ] Final documentation review
 * [ ] Final PDF prepared
 
 ---
 
-# 20. Final Demonstration
+# Final Demonstration
 
-**Final Demonstration Date:** 2 November 2026
+**Date:** 2 November 2026
 
-The final demonstration will present the design of TIVIDY, including:
+The final demonstration will present:
 
 * Workflow Management System research.
+* TIVIDY's generic workflow-management purpose.
 * Employee onboarding scenario.
-* System scope and responsibilities.
-* Selected GoF design patterns.
-* UML design.
-* Runtime behaviour.
-* Design decisions.
-* GitHub development history.
+* System boundaries and responsibilities.
+* Workflow definitions and instances.
+* Ten selected GoF design patterns.
+* UML Activity Diagrams.
+* UML Class Diagram.
+* UML Sequence Diagrams.
+* UML State Diagram.
+* Design decisions and revisions.
+* GitHub repository and development history.
 * Team contributions.
 
 ---
 
-# 21. References
+# Project Repository
 
-The research supporting TIVIDY is documented in the project's research section.
-
-Key references include:
-
-1. Hollingsworth, D. (1995). *Workflow Reference Model*. Workflow Management Coalition.
-
-2. Workflow Management Coalition. *Terminology & Glossary*. Available from the WfMC documentation.
-
-3. van der Aalst, W.M.P., ter Hofstede, A.H.M., Kiepuszewski, B. and Barros, A.P. (2003). *Workflow Patterns*. Distributed and Parallel Databases, 14(1), pp.5–51.
-
-4. Russell, N., ter Hofstede, A.H.M., Edmond, D. and van der Aalst, W.M.P. (2005). *Workflow Resource Patterns*. Queensland University of Technology and Eindhoven University of Technology.
-
-5. Camunda. *Versioning Process Definitions*. Camunda Documentation.
-
-6. Camunda. *Process Instance Migration*. Camunda Documentation.
-
-7. Object Management Group. (2011). *Business Process Model and Notation (BPMN) Version 2.0*.
-
-Full reference details and links are included in the project research documentation.
+**GitHub Repository:** Chloe-Larsen/COS214-Project
 
 ---
 
-# 22. Project Repository
+# COS 214 – TIVIDY
 
-**GitHub:** `<INSERT GITHUB REPOSITORY LINK>`
+**Workflow Management System**
 
----
-
-## COS 214 – TIVIDY
-
-**Workflow Management System – Research and Initial Design**
+**Research, Scenario and UML Design**
 
 **2026**

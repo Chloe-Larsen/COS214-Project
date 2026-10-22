@@ -5,6 +5,7 @@
 class LegacyEmailService
 {
 public:
+	LegacyEmailService();
 	void send(std::string data);
 };
 

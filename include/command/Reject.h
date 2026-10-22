@@ -7,7 +7,7 @@ class Reject : public WorkflowCommand {
 private:
 	std::string reason;
 public:
-	Reject();
+	Reject(Item* item);
 	void execute() override;
 	std::string getName() override;
 };

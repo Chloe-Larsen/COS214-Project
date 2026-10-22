@@ -31,14 +31,11 @@ public:
 	void escalate();
 	Worker* getWorker();
 	void assignWorker(Worker* person);
-	State getState();
-	void setState(State state);
+	State* getState();
+	void setState(State* state);
 	int getPriority();
 	void setPriority(int priority);
-	Item* clone();
-	void progress() override;
-	void cancel() override;
-	void requestReview() override;
+	Item* clone();	
 	Iterator* createIterator(std::string type) override;
 	int getChildCount() override;	
 };

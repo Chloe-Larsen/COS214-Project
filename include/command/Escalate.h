@@ -6,7 +6,7 @@
 class Escalate : public WorkflowCommand
 {
 public:
-	Escalate();
+	Escalate(Item* item);
 	void execute() override;
 	std::string getName() override;
 };

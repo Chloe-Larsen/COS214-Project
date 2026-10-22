@@ -6,7 +6,7 @@
 class Cancel : public WorkflowCommand
 {
 public:
-	Cancel();
+	Cancel(Item* item);
 	void execute() override;
 	std::string getName() override;
 };

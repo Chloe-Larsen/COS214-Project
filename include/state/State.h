@@ -7,13 +7,13 @@ class State
 {
 public:
 	State();
-	virtual ~State() = 0;
+	virtual ~State();
 	virtual void progress(Item *item) = 0;
 	virtual void cancel(Item *item) = 0;
 	virtual void block(Item *item) = 0;
 	virtual void unblock(Item *item) = 0;
-	bool getEscalated();
-	void setEscalated();
+	virtual bool getEscalated() = 0;
+	virtual void setEscalated() = 0;
 };
 
 #endif

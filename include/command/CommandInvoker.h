@@ -9,6 +9,7 @@ private:
 	std::vector<WorkflowCommand*> history;
 public:
 	CommandInvoker();
+	~CommandInvoker();
 	void executeCommand(WorkflowCommand* command);
 	std::vector<WorkflowCommand*> getHistory();
 };

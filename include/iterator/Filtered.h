@@ -11,8 +11,8 @@ private:
 	FilterCriteria criteria;
 
 public:
-	void FilteredIterator(Iterator *inner, FilterCriteria c);
-	~FilteredIterator();
+	Filtered(Iterator *inner, FilterCriteria c);
+	~Filtered();
 	virtual WorkComponent *first() override;
 	virtual WorkComponent *next() override;
 	virtual bool isDone() override;

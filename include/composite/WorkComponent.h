@@ -12,6 +12,7 @@ protected:
 
 public:
 	WorkComponent(std::string id, std::string name, std::string status);
+	WorkComponent(WorkComponent& other);
 	virtual ~WorkComponent();
 	virtual void progress() = 0;
 	virtual void cancel() = 0;

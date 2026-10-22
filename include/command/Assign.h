@@ -6,7 +6,7 @@
 class Assign : public WorkflowCommand
 {
 public:
-	Assign();
+	Assign(Item* item);
 	void execute() override;
 	std::string getName() override;
 };

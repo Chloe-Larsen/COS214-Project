@@ -6,7 +6,7 @@
 class Progress : public WorkflowCommand
 {
 public:
-	Progress();
+	Progress(Item* item);
 	void execute() override;
 	std::string getName() override;
 };

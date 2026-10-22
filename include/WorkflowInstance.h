@@ -23,7 +23,7 @@ public:
 	WorkComponent *selectNextAvailable();
 	void progress();
 	void cancel();
-	Iterator createIterator();
+	Iterator* createIterator();
 };
 
 #endif

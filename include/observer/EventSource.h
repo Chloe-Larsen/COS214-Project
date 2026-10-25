@@ -13,7 +13,7 @@ private:
 
 public:
 	EventSource();
-	EventSource(EventSource &other);
+	EventSource(const EventSource &other);
 	virtual ~EventSource();
 
 	void attach(Observer *observer);

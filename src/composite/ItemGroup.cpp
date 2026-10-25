@@ -8,12 +8,18 @@ ItemGroup::ItemGroup(std::string id, std::string name, std::string status) : Wor
 
 ItemGroup::ItemGroup(ItemGroup &other) : WorkComponent(other)
 {
-	// TODO - implement ItemGroup::ItemGroup
-	throw "Not yet implemented";
+	for(size_t i = 0; i < other.children.size(); ++i)
+	{
+		children.push_back(other.children[i]->clone()); // recursive deep copy
+	}
 }
 
 ItemGroup::~ItemGroup()
 {
+	for(size_t i = 0; i < children.size(); ++i)
+	{
+		delete children[i];
+	}
 }
 
 void ItemGroup::progress()
@@ -30,8 +36,10 @@ void ItemGroup::cancel()
 
 void ItemGroup::requestReview()
 {
-	// TODO - implement ItemGroup::requestReview
-	throw "Not yet implemented";
+	for(size_t i = 0; i < children.size(); ++i)
+	{
+		children[i]->requestReview();
+	}
 }
 
 void ItemGroup::add(WorkComponent *child)

@@ -7,6 +7,10 @@
 #include "../state/State.h"
 #include "../strategy/AssignmentStrategy.h"
 
+class Worker;
+class State;
+class AssignmentStrategy;
+
 class Item : public WorkComponent
 {
 private:
@@ -16,18 +20,25 @@ private:
 	State *currentState;
 	AssignmentStrategy *assignmentStrategy;
 	int dependencies;
+	bool rejected;
+	bool escalated;
+	std::string rejectionReason;
+	Item &operator=(const Item &);
 
 public:
 	Item(std::string id, std::string name, std::string status, std::string deadline, int priority, Worker *assignedTo, AssignmentStrategy *assignmentStrategy);
-	Item(Item &other);
+	Item(const Item &other);
 	~Item();
-	void progress();
-	void cancel();
+	void progress() override;
+	void cancel() override;
 	void reject(std::string reason);
 	void incrementDependencies();
 	void decrementDependencies();
-	void requestReview();
-	bool isEscalated();
+	int getDependencies() const;
+	void requestReview() override;
+	bool isEscalated() const;
+	bool isRejected() const;
+	const std::string &getRejectionReason() const;
 	void escalate();
 	Worker *getWorker();
 	void assignWorker(Worker *person);
@@ -35,7 +46,8 @@ public:
 	void setState(State *state);
 	int getPriority();
 	void setPriority(int priority);
-	Item *clone();
+	std::time_t getDeadline() const;
+	Item *clone() const override;
 	Iterator *createIterator(std::string type) override;
 	int getChildCount() override;
 };

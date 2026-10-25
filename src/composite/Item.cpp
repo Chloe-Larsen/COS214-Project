@@ -1,4 +1,8 @@
 #include "../../include/composite/Item.h"
+#include "../../include/chain/Worker.h"
+#include "../../include/state/State.h"
+#include <cstdio>
+#include <stdexcept>
 
 Item::Item(std::string id, std::string name, std::string status, std::string deadline, int priority, Worker *assignedTo, AssignmentStrategy *assignmentStrategy) : WorkComponent(id, name, status)
 {
@@ -6,10 +10,15 @@ Item::Item(std::string id, std::string name, std::string status, std::string dea
 	throw "Not yet implemented";
 }
 
-Item::Item(Item &other) : WorkComponent(other)
+// PROTOTYPE: copy configuration, reset runtime state so instances are isolated.
+Item::Item(const Item &other) : WorkComponent(other), deadline(other.deadline), priority(other.priority), assignedTo(other.assignedTo), currentState(NULL), assignmentStrategy(other.assignmentStrategy), dependencies(other.dependencies), rejected(false), escalated(false)
 {
-	// TODO - implement Item::Item
-	throw "Not yet implemented";
+
+}
+
+Item *Item::clone() const
+{
+	return new Item(*this);
 }
 
 Item::~Item()
@@ -42,8 +51,9 @@ void Item::unblock()
 
 void Item::reject(std::string reason)
 {
-	// TODO - implement Item::reject
-	throw "Not yet implemented";
+	rejected = true;
+	rejectionReason = reason;
+	status = "Rejected";
 }
 
 void Item::incrementDependencies()
@@ -60,32 +70,59 @@ void Item::decrementDependencies()
 
 void Item::requestReview()
 {
-	// TODO - implement Item::requestReview
-	throw "Not yet implemented";
+	rejected = false; escalated = false; rejectionReason.clear();
+
+	if(assignedTo == NULL || assignedTo->getSupervisor() == NULL)
+	{
+		reject("No reviewer available for item " + id);
+		return;
+	}
+
+	if(assignedTo->getSupervisor()->review(this, 0))
+	{
+		status = "Approved";
+	}
 }
 
-bool Item::isEscalated()
+bool Item::isEscalated() const
 {
-	// TODO - implement Item::isEscalated
-	throw "Not yet implemented";
+	return escalated;
+}
+
+bool Item::isRejected() const
+{ 
+	return rejected;
+}
+
+const std::string &Item::getRejectionReason() const
+{ 
+	return rejectionReason;
 }
 
 void Item::escalate()
 {
-	// TODO - implement Item::escalate
-	throw "Not yet implemented";
+	escalated = true;
+	status = "Escalated";
 }
 
 Worker *Item::getWorker()
-{
-	// TODO - implement Item::getWorker
-	throw "Not yet implemented";
+{ 
+	return assignedTo;
 }
 
 void Item::assignWorker(Worker *person)
 {
-	// TODO - implement Item::assignWorker
-	throw "Not yet implemented";
+	if (assignedTo)
+	{
+		assignedTo->addWorkload(-1);
+	}
+
+	assignedTo = person;
+
+	if (assignedTo)
+	{
+		assignedTo->addWorkload(1);
+	}
 }
 
 State *Item::getState()

@@ -4,7 +4,7 @@
 
 EventSource::EventSource() {}
 
-EventSource::EventSource(EventSource &other)
+EventSource::EventSource(const EventSource &other)
 {
 	for (Observer *observer : other.observers)
 	{

@@ -1,10 +1,11 @@
 #ifndef EVENTTYPE_H
 #define EVENTTYPE_H
 
-enum EventType {
+enum EventType
+{
     COMPLETE,
     APPROVED,
-    REJECTED, 
+    REJECTED,
     ESCALATED,
     ASSIGNED
 };

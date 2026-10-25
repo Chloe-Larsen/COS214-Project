@@ -12,6 +12,14 @@ WorkComponent::WorkComponent(WorkComponent &other)
 	throw "Not yet implemented";
 }
 
-WorkComponent::~WorkComponent()
+WorkComponent::~WorkComponent() {}
+
+std::string WorkComponent::getName()
 {
+	return name;
+}
+
+std::string WorkComponent::getStatus()
+{
+	return status;
 }

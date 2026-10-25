@@ -15,6 +15,7 @@ public:
 	EventSource();
 	EventSource(EventSource &other);
 	virtual ~EventSource();
+
 	void attach(Observer *observer);
 	void detach(Observer *observer);
 	void notify(Event *event);

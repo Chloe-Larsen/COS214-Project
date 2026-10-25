@@ -28,6 +28,18 @@ void Item::cancel()
 	throw "Not yet implemented";
 }
 
+void Item::block()
+{
+	// TODO - implement Item::block
+	throw "Not yet implemented";
+}
+
+void Item::unblock()
+{
+	// TODO - implement Item::unblock
+	throw "Not yet implemented";
+}
+
 void Item::reject(std::string reason)
 {
 	// TODO - implement Item::reject

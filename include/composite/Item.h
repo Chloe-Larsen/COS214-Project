@@ -7,19 +7,19 @@
 #include "../state/State.h"
 #include "../strategy/AssignmentStrategy.h"
 
-class Item : public WorkComponent {
-
+class Item : public WorkComponent
+{
 private:
 	std::time_t deadline;
 	int priority;
-	Worker* assignedTo;
-	State* currentState;
-	AssignmentStrategy* assignmentStrategy;
+	Worker *assignedTo;
+	State *currentState;
+	AssignmentStrategy *assignmentStrategy;
 	int dependencies;
 
 public:
-	Item(std::string id, std::string name, std::string status, std::string deadline, int priority, Worker* assignedTo, AssignmentStrategy* assignmentStrategy);
-	Item(Item& other);
+	Item(std::string id, std::string name, std::string status, std::string deadline, int priority, Worker *assignedTo, AssignmentStrategy *assignmentStrategy);
+	Item(Item &other);
 	~Item();
 	void progress();
 	void cancel();
@@ -29,15 +29,15 @@ public:
 	void requestReview();
 	bool isEscalated();
 	void escalate();
-	Worker* getWorker();
-	void assignWorker(Worker* person);
-	State* getState();
-	void setState(State* state);
+	Worker *getWorker();
+	void assignWorker(Worker *person);
+	State *getState();
+	void setState(State *state);
 	int getPriority();
 	void setPriority(int priority);
-	Item* clone();	
-	Iterator* createIterator(std::string type) override;
-	int getChildCount() override;	
+	Item *clone();
+	Iterator *createIterator(std::string type) override;
+	int getChildCount() override;
 };
 
 #endif

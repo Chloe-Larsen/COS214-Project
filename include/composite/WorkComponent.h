@@ -22,7 +22,8 @@ public:
 	virtual int getChildCount() = 0;
 	virtual WorkComponent *clone() = 0;
 	virtual WorkComponent *getChild(int i) = 0;
-	virtual std::string getStatus() = 0;
+	std::string getName();
+	std::string getStatus();
 };
 
 #endif

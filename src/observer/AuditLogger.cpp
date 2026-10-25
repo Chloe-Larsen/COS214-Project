@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "../../include/observer/AuditLogger.h"
 
 AuditLogger::AuditLogger() : Observer()
@@ -8,6 +10,10 @@ AuditLogger::AuditLogger() : Observer()
 
 void AuditLogger::update(Event *event)
 {
-	// TODO - implement AuditLogger::update
-	throw "Not yet implemented";
+	std::cout << "(" << event->getTimestamp() << ") [AUDIT LOG > " << event->getSource()->getName() << "] " << event->getType() << std::endl;
+}
+
+AuditLogger *AuditLogger::clone()
+{
+	return new AuditLogger();
 }

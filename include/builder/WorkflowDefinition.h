@@ -7,14 +7,22 @@
 
 class WorkflowDefinition
 {
-private:
-	std::string id;
-	std::string name;
-	WorkComponent *rootTemplate;
+	private:
+		std::string id;
+		std::string name;
+		WorkComponent *rootTemplate;
 
-public:
-	WorkflowInstance createInstance();
-	WorkComponent *getRootTemplate();
+		WorkflowDefinition(const WorkflowDefinition &);
+		WorkflowDefinition &operator=(const WorkflowDefinition &);
+
+	public:
+		WorkflowInstance createInstance();
+		WorkComponent *getRootTemplate();
+
+		WorkflowInstance *createInstance();
+		WorkComponent *getRootTemplate();
+		const std::string &getId() const;
+		const std::string &getName() const;
 };
 
 #endif

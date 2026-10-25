@@ -9,6 +9,10 @@ class Filtered : public Iterator
 private:
 	Iterator *inner;
 	FilterCriteria criteria;
+	WorkComponent *current;
+
+	bool matches(WorkComponent *component) const;
+	void advanceToNextMatch();
 
 public:
 	Filtered(Iterator *inner, FilterCriteria c);

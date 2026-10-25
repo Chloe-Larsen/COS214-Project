@@ -7,15 +7,15 @@
 
 class Event
 {
-private:
-	EventType type;
-	Item *source;
-	std::string timestamp;
+	private:
+		EventType type;
+		Item *source;
+		std::string timestamp;
 
-public:
-	EventType getType();
-	Item *getSource();
-	std::string getTimestamp();
+	public:
+		EventType getType();
+		Item *getSource();
+		std::string getTimestamp();
 };
 
 #endif

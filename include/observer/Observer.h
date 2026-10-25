@@ -2,12 +2,13 @@
 #define OBSERVER_H
 
 #include "Event.h"
+
 class Observer
 {
-public:
-	Observer();
-	~Observer();
-	virtual void update(Event* event) = 0;
+	public:
+		Observer();
+		~Observer();
+		virtual void update(Event* event) = 0;
 };
 
 #endif

@@ -1,9 +1,13 @@
 #include "../../include/builder/WorkflowDefinition.h"
+#include "../../include/WorkflowInstance.h"
+#include "../../include/composite/WorkComponent.h"
 
 WorkflowInstance WorkflowDefinition::createInstance()
 {
-	// TODO - implement WorkflowDefinition::createInstance
-	throw "Not yet implemented";
+	WorkflowInstance *inst = new WorkflowInstance();
+	inst->buildFromDefinition(this);
+
+	return inst;
 }
 
 WorkComponent *WorkflowDefinition::getRootTemplate()

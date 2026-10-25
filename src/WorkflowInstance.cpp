@@ -1,36 +1,66 @@
 #include "../include/WorkflowInstance.h"
+#include "../include/builder/WorkflowDefinition.h"
+#include "../include/composite/WorkComponent.h"
 
-WorkflowInstance::WorkflowInstance() {
-	// TODO - implement WorkflowInstance::WorkflowInstance
-	throw "Not yet implemented";
+#include <stdexcept>
+
+WorkflowInstance::WorkflowInstance() : definition(NULL), root(NULL), createdAt(std::time(NULL)), status("Created"), routing(NULL)
+{
 }
 
-void WorkflowInstance::buildFromDefinition(WorkflowDefinition* def) {
-	// TODO - implement WorkflowInstance::buildFromDefinition
-	throw "Not yet implemented";
+WorkflowInstance::~WorkflowInstance()
+{
+	delete root;
 }
 
-void WorkflowInstance::evaluateReadiness() {
-	// TODO - implement WorkflowInstance::evaluateReadiness
-	throw "Not yet implemented";
+void WorkflowInstance::buildFromDefinition(WorkflowDefinition *def)
+{
+	if(def == NULL || def->getRootTemplate() == NULL)
+	{
+		throw std::invalid_argument("definition has no root template");
+	}
+
+	WorkComponent *fresh = def->getRootTemplate()->clone(); // Prototype in action
+	delete root;
+	root = fresh;
+
+	definition = def;
+	status = "Running";
 }
 
-WorkComponent* WorkflowInstance::selectNextAvailable() {
-	// TODO - implement WorkflowInstance::selectNextAvailable
-	throw "Not yet implemented";
+WorkComponent *WorkflowInstance::getRoot() const
+{ 
+	return root; 
 }
 
-void WorkflowInstance::progress() {
-	// TODO - implement WorkflowInstance::progress
-	throw "Not yet implemented";
+void WorkflowInstance::progress()
+{
+	if(root)
+	{
+		root->progress();
+	}
 }
 
-void WorkflowInstance::cancel() {
-	// TODO - implement WorkflowInstance::cancel
-	throw "Not yet implemented";
+void WorkflowInstance::cancel()
+{
+	if(root)
+	{
+		root->cancel();
+	}
+
+	status = "Cancelled";
 }
 
-Iterator* WorkflowInstance::createIterator() {
-	// TODO - implement WorkflowInstance::createIterator
-	throw "Not yet implemented";
+void WorkflowInstance::evaluateReadiness()
+{
+}
+
+WorkComponent *WorkflowInstance::selectNextAvailable()
+{
+	return NULL;
+}
+
+Iterator *WorkflowInstance::createIterator()
+{
+	return root ? root->createIterator("dependency") : NULL;
 }

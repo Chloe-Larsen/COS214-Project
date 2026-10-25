@@ -1,12 +1,14 @@
 #include "../../include/observer/EventSource.h"
 
+#include <algorithm>
+
 EventSource::EventSource()
 {
 	// TODO - implement EventSource::EventSource
 	throw "Not yet implemented";
 }
 
-EventSource::EventSource(EventSource &other)
+EventSource::EventSource(const EventSource &other)
 {
 	// TODO - implement EventSource::EventSource
 	throw "Not yet implemented";
@@ -14,18 +16,21 @@ EventSource::EventSource(EventSource &other)
 
 void EventSource::attach(Observer *observer)
 {
-	// TODO - implement EventSource::attach
-	throw "Not yet implemented";
+	if(observer)
+	{
+		observers.push_back(observer);
+	}
 }
 
 void EventSource::detach(Observer *observer)
 {
-	// TODO - implement EventSource::detach
-	throw "Not yet implemented";
+	observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
 }
 
 void EventSource::notify(Event *event)
 {
-	// TODO - implement EventSource::notify
-	throw "Not yet implemented";
+	for(size_t i = 0; i < observers.size(); ++i)
+	{
+		observers[i]->update(event);
+	}
 }

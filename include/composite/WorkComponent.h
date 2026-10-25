@@ -20,6 +20,7 @@ public:
 	virtual Iterator* createIterator(std::string type) = 0;
 	virtual int getChildCount() = 0;
 	virtual WorkComponent* clone() = 0;
+	virtual WorkComponent* getChild(int i) = 0;
 };
 
 #endif

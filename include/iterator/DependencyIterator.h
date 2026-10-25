@@ -7,6 +7,8 @@
 class DependencyIterator : public Iterator {
 private:
 	std::stack<WorkComponent*> stack;
+	WorkComponent* current;
+    void pushChildren(WorkComponent* component);
 public:
 	DependencyIterator(WorkComponent* root);
 	~DependencyIterator();

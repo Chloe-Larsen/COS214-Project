@@ -19,13 +19,12 @@ class WorkflowInstance
 		WorkComponent *root;
 		std::time_t createdAt;
 		std::string status;
-		Routing *routing;
-
-		WorkflowInstance(const WorkflowInstance &);
+		Routing *routing;		
 		WorkflowInstance &operator=(const WorkflowInstance &);
 
 	public:
 		WorkflowInstance();
+		WorkflowInstance(const WorkflowInstance &);
 		~WorkflowInstance();
 		void buildFromDefinition(WorkflowDefinition *def);
 		WorkComponent *getRoot() const;
@@ -34,6 +33,9 @@ class WorkflowInstance
 		void progress();
 		void cancel();
 		Iterator* createIterator();
+		void setRoot(WorkComponent *root);
+		std::string getId();
+		std::string getStatus();
 };
 
 #endif

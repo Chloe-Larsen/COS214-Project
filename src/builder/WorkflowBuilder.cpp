@@ -1,11 +1,11 @@
 #include "../../include/builder/WorkflowBuilder.h"
 
-WorkflowBuilder::WorkflowBuilder()
+WorkflowBuilder::WorkflowBuilder() : currentDefinition(nullptr)
 {
-	// TODO - implement WorkflowBuilder::WorkflowBuilder
-	throw "Not yet implemented";
 }
 
 WorkflowBuilder::~WorkflowBuilder()
 {
+	if (currentDefinition)
+		delete currentDefinition;
 }

@@ -2,7 +2,8 @@
 #define WORKFLOWBUILDER_H
 
 #include "WorkflowDefinition.h"
-class WorkflowBlueprint;
+#include "WorkflowBlueprint.h"
+
 class WorkflowBuilder
 {
 protected:

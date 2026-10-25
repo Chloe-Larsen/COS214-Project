@@ -1,6 +1,5 @@
 #include "../../include/adapter/EmailService.h"
 
-EmailService::EmailService()
-{
-	throw "Not yet implemented";
-}
+EmailService::EmailService() {}
+
+EmailService::~EmailService() {}

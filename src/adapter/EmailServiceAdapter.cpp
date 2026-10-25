@@ -1,13 +1,13 @@
 #include "../../include/adapter/EmailServiceAdapter.h"
 
-EmailServiceAdapter::EmailServiceAdapter()
+EmailServiceAdapter::EmailServiceAdapter() : legacyEmailService(new LegacyEmailService()) {}
+
+EmailServiceAdapter::~EmailServiceAdapter()
 {
-	// TODO - implement EmailServiceAdapter::EmailServiceAdapter
-	throw "Not yet implemented";
+	delete legacyEmailService;
 }
 
 void EmailServiceAdapter::sendEmail(std::string email, std::string subject, std::string body)
 {
-	// TODO - implement EmailServiceAdapter::sendEmail
-	throw "Not yet implemented";
+	legacyEmailService->send(email + ";" + subject + ";" + body); // legacy service accepts single string with all data
 }

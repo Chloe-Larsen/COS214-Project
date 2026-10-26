@@ -1,45 +1,45 @@
 #include "../../include/state/InProgress.h"
+#include "../../include/state/Approved.h"
+#include "../../include/state/Cancelled.h"
+#include "../../include/state/Blocked.h"
+#include "../../include/composite/Item.h"
 
-InProgress::InProgress()
+InProgress::InProgress() : isEscalated(false)
 {
-	// TODO - implement InProgress::InProgress
-	throw "Not yet implemented";
 }
 
 void InProgress::progress(Item *item)
 {
-	// TODO - implement InProgress::progress
-	throw "Not yet implemented";
+	item->setState(new Approved());
 }
 
 void InProgress::cancel(Item *item)
 {
-	// TODO - implement InProgress::cancel
-	throw "Not yet implemented";
+	item->setState(new Cancelled());
 }
 
 void InProgress::block(Item *item)
 {
-	// TODO - implement InProgress::block
-	throw "Not yet implemented";
+	Blocked *next = new Blocked();
+	if (isEscalated)
+	{
+		next->setEscalated();
+	}
+	item->setState(next);
 }
 
 void InProgress::unblock(Item *item)
 {
-	// TODO - implement InProgress::unblock
-	throw "Not yet implemented";
 }
 
-void InProgress::getEscalated(Item *item)
+bool InProgress::getEscalated()
 {
-	// TODO - implement InProgress::getEscalated
-	throw "Not yet implemented";
+	return isEscalated;
 }
 
-void InProgress::setEscalated(Item *item)
+void InProgress::setEscalated()
 {
-	// TODO - implement InProgress::setEscalated
-	throw "Not yet implemented";
+	isEscalated = true;
 }
 
 std::string InProgress::getName() const

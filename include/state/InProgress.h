@@ -3,18 +3,18 @@
 
 #include "State.h"
 
-class InProgress : State
+class InProgress : public State
 {
 private:
-	bool isEscalted;
+	bool isEscalated;
 public:
 	InProgress();
 	void progress(Item *item);
 	void cancel(Item *item);
 	void block(Item *item);
 	void unblock(Item *item);
-	void getEscalated(Item *item);
-	void setEscalated(Item *item);
+	bool getEscalated() override;
+	void setEscalated() override;
 	std::string getName() const override;
 };
 

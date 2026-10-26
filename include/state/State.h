@@ -1,7 +1,9 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "../composite/Item.h"
+#include <string>
+
+class Item;
 
 class State
 {
@@ -12,8 +14,8 @@ class State
 		virtual void cancel(Item *item) = 0;
 		virtual void block(Item *item) = 0;
 		virtual void unblock(Item *item) = 0;
-		virtual bool getEscalated() = 0;
-		virtual void setEscalated() = 0;
+		virtual bool getEscalated() { return false;}
+		virtual void setEscalated() {};
 		virtual std::string getName() const = 0;
 };
 

@@ -3,7 +3,7 @@
 
 #include "State.h"
 
-class Cancelled : State {
+class Cancelled : public State {
 public:
 	Cancelled();
 	void progress(Item* item);

@@ -3,7 +3,7 @@
 
 #include "State.h"
 
-class Available : State {
+class Available : public State {
 private:
 	bool isEscalated;
 public:
@@ -12,8 +12,8 @@ public:
 	void cancel(Item* item);
 	void block(Item* item);
 	void unblock(Item* item);
-	void getEscalated(Item* item);
-	void setEscalated(Item* item);
+	bool getEscalated() override;
+	void setEscalated() override;
 	std::string getName() const override;
 };
 

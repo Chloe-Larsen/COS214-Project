@@ -3,7 +3,7 @@
 
 #include "State.h"
 
-class Completed : State
+class Completed :public State
 {
 public:
 	Completed();

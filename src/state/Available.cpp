@@ -41,3 +41,8 @@ void Available::setEscalated(Item *item)
 	// TODO - implement Available::setEscalated
 	throw "Not yet implemented";
 }
+
+std::string Available::getName() const
+{
+	return "";
+}

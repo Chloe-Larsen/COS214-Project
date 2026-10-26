@@ -41,3 +41,8 @@ void Blocked::setEscalated(Item *item)
 	// TODO - implement Blocked::setEscalated
 	throw "Not yet implemented";
 }
+
+std::string Blocked::getName() const
+{
+	return "BLOCKED";
+}

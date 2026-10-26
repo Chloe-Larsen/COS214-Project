@@ -29,3 +29,8 @@ void Cancelled::unblock(Item *item)
 	// TODO - implement Cancelled::unblock
 	throw "Not yet implemented";
 }
+
+std::string Cancelled::getName() const
+{
+	return "CANCELLED";
+}

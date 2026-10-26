@@ -29,3 +29,8 @@ void Completed::unblock(Item *item)
 	// TODO - implement Completed::unblock
 	throw "Not yet implemented";
 }
+
+std::string Completed::getName() const
+{
+	return "COMPLETED";
+}

@@ -41,3 +41,8 @@ void InProgress::setEscalated(Item *item)
 	// TODO - implement InProgress::setEscalated
 	throw "Not yet implemented";
 }
+
+std::string InProgress::getName() const
+{
+	return "IN_PROGRESS";
+}

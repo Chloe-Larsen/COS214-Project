@@ -1,4 +1,5 @@
 #include "../../include/iterator/PriorityIterator.h"
+#include "../../include/composite/ItemGroup.h"
 
 bool PriorityComparator::operator()(WorkComponent *a, WorkComponent *b) const
 {
@@ -36,7 +37,14 @@ void PriorityIterator::collectAll(WorkComponent *node)
 	int count = node->getChildCount();
 	for (int i = 0; i < count; ++i)
 	{
-		collectAll(node->getChild(i));
+		ItemGroup *group = dynamic_cast<ItemGroup *>(node);
+		if (group)
+		{
+			WorkComponent *child = group->getChild(i);
+		if (child)
+			collectAll(child);
+		}
+		
 	}
 }
 

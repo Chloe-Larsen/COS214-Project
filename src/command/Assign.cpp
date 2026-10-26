@@ -1,17 +1,23 @@
 #include "../../include/command/Assign.h"
 
-Assign::Assign(Item* item) : WorkflowCommand(item)
+Assign::Assign(Item *item) : WorkflowCommand(item), worker(item->getWorker())
 {
-	// TODO - implement Assign::Assign
-	throw "Not yet implemented";
+}
+
+Assign::Assign(Item *item, Worker *worker) : WorkflowCommand(item), worker(worker)
+{
+    if (!worker)
+        throw std::string("Assign needs a non-null Worker.");
 }
 
 void Assign::execute()
 {
-
+    if (!worker)
+        throw std::string("Supply a Worker when assigning an unassigned Item.");
+    reciever->assignWorker(worker);
 }
 
 std::string Assign::getName()
 {
-
+    return "Assign";
 }

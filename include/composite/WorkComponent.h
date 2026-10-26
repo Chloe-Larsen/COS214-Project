@@ -9,13 +9,11 @@ class Iterator;
 
 class WorkComponent : public EventSource
 {
-protected:
-	std::string id;
-	std::string name;
-	std::string status;
+protected:	
+	std::string name;	
 
 public:
-	WorkComponent(std::string id, std::string name, std::string status);
+	WorkComponent(std::string name);
 	WorkComponent(const WorkComponent &other);
 	virtual ~WorkComponent();
 	virtual void progress() = 0;
@@ -23,12 +21,8 @@ public:
 	virtual void requestReview() = 0;
 	virtual Iterator *createIterator(std::string type) = 0;
 	virtual int getChildCount() = 0;
-	virtual WorkComponent *clone() const = 0;
-
-	const std::string &getId() const;
-	const std::string &getName() const;
-	const std::string &getStatus() const;
-	void setStatus(const std::string &s);
+	virtual WorkComponent *clone() const = 0;	
+	const std::string &getName() const;		
 };
 
 #endif

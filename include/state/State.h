@@ -14,6 +14,7 @@ class State
 		virtual void unblock(Item *item) = 0;
 		virtual bool getEscalated() = 0;
 		virtual void setEscalated() = 0;
+		virtual std::string getName() = 0;
 };
 
 #endif

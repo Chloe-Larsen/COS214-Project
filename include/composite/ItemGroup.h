@@ -10,7 +10,7 @@ class ItemGroup : public WorkComponent {
 		ItemGroup& operator=(const ItemGroup&);
 		
 	public:
-		ItemGroup(std::string id, std::string name, std::string status);
+		ItemGroup(std::string name);
 		ItemGroup(const ItemGroup& other);
 		~ItemGroup();
 		void progress() override;

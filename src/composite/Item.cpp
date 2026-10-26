@@ -4,16 +4,15 @@
 #include <cstdio>
 #include <stdexcept>
 
-Item::Item(std::string id, std::string name, std::string status, std::string deadline, int priority, Worker *assignedTo, AssignmentStrategy *assignmentStrategy) : WorkComponent(id, name, status)
+Item::Item(std::string name, std::string deadline, int priority, Worker *assignedTo) : WorkComponent(name)
 {
 	// TODO - implement Item::Item
 	throw "Not yet implemented";
 }
 
 // PROTOTYPE: copy configuration, reset runtime state so instances are isolated.
-Item::Item(const Item &other) : WorkComponent(other), deadline(other.deadline), priority(other.priority), assignedTo(other.assignedTo), currentState(NULL), assignmentStrategy(other.assignmentStrategy), dependencies(other.dependencies), rejected(false), escalated(false)
+Item::Item(const Item &other) : WorkComponent(other), deadline(other.deadline), priority(other.priority), assignedTo(other.assignedTo), currentState(NULL), dependencies(other.dependencies), rejected(false), escalated(false)
 {
-
 }
 
 Item *Item::clone() const
@@ -34,18 +33,6 @@ void Item::progress()
 void Item::cancel()
 {
 	// TODO - implement Item::cancel
-	throw "Not yet implemented";
-}
-
-void Item::block()
-{
-	// TODO - implement Item::block
-	throw "Not yet implemented";
-}
-
-void Item::unblock()
-{
-	// TODO - implement Item::unblock
 	throw "Not yet implemented";
 }
 
@@ -70,15 +57,17 @@ void Item::decrementDependencies()
 
 void Item::requestReview()
 {
-	rejected = false; escalated = false; rejectionReason.clear();
+	rejected = false;
+	escalated = false;
+	rejectionReason.clear();
 
-	if(assignedTo == NULL || assignedTo->getSupervisor() == NULL)
+	if (assignedTo == NULL || assignedTo->getSupervisor() == NULL)
 	{
 		reject("No reviewer available for item " + id);
 		return;
 	}
 
-	if(assignedTo->getSupervisor()->review(this, 0))
+	if (assignedTo->getSupervisor()->review(this, 0))
 	{
 		status = "Approved";
 	}
@@ -90,12 +79,12 @@ bool Item::isEscalated() const
 }
 
 bool Item::isRejected() const
-{ 
+{
 	return rejected;
 }
 
 const std::string &Item::getRejectionReason() const
-{ 
+{
 	return rejectionReason;
 }
 
@@ -106,7 +95,7 @@ void Item::escalate()
 }
 
 Worker *Item::getWorker()
-{ 
+{
 	return assignedTo;
 }
 
@@ -145,16 +134,16 @@ void Item::setPriority(int priority)
 	this->priority = priority;
 }
 
-Item *Item::clone()
-{
-	// TODO - implement Item::clone
-	throw "Not yet implemented";
-}
-
-Iterator *createIterator(std::string type)
+Iterator *Item::createIterator(std::string type)
 {
 }
 
-int getChildCount()
+int Item::getChildCount()
 {
+	return 1;
+}
+
+std::string Item::getStatus() const
+{
+	return currentState->getName();
 }

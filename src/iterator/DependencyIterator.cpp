@@ -20,7 +20,7 @@ void DependencyIterator::pushChildren(WorkComponent *component)
 
 	for (int i = childCount - 1; i >= 0; ++i)
 	{
-		WorkComponent *child = component->getChild(i);
+		WorkComponent *child = component->getChild(i);//GET DYNAMIC CAST for children
 		if (child)
 			stack.push(child);
 	}

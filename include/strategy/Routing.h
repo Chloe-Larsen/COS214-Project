@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "../WorkflowInstance.h"
 #include "../composite/WorkComponent.h"
 
 class Routing
@@ -11,7 +10,7 @@ class Routing
 public:
 	Routing();
 	virtual ~Routing();
-	virtual std::vector<WorkComponent *> nextWork(Item item, WorkflowInstance workflow) = 0;
+	virtual std::vector<WorkComponent *> nextWork(Item item) = 0;
 };
 
 #endif

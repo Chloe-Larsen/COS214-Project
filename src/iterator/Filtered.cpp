@@ -18,16 +18,6 @@ bool Filtered::matches(WorkComponent *component) const
 		return false;
 
 	Item *item = dynamic_cast<Item *>(component);
-	ItemGroup *group = dynamic_cast<ItemGroup *>(component);
-
-	if (criteria.getType() == ItemType::ITEM && !item)
-	{
-		return false;
-	}
-	if (criteria.getType() == ItemType::ITEM_GROUP && !group)
-	{
-		return false;
-	}
 
 	if (criteria.getStatus() != ItemStatus::ANY)
 	{
@@ -43,16 +33,19 @@ bool Filtered::matches(WorkComponent *component) const
 		case ItemStatus::COMPLETED:
 			expectedStatus = "COMPLETED";
 			break;
-		case ItemStatus::REJECTED:
-			expectedStatus = "REJECTED";
+		case ItemStatus::APPROVED:
+			expectedStatus = "APPROVED";
 			break;
 		case ItemStatus::BLOCKED:
 			expectedStatus = "BLOCKED";
 			break;
+		case ItemStatus::CANCELLED:
+			expectedStatus = "CANCELLED";
+			break;
 		default:
 			break;
 		}
-		if (!expectedStatus.empty() && component->getStatus() != expectedStatus)
+		if (!expectedStatus.empty() && item->getStatus() != expectedStatus)
 		{
 			return false;
 		}
@@ -89,7 +82,7 @@ WorkComponent *Filtered::first()
 {
 	if (!inner)
 		return nullptr;
-	
+
 	inner->first();
 	advanceToNextMatch();
 }
@@ -97,7 +90,7 @@ WorkComponent *Filtered::first()
 WorkComponent *Filtered::next()
 {
 	advanceToNextMatch();
-    return current;
+	return current;
 }
 
 bool Filtered::isDone()

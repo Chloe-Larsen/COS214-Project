@@ -6,8 +6,9 @@ enum ItemStatus {
     AVAILABLE,
     IN_PROGRESS,
     COMPLETED,
-    REJECTED,
-    BLOCKED
+    APPROVED,    
+    BLOCKED,
+    CANCELLED
 };
 
 #endif

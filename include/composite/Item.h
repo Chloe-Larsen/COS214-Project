@@ -5,11 +5,9 @@
 #include <ctime>
 #include "../chain/Worker.h"
 #include "../state/State.h"
-#include "../strategy/AssignmentStrategy.h"
 
 class Worker;
 class State;
-class AssignmentStrategy;
 
 class Item : public WorkComponent
 {
@@ -17,8 +15,7 @@ private:
 	std::time_t deadline;
 	int priority;
 	Worker *assignedTo;
-	State *currentState;
-	AssignmentStrategy *assignmentStrategy;
+	State *currentState;	
 	int dependencies;
 	bool rejected;
 	bool escalated;
@@ -26,7 +23,7 @@ private:
 	Item &operator=(const Item &);
 
 public:
-	Item(std::string id, std::string name, std::string status, std::string deadline, int priority, Worker *assignedTo, AssignmentStrategy *assignmentStrategy);
+	Item(std::string name, std::string deadline, int priority, Worker *assignedTo);
 	Item(const Item &other);
 	~Item();
 	void progress() override;
@@ -50,6 +47,7 @@ public:
 	Item *clone() const override;
 	Iterator *createIterator(std::string type) override;
 	int getChildCount() override;
+	std::string getStatus() const;
 };
 
 #endif

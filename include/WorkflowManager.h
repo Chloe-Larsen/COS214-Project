@@ -20,9 +20,11 @@ private:
 	WorkComponent *root;
 	std::time_t createdAt;
 	std::string status;
-	Routing *routing;
-	AssignmentStrategy *assignmentStrategy;
-	std::vector<WorkflowCommand *> history;
+	Routing* routing;
+	AssignmentStrategy* assignmentStrategy;
+	std::vector<WorkflowCommand*> history;
+	WorkflowManager(const WorkflowManager&) = delete;
+	WorkflowManager& operator=(const WorkflowManager&) = delete;
 
 public:
 	WorkflowManager();

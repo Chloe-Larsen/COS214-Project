@@ -1,9 +1,12 @@
 #include "../../include/command/WorkflowCommand.h"
 
-WorkflowCommand::WorkflowCommand(Item *reciever)
+WorkflowCommand::WorkflowCommand(Item* reciever)
+    : reciever(reciever)
 {
-	// TODO - implement WorkflowCommand::WorkflowCommand
-	throw "Not yet implemented";
+    if (reciever == nullptr)
+    {
+        throw std::string("A command needs an Item receiver.");
+    }
 }
 
 WorkflowCommand::~WorkflowCommand()

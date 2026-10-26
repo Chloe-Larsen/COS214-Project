@@ -44,5 +44,5 @@ void Available::setEscalated(Item *item)
 
 std::string Available::getName() const
 {
-	return "";
+	return "AVAILABLE";
 }

@@ -12,29 +12,30 @@
 #include "factory/ItemBuilder.h"
 #include "factory/ItemGroupBuilder.h"
 
-class WorkflowManager {
+class WorkflowManager
+{
 
 private:
 	std::string id;
-	WorkComponent* root;
+	WorkComponent *root;
 	std::time_t createdAt;
 	std::string status;
-	Routing* routing;
-	AssignmentStrategy* assignmentStrategy;
-	std::vector<WorkflowCommand*> history;
+	Routing *routing;
+	AssignmentStrategy *assignmentStrategy;
+	std::vector<WorkflowCommand *> history;
 
 public:
 	WorkflowManager();
 	~WorkflowManager();
 	void progress();
 	void cancel();
-	void assignWork(Item* item);
-	Iterator createIterator();
-	WorkComponent* selectNextAvailable();
-	void executeCommand(WorkflowCommand* command);
-	std::vector<WorkflowCommand*> getHistory();
-	ItemBuilder* createItemBuilder();
-	ItemGroupBuilder* createItemGroupBuilder();
+	void assignWork(Item *item);
+	Iterator *createIterator();
+	WorkComponent *selectNextAvailable();
+	void executeCommand(WorkflowCommand *command);
+	std::vector<WorkflowCommand *> getHistory();
+	ItemBuilder *createItemBuilder();
+	ItemGroupBuilder *createItemGroupBuilder();
 };
 
 #endif

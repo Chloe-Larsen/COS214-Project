@@ -12,6 +12,7 @@ class ItemGroup : public WorkComponent {
 	public:
 		ItemGroup(std::string name);
 		ItemGroup(const ItemGroup& other);
+		ItemGroup();
 		~ItemGroup();
 		void progress() override;
 		void cancel() override;

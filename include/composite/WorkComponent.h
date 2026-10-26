@@ -23,6 +23,7 @@ public:
 	virtual int getChildCount() = 0;
 	virtual WorkComponent *clone() const = 0;	
 	const std::string &getName() const;		
+	void setName(std::string name);	
 };
 
 #endif

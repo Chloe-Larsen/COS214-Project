@@ -3,11 +3,11 @@
 
 #include "Routing.h"
 
-class Parallel : Routing
+class Parallel : public Routing
 {
 public:
 	Parallel();
-	std::vector<WorkComponent *> nextWork(Item item, WorkflowInstance workflow) override;
+	std::vector<WorkComponent *> nextWork(Item *item, WorkflowManager &manager) override;
 };
 
 #endif

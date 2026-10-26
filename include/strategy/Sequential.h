@@ -3,11 +3,11 @@
 
 #include "Routing.h"
 
-class Sequential : Routing
+class Sequential : public Routing
 {
 public:
 	Sequential();
-	std::vector<WorkComponent *> nextWork(Item item, WorkflowInstance workflow) override;
+	std::vector<WorkComponent *> nextWork(Item *item, WorkflowManager &manager) override;
 };
 
 #endif

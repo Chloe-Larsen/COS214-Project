@@ -22,6 +22,8 @@ private:
 	Routing* routing;
 	AssignmentStrategy* assignmentStrategy;
 	std::vector<WorkflowCommand*> history;
+	WorkflowManager(const WorkflowManager&) = delete;
+	WorkflowManager& operator=(const WorkflowManager&) = delete;
 
 public:
 	WorkflowManager();
@@ -29,7 +31,7 @@ public:
 	void progress();
 	void cancel();
 	void assignWork(Item* item);
-	Iterator createIterator();
+	Iterator* createIterator();
 	WorkComponent* selectNextAvailable();
 	void executeCommand(WorkflowCommand* command);
 	std::vector<WorkflowCommand*> getHistory();

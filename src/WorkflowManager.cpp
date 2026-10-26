@@ -1,18 +1,31 @@
 #include "WorkflowManager.h"
+#include "../include/command/WorkflowCommand.h"
+#include "../include/composite/WorkComponent.h"
+#include <memory>
 
-WorkflowManager::WorkflowManager() {
-	// TODO - implement WorkflowManager::WorkflowManager
-	throw "Not yet implemented";
+WorkflowManager::WorkflowManager()
+    : root(nullptr), createdAt(std::time(nullptr)), status("Created"),
+      routing(nullptr), assignmentStrategy(nullptr) {}
+
+WorkflowManager::~WorkflowManager()
+{
+    for (std::size_t i = 0; i < history.size(); ++i)
+        delete history[i];
+    delete root;
+   //strategy pointers
 }
 
 void WorkflowManager::progress() {
-	// TODO - implement WorkflowManager::progress
-	throw "Not yet implemented";
+    if (!root)
+        throw std::string("The workflow has no root component.");
+    root->progress();
 }
 
 void WorkflowManager::cancel() {
-	// TODO - implement WorkflowManager::cancel
-	throw "Not yet implemented";
+    if (!root)
+        throw std::string("The workflow has no root component.");
+    root->cancel();
+    status = "Cancelled";
 }
 
 void WorkflowManager::assignWork(Item* item) {
@@ -21,8 +34,7 @@ void WorkflowManager::assignWork(Item* item) {
 }
 
 Iterator WorkflowManager::createIterator() {
-	// TODO - implement WorkflowManager::createIterator
-	throw "Not yet implemented";
+    return root ? root->createIterator("Dependency") : nullptr;
 }
 
 WorkComponent* WorkflowManager::selectNextAvailable() {
@@ -31,8 +43,25 @@ WorkComponent* WorkflowManager::selectNextAvailable() {
 }
 
 void WorkflowManager::executeCommand(WorkflowCommand* command) {
-	// TODO - implement WorkflowManager::executeCommand
-	throw "Not yet implemented";
+{
+    if (!command)
+        throw std::string("Cannot execute a null command.");
+    for (std::size_t i = 0; i < history.size(); ++i)
+        if (history[i] == command)
+            throw std::string("This command is already owned.");
+
+    std::unique_ptr<WorkflowCommand> owned(command);
+    history.push_back(command);
+    try
+    {
+        command->execute();
+    }
+    catch (...)
+    {
+        history.pop_back();
+        throw;
+    }
+    owned.release(); // Successful
 }
 
 vector<WorkflowCommand*> WorkflowManager::getHistory() {

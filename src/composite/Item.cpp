@@ -147,3 +147,8 @@ std::string Item::getStatus() const
 {
 	return currentState->getName();
 }
+
+void Item::setDeadline(std::time_t deadline)
+{
+	this->deadline = deadline;
+}

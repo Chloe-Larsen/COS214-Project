@@ -20,7 +20,7 @@ void WorkflowManager::assignWork(Item* item) {
 	throw "Not yet implemented";
 }
 
-Iterator WorkflowManager::createIterator() {
+Iterator* WorkflowManager::createIterator() {
 	// TODO - implement WorkflowManager::createIterator
 	throw "Not yet implemented";
 }
@@ -35,16 +35,14 @@ void WorkflowManager::executeCommand(WorkflowCommand* command) {
 	throw "Not yet implemented";
 }
 
-vector<WorkflowCommand*> WorkflowManager::getHistory() {
+std::vector<WorkflowCommand*> WorkflowManager::getHistory() {
 	return this->history;
 }
 
 ItemBuilder* WorkflowManager::createItemBuilder() {
-	// TODO - implement WorkflowManager::createItemBuilder
-	throw "Not yet implemented";
+	return new ItemBuilder();
 }
 
 ItemGroupBuilder* WorkflowManager::createItemGroupBuilder() {
-	// TODO - implement WorkflowManager::createItemGroupBuilder
-	throw "Not yet implemented";
+	return new ItemGroupBuilder();
 }

@@ -34,7 +34,8 @@ void WorkflowManager::assignWork(Item* item) {
 }
 
 Iterator WorkflowManager::createIterator() {
-    return root ? root->createIterator("Dependency") : nullptr;
+	// TODO - implement WorkflowManager::createIterator
+	throw "Not yet implemented";
 }
 
 WorkComponent* WorkflowManager::selectNextAvailable() {

@@ -1,13 +1,32 @@
 #include "../../include/composite/Item.h"
 #include "../../include/chain/Worker.h"
 #include "../../include/state/State.h"
+#include "../../include/state/Available.h"
+#include "../../include/state/Approved.h"
+#include "../../include/state/Blocked.h"
+#include "../../include/state/Cancelled.h"
+#include "../../include/state/Completed.h"
+#include "../../include/state/InProgress.h"
+
 #include <cstdio>
 #include <stdexcept>
+#include <sstream>
+#include <iomanip>
+#include <ctime>
 
-Item::Item(std::string name, std::string deadline, int priority, Worker *assignedTo) : WorkComponent(name)
+Item::Item(std::string name, std::string deadline, int priority, Worker *assignedTo) : WorkComponent(name), deadline(0), priority(priority), assignedTo(NULL), currentState(new Available()), dependencies(0), rejected(false), escalated(false)
 {
-	// TODO - implement Item::Item
-	throw "Not yet implemented";
+    std::tm time = {};
+    std::istringstream input(deadline);
+
+    input >> std::get_time(&time, "%Y-%m-%d");
+
+    if (!input.fail())
+    {
+        this->deadline = std::mktime(&time);
+    }
+    
+	this->assignedTo = assignedTo;
 }
 
 // PROTOTYPE: copy configuration, reset runtime state so instances are isolated.
@@ -22,25 +41,29 @@ Item *Item::clone() const
 
 Item::~Item()
 {
+	delete currentState;
 }
 
 void Item::progress()
 {
-	// TODO - implement Item::progress
-	throw "Not yet implemented";
+	if(currentState != NULL)
+    {
+        currentState->progress(this);
+    }
 }
 
 void Item::cancel()
 {
-	// TODO - implement Item::cancel
-	throw "Not yet implemented";
+	if(currentState != NULL)
+    {
+        currentState->cancel(this);
+    }
 }
 
 void Item::reject(std::string reason)
 {
 	rejected = true;
 	rejectionReason = reason;
-	status = "Rejected";
 }
 
 void Item::incrementDependencies()
@@ -61,15 +84,15 @@ void Item::requestReview()
 	escalated = false;
 	rejectionReason.clear();
 
-	if (assignedTo == NULL || assignedTo->getSupervisor() == NULL)
+	if (assignedTo == NULL)
 	{
-		reject("No reviewer available for item " + id);
+		reject("No reviewer available");
 		return;
 	}
 
-	if (assignedTo->getSupervisor()->review(this, 0))
+	if (assignedTo->review(this, getPriority()))
 	{
-		status = "Approved";
+		setState(new Approved());
 	}
 }
 
@@ -91,7 +114,11 @@ const std::string &Item::getRejectionReason() const
 void Item::escalate()
 {
 	escalated = true;
-	status = "Escalated";
+	
+	if(currentState != NULL)
+    {
+        currentState->setEscalated();
+    }
 }
 
 Worker *Item::getWorker()
@@ -101,17 +128,7 @@ Worker *Item::getWorker()
 
 void Item::assignWorker(Worker *person)
 {
-	if (assignedTo)
-	{
-		assignedTo->addWorkload(-1);
-	}
-
 	assignedTo = person;
-
-	if (assignedTo)
-	{
-		assignedTo->addWorkload(1);
-	}
 }
 
 State *Item::getState()
@@ -121,7 +138,11 @@ State *Item::getState()
 
 void Item::setState(State *state)
 {
-	currentState = state;
+	if(currentState != state)
+    {
+        delete currentState;
+        currentState = state;
+    }
 }
 
 int Item::getPriority()
@@ -145,5 +166,10 @@ int Item::getChildCount()
 
 std::string Item::getStatus() const
 {
+	if(currentState == NULL)
+    {
+        return "Unknown";
+    }
+
 	return currentState->getName();
 }

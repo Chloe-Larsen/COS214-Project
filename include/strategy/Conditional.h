@@ -3,11 +3,11 @@
 
 #include "Routing.h"
 
-class Conditional : Routing
+class Conditional : public Routing
 {
 public:
 	Conditional();
-	std::vector<WorkComponent *> nextWork(Item item, WorkflowInstance workflow) override;
+	std::vector<WorkComponent *> nextWork(Item* item, WorkflowManager& manager) override;
 };
 
 #endif

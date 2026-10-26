@@ -3,13 +3,13 @@
 
 #include "Observer.h"
 
-class AuditLogger : Observer
+class AuditLogger : public Observer
 {
 public:
 	AuditLogger();
 	
 	void update(Event *event) override;
-	AuditLogger *clone() override;
+	AuditLogger *clone();
 };
 
 #endif

@@ -231,7 +231,12 @@ int Item::getChildCount()
 
 std::string Item::getStatus() const
 {
-    return currentState ? currentState->getName() : "UNINITIALISED";
+	return currentState ? currentState->getName() : "UNINITIALISED";
+}
+
+void Item::setDeadline(std::time_t deadline)
+{
+	this->deadline = deadline;   
 }
 
 int Item::getDependencies() const

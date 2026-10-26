@@ -20,7 +20,7 @@ void Approved::cancel(Item *item)
 
 void Approved::block(Item *item)
 {
-	item->setState(new Blocked());
+
 }
 
 void Approved::unblock(Item *item)

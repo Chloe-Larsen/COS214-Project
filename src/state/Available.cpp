@@ -1,45 +1,50 @@
 #include "../../include/state/Available.h"
+#include "../../include/state/Cancelled.h"
+#include "../../include/state/Blocked.h"
+#include "../../include/composite/Item.h"
+#include "../../include/state/InProgress.h"
 
-Available::Available()
+Available::Available() : isEscalated(false)
 {
-	// TODO - implement Available::Available
-	throw "Not yet implemented";
 }
 
 void Available::progress(Item *item)
 {
-	// TODO - implement Available::progress
-	throw "Not yet implemented";
+	InProgress *next = new InProgress();
+	if (isEscalated)
+	{
+		next->setEscalated();
+	}
+	item->setState(next);
 }
 
 void Available::cancel(Item *item)
 {
-	// TODO - implement Available::cancel
-	throw "Not yet implemented";
+	item->setState(new Cancelled());
 }
 
 void Available::block(Item *item)
 {
-	// TODO - implement Available::block
-	throw "Not yet implemented";
+	Blocked *next = new Blocked();
+	if (isEscalated)
+	{
+		next->setEscalated();
+	}
+	item->setState(next);
 }
 
 void Available::unblock(Item *item)
 {
-	// TODO - implement Available::unblock
-	throw "Not yet implemented";
 }
 
-void Available::getEscalated(Item *item)
+bool Available::getEscalated()
 {
-	// TODO - implement Available::getEscalated
-	throw "Not yet implemented";
+	return isEscalated;
 }
 
-void Available::setEscalated(Item *item)
+void Available::setEscalated()
 {
-	// TODO - implement Available::setEscalated
-	throw "Not yet implemented";
+	isEscalated = true;
 }
 
 std::string Available::getName() const

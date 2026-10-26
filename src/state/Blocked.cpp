@@ -1,45 +1,46 @@
+#include "../../include/state/Available.h"
+#include "../../include/state/Cancelled.h"
 #include "../../include/state/Blocked.h"
+#include "../../include/composite/Item.h"
+#include "../../include/state/InProgress.h"
 
-Blocked::Blocked()
+Blocked::Blocked() : isEscalated(false)
 {
-	// TODO - implement Blocked::Blocked
-	throw "Not yet implemented";
 }
 
 void Blocked::progress(Item *item)
 {
-	// TODO - implement Blocked::progress
-	throw "Not yet implemented";
+
 }
 
 void Blocked::cancel(Item *item)
 {
-	// TODO - implement Blocked::cancel
-	throw "Not yet implemented";
+	item->setState(new Cancelled());
 }
 
 void Blocked::block(Item *item)
 {
-	// TODO - implement Blocked::block
-	throw "Not yet implemented";
+	
 }
 
 void Blocked::unblock(Item *item)
 {
-	// TODO - implement Blocked::unblock
-	throw "Not yet implemented";
+	Available* next = new Available();
+	if (isEscalated)
+	{
+		next->setEscalated();
+	}
+	item->setState(next);
 }
 
-void Blocked::getEscalated(Item *item)
+bool Blocked::getEscalated()
 {
-	// TODO - implement Blocked::getEscalated
-	throw "Not yet implemented";
+	return isEscalated;	
 }
 
-void Blocked::setEscalated(Item *item)
+void Blocked::setEscalated()
 {
-	// TODO - implement Blocked::setEscalated
-	throw "Not yet implemented";
+	isEscalated = true;
 }
 
 std::string Blocked::getName() const

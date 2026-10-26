@@ -3,7 +3,7 @@
 
 #include "State.h"
 
-class Approved : State
+class Approved : public State
 {
 public : Approved();
 	void progress(Item *item);

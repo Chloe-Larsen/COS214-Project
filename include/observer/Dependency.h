@@ -3,13 +3,16 @@
 
 #include "Observer.h"
 
-
-class Dependency : Observer {
+class Dependency : Observer
+{
 private:
-	WorkComponent* dependentItem;
+	Item *dependentItem;
+
 public:
-	Dependency(WorkComponent* item);
-	void update(Event* event) override;
+	Dependency(Item *item);
+	
+	void update(Event *event) override;
+	Dependency *clone() override;
 };
 
 #endif

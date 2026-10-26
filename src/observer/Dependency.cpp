@@ -1,13 +1,14 @@
 #include "../../include/observer/Dependency.h"
 
-Dependency::Dependency(WorkComponent *item) : Observer()
-{
-	// TODO - implement Dependency::Dependency
-	throw "Not yet implemented";
-}
+Dependency::Dependency(Item *item) : dependentItem(item) {}
 
 void Dependency::update(Event *event)
 {
-	// TODO - implement Dependency::update
-	throw "Not yet implemented";
+	if (event->getType() == EventType::APPROVED)
+		dependentItem->decrementDependencies();
+}
+
+Dependency *Dependency::clone()
+{
+	return new Dependency(dependentItem);
 }

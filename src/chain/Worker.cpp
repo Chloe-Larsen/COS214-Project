@@ -3,7 +3,7 @@
 
 Worker::Worker(std::string id, std::string name, std::string role, Worker *supervisor) : id(id), name(name), role(role), supervisor(supervisor), workload(0)
 {
-	if(supervisor)
+	if (supervisor)
 	{
 		supervisor->addSubordinate(this);
 	}
@@ -11,7 +11,7 @@ Worker::Worker(std::string id, std::string name, std::string role, Worker *super
 
 bool Worker::review(Item *item, int depth)
 {
-	if(item == NULL || depth < 0 || depth > MAX_CHAIN_DEPTH)
+	if (item == NULL || depth < 0 || depth > MAX_CHAIN_DEPTH)
 	{
 		return false;
 	}
@@ -27,14 +27,14 @@ bool Worker::review(Item *item, int depth)
 
 	// 2. Is this approval level enough for the item's importance?
 	int levelsRequired = item->getPriority() < 1 ? 1 : item->getPriority();
-	
-	if(depth + 1 >= levelsRequired)
+
+	if (depth + 1 >= levelsRequired)
 	{
 		return true;
 	}
 
 	// 3. Not enough sign-offs yet: forward to superior, or escalate if none.
-	if(supervisor == NULL)
+	if (supervisor == NULL)
 	{
 		handleEscalation(item);
 		return false;
@@ -45,13 +45,13 @@ bool Worker::review(Item *item, int depth)
 
 void Worker::handleEscalation(Item *item)
 {
-	if(item == NULL)
+	if (item == NULL)
 	{
 		return;
 	}
 
-	item->escalate();                 // item is now pending manual resolution
-	escalatedQueue.push_back(item);   // e.g. HR picks it up from here
+	item->escalate();				// item is now pending manual resolution
+	escalatedQueue.push_back(item); // e.g. HR picks it up from here
 }
 
 int Worker::getWorkload()
@@ -84,26 +84,31 @@ void Worker::setDecisionPolicy(DecisionPolicy p)
 }
 
 Worker *Worker::getSupervisor() const
-{ 
+{
 	return supervisor;
 }
 
 const std::string &Worker::getId() const
-{ 
+{
 	return id;
 }
 
 const std::string &Worker::getName() const
-{ 
+{
 	return name;
 }
 
+const std::string &Worker::getEmail() const
+{
+	return email;
+}
+
 const std::string &Worker::getRole() const
-{ 
+{
 	return role;
 }
 
 const std::vector<Item *> &Worker::getEscalatedQueue() const
-{ 
+{
 	return escalatedQueue;
 }

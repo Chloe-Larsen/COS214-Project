@@ -1,25 +1,21 @@
-#include "../../include/observer/EventSource.h"
-
 #include <algorithm>
 
-EventSource::EventSource()
-{
-	// TODO - implement EventSource::EventSource
-	throw "Not yet implemented";
-}
+#include "../../include/observer/EventSource.h"
+
+EventSource::EventSource() {}
 
 EventSource::EventSource(const EventSource &other)
 {
-	// TODO - implement EventSource::EventSource
-	throw "Not yet implemented";
+	for (Observer *observer : other.observers)
+	{
+		Observer *clone = observer->clone();
+		attach(clone);
+	}
 }
 
 void EventSource::attach(Observer *observer)
 {
-	if(observer)
-	{
-		observers.push_back(observer);
-	}
+	observers.push_back(observer);
 }
 
 void EventSource::detach(Observer *observer)
@@ -29,8 +25,6 @@ void EventSource::detach(Observer *observer)
 
 void EventSource::notify(Event *event)
 {
-	for(size_t i = 0; i < observers.size(); ++i)
-	{
-		observers[i]->update(event);
-	}
+	for (Observer *observer : observers)
+		observer->update(event);
 }

@@ -8,37 +8,40 @@
 
 class Item;
 
-class Worker{
-	private:
-		std::string id;
-		std::string name;
-		std::string role;
-		Worker *supervisor;
-		std::vector<Worker *> subordinates;
-		int workload;
-		DecisionPolicy policy;
-		std::vector<Item *> escalatedQueue;
+class Worker
+{
+private:
+	typedef std::function<bool(Item *)> DecisionPolicy;
 
-		static const int MAX_CHAIN_DEPTH = 64;
+	std::string id;
+	std::string name;
+	std::string email;
+	std::string role;
+	Worker *supervisor;
+	std::vector<Worker *> subordinates;
+	int workload;
+	DecisionPolicy policy;
+	std::vector<Item *> escalatedQueue;
 
-	public:
-		Worker(std::string id, std::string name, std::string role, Worker *supervisor = NULL);
-		bool review(Item *item, int depth);
-		void handleEscalation(Item *item);
-		int getWorkload();
-		void addWorkload(int delta);
+	static const int MAX_CHAIN_DEPTH = 64;
 
-		void setSupervisor(Worker *s);
-		void addSubordinate(Worker *w);
-		void setDecisionPolicy(DecisionPolicy p);
+public:
+	Worker(std::string id, std::string name, std::string role, Worker *supervisor = NULL);
+	bool review(Item *item, int depth);
+	void handleEscalation(Item *item);
+	int getWorkload();
+	void addWorkload(int delta);
 
-		Worker *getSupervisor() const;
-		const std::string &getId() const;
-		const std::string &getName() const;
-		const std::string &getRole() const;
-		const std::vector<Item *> &getEscalatedQueue() const;
+	void setSupervisor(Worker *s);
+	void addSubordinate(Worker *w);
+	void setDecisionPolicy(DecisionPolicy p);
 
-		typedef std::function<bool(Item *)> DecisionPolicy;
+	Worker *getSupervisor() const;
+	const std::string &getId() const;
+	const std::string &getName() const;
+	const std::string &getEmail() const;
+	const std::string &getRole() const;
+	const std::vector<Item *> &getEscalatedQueue() const;
 };
 
 #endif

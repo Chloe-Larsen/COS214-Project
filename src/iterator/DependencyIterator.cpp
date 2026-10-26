@@ -1,4 +1,5 @@
 #include "../../include/iterator/DependencyIterator.h"
+#include "../../include/composite/ItemGroup.h"
 
 DependencyIterator::DependencyIterator(WorkComponent *root) : Iterator(root), current(nullptr)
 {
@@ -20,9 +21,13 @@ void DependencyIterator::pushChildren(WorkComponent *component)
 
 	for (int i = childCount - 1; i >= 0; ++i)
 	{
-		WorkComponent *child = component->getChild(i);//GET DYNAMIC CAST for children
+		ItemGroup *group = dynamic_cast<ItemGroup *>(component);
+		if (group)
+		{
+			WorkComponent *child = group->getChild(i);
 		if (child)
 			stack.push(child);
+		}
 	}
 }
 

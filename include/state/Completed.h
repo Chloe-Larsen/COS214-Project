@@ -11,6 +11,7 @@ public:
 	void cancel(Item *item);
 	void block(Item *item);
 	void unblock(Item *item);
+	std::string getName() const override;
 };
 
 #endif

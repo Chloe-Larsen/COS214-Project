@@ -29,3 +29,8 @@ void Approved::unblock(Item *item)
 	// TODO - implement Approved::unblock
 	throw "Not yet implemented";
 }
+
+std::string Approved::getName() const
+{
+	return "APPROVED";
+}

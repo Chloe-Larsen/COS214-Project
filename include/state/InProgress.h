@@ -15,6 +15,7 @@ public:
 	void unblock(Item *item);
 	void getEscalated(Item *item);
 	void setEscalated(Item *item);
+	std::string getName() const override;
 };
 
 #endif

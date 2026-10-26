@@ -9,7 +9,7 @@ protected:
 
 public:
 	WorkflowCommand(Item *reciever);
-	~WorkflowCommand();
+	virtual ~WorkflowCommand();
 	virtual void execute() = 0;
 	virtual std::string getName() = 0;
 };

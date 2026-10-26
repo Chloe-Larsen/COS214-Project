@@ -9,6 +9,8 @@ public:
 	Assign(Item* item);
 	void execute() override;
 	std::string getName() override;
+	private:
+    Worker* worker;
 };
 
 #endif

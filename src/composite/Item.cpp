@@ -71,8 +71,7 @@ Item *Item::clone() const
 
 Item::~Item()
 {
-	if (assignedTo)
-        assignedTo->addWorkload(-1);
+    assignWorker(nullptr);
     delete currentState;
 }
 
@@ -173,10 +172,13 @@ void Item::assignWorker(Worker *person)
 {
     if (assignedTo == person)
         return;
-    if (assignedTo)
+    
+	if (assignedTo)
         assignedTo->addWorkload(-1);
+
     assignedTo = person;
-    if (assignedTo)
+    
+	if (assignedTo)
     {
         assignedTo->addWorkload(1);
     }
@@ -209,23 +211,35 @@ void Item::setPriority(int priority)
 	this->priority = priority;
 }
 
+
 Iterator *Item::createIterator(std::string type)
 {
-	if (!state)
-        throw std::string("An item's State cannot be null.");
-    if (currentState == state)
-        return;
-    State *previous = currentState;
-    currentState = state;
-    delete previous;
+    if (type == "Dependency" || type == "dependency")
+        return new DependencyIterator(this);
+
+    if (type == "Priority" || type == "priority")
+        return new PriorityIterator(this);
+
+    throw std::string("Unknown iterator type: " + type);
 }
+
 
 int Item::getChildCount()
 {
-	return 0;
+	return 1;
 }
 
 std::string Item::getStatus() const
 {
     return currentState ? currentState->getName() : "UNINITIALISED";
+}
+
+int Item::getDependencies() const
+{
+    return dependencies;
+}
+
+std::time_t Item::getDeadline() const
+{
+    return deadline;
 }

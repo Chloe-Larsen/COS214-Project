@@ -97,7 +97,16 @@ Iterator *ItemGroup::createIterator(std::string type)
     throw std::string("Unknown iterator type: " + type);
 }
 
-int ItemGroup::getChildCount() { return static_cast<int>(children.size()); }
+int ItemGroup::getChildCount() { 
+    int total = 0;
+
+    for (std::size_t i = 0; i < children.size(); ++i){
+        total += children[i]->getChildCount();
+    }
+
+    return total;
+
+}
 
 WorkComponent *ItemGroup::getChild(int index) const
 {

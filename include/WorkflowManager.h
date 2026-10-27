@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "command/WorkflowCommand.h"
+#include "iterator/FilterCriteria.h"
 #include "composite/WorkComponent.h"
 #include "strategy/Routing.h"
 #include "strategy/AssignmentStrategy.h"
@@ -19,7 +20,8 @@ private:
 	std::time_t createdAt;
 	Routing *routing;
 	AssignmentStrategy *assignmentStrategy;
-	std::vector<WorkflowCommand *> history;
+	std::vector<WorkflowCommand *> commandHistory;
+	std::vector<Worker *> workers;
 
 	WorkflowManager(const WorkflowManager &) = delete;
 	WorkflowManager &operator=(const WorkflowManager &) = delete;
@@ -39,6 +41,8 @@ public:
 	WorkComponent *selectNextAvailable();
 	void executeCommand(WorkflowCommand *command);
 	std::vector<WorkflowCommand *> getHistory();
+	std::vector<Worker *> getWorkers();
+	void addWorker(Worker *worker);
 	ItemBuilder *createItemBuilder();
 	ItemGroupBuilder *createItemGroupBuilder();
 };

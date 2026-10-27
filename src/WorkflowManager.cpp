@@ -13,10 +13,16 @@ WorkflowManager::WorkflowManager()
 
 WorkflowManager::~WorkflowManager()
 {
-    for (std::size_t i = 0; i < history.size(); ++i)
-        delete history[i];
-    delete root;
-    // strategy pointers
+    if (root != nullptr)
+        delete root;
+    if (routing != nullptr)
+        delete routing;
+    if (assignmentStrategy != nullptr)
+        delete assignmentStrategy;
+    for (WorkflowCommand *workflowCommand : commandHistory)
+        delete workflowCommand;
+    for (Worker *worker : workers)
+        delete worker;
 }
 
 void WorkflowManager::progress()
@@ -71,17 +77,27 @@ void WorkflowManager::executeCommand(WorkflowCommand *command)
     if (!command)
         throw "Cannot execute null command";
 
-    for (std::size_t i = 0; i < history.size(); ++i)
-        if (history[i] == command)
+    for (std::size_t i = 0; i < commandHistory.size(); ++i)
+        if (commandHistory[i] == command)
             throw "Command has already been executed!";
 
     command->execute();
-    history.push_back(command); // add to history
+    commandHistory.push_back(command); // add to history
 }
 
 std::vector<WorkflowCommand *> WorkflowManager::getHistory()
 {
-    return this->history;
+    return commandHistory;
+}
+
+std::vector<Worker *> WorkflowManager::getWorkers()
+{
+    return workers;
+}
+
+void WorkflowManager::addWorker(Worker *worker)
+{
+    workers.push_back(worker);
 }
 
 ItemBuilder *WorkflowManager::createItemBuilder()

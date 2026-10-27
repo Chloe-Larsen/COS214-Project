@@ -10,7 +10,7 @@ class AssignmentStrategy
 public:
 	AssignmentStrategy();
 	virtual ~AssignmentStrategy();
-	virtual Worker assign(Item* item, WorkflowManager& manager) = 0;
+	virtual Worker *assign(Item *item, WorkflowManager *manager) = 0;
 };
 
 #endif

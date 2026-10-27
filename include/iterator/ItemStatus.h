@@ -1,12 +1,13 @@
 #ifndef ITEMSTATUS_H
 #define ITEMSTATUS_H
 
-enum ItemStatus {
-    ANY, 
+enum class ItemStatus
+{
+    ANY,
     AVAILABLE,
     IN_PROGRESS,
     COMPLETED,
-    APPROVED,    
+    APPROVED,
     BLOCKED,
     CANCELLED
 };

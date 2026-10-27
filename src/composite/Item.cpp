@@ -59,25 +59,19 @@ static std::time_t parseItemDeadline(const std::string &text)
 
 Item::Item(std::string name, std::string deadline, int priority, Worker *assignedTo)
     : WorkComponent(name), deadline(parseItemDeadline(deadline)), priority(priority),
-      assignedTo(nullptr), currentState(Available), dependencies(0),
-      rejected(false), escalated(false)
-{
-    currentState = new Available();
-    assignWorker(assignedTo);
-}
+      assignedTo(assignedTo), currentState(new Available()), dependencies(0),
+      rejected(false) {}
 
 // PROTOTYPE: copy configuration, reset runtime state so instances are isolated.
-Item::Item(const Item &other) : WorkComponent(other), deadline(other.deadline), priority(other.priority), assignedTo(other.assignedTo), currentState(NULL), dependencies(other.dependencies), rejected(false), escalated(false)
+Item::Item(const Item &other) : WorkComponent(other), deadline(other.deadline), priority(other.priority), assignedTo(other.assignedTo), currentState(NULL), dependencies(other.dependencies), rejected(false)
 {
-    currentState = dependencies > 0 ? static_cast<State *>(new Blocked())
+    currentState = dependencies > 0 ? new Blocked()
                                     : static_cast<State *>(new Available());
 }
 
 Item::Item() : WorkComponent(nullptr), deadline(parseItemDeadline(nullptr)), priority(-1),
                assignedTo(nullptr), currentState(nullptr), dependencies(0),
-               rejected(false), escalated(false)
-{
-}
+               rejected(false) {}
 
 Item *Item::clone() const
 {
@@ -92,7 +86,7 @@ Item::~Item()
 
 void Item::progress()
 {
-	if(currentState != NULL)
+    if (currentState != NULL)
     {
         currentState->progress(this);
     }
@@ -151,7 +145,6 @@ void Item::decrementDependencies()
 void Item::requestReview()
 {
     rejected = false;
-    escalated = false;
     rejectionReason.clear();
     if (!assignedTo || !assignedTo->getSupervisor())
     {
@@ -166,7 +159,7 @@ void Item::requestReview()
 
 bool Item::isEscalated() const
 {
-    return escalated;
+    return currentState->getEscalated();
 }
 
 bool Item::isRejected() const
@@ -181,12 +174,12 @@ const std::string &Item::getRejectionReason() const
 
 void Item::escalate()
 {
-    escalated = true;
     if (currentState)
         currentState->setEscalated();
 
     Worker *superior = assignedTo ? assignedTo->getSupervisor() : nullptr;
-    if(superior != nullptr) superior->handleEscalation(this);
+    if (superior != nullptr)
+        superior->handleEscalation(this);
 }
 
 Worker *Item::getWorker()
@@ -196,7 +189,7 @@ Worker *Item::getWorker()
 
 void Item::assignWorker(Worker *person)
 {
-	assignedTo = person;
+    assignedTo = person;
 }
 
 State *Item::getState()

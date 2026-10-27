@@ -7,7 +7,7 @@ class RuleBased : public AssignmentStrategy
 {
 public:
 	RuleBased();
-	Worker assign(Item* item, WorkflowManager& manager) override;
+	Worker *assign(Item *item, WorkflowManager *manager) override;
 };
 
 #endif

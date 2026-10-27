@@ -1,7 +1,8 @@
 #ifndef ITERATOR_H
 #define ITERATOR_H
 
-#include "../composite/WorkComponent.h"
+class WorkComponent;
+
 class Iterator
 {
 protected:

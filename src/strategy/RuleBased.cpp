@@ -3,11 +3,9 @@
 #include "../../include/WorkflowManager.h"
 #include <stdexcept>
 
-RuleBased::RuleBased()
-{
-}
+RuleBased::RuleBased() {}
 
-Worker RuleBased::assign(Item *item, WorkflowManager &manager)
+Worker *RuleBased::assign(Item *item, WorkflowManager *manager)
 {
 	if (!item)
 		throw std::runtime_error("RuleBased: null item");
@@ -16,5 +14,5 @@ Worker RuleBased::assign(Item *item, WorkflowManager &manager)
 	if (!w)
 		throw std::runtime_error("RuleBased: item has no worker");
 
-	return *w;
+	return w;
 }

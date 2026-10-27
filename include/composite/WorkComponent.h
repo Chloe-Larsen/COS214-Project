@@ -1,9 +1,9 @@
 #ifndef WORKCOMPONENT_H
 #define WORKCOMPONENT_H
 
-#include "../observer/EventSource.h"
-#include "../iterator/Iterator.h"
 #include <string>
+
+#include "../observer/EventSource.h"
 
 class Iterator;
 

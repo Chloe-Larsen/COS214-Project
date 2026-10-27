@@ -1,5 +1,6 @@
 #include "../../include/observer/Notification.h"
 #include "../../include/adapter/EmailServiceAdapter.h"
+#include "../../include/chain/Worker.h"
 
 Notification::Notification(EmailService *emailService) : emailService(emailService) {}
 
@@ -11,25 +12,25 @@ void Notification::update(Event *event)
 
 	switch (event->getType())
 	{
-	case COMPLETE:
+	case EventType::COMPLETED:
 		// notify supervisor
 		if (supervisor != nullptr)
 			emailService->sendEmail(supervisor->getEmail(), "Item Completed", worker->getName() + " completed an item: " + source->getName() + ".");
 		break;
-	case APPROVED:
+	case EventType::APPROVED:
 		// notify asignee
 		emailService->sendEmail(worker->getEmail(), "Item Approved", "Your item, " + source->getName() + ", was approved.");
 		break;
-	case REJECTED:
+	case EventType::REJECTED:
 		// notify asignee
 		emailService->sendEmail(worker->getEmail(), "Item Approval Rejected", "Your approval request for your item, " + source->getName() + ", was rejected.");
 		break;
-	case ESCALATED:
+	case EventType::ESCALATED:
 		// notify supervisor
 		if (supervisor != nullptr)
 			emailService->sendEmail(supervisor->getEmail(), "Item Escalated", "The item, " + source->getName() + ", was escalated.");
 		break;
-	case ASSIGNED:
+	case EventType::ASSIGNED:
 		// notify asignee
 		emailService->sendEmail(worker->getEmail(), "Item Assignment", "You were assigned a new item: " + source->getName() + ".");
 		break;

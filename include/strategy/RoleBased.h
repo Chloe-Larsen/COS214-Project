@@ -3,12 +3,14 @@
 
 #include "AssignmentStrategy.h"
 
-class RoleBased : public AssignmentStrategy {
+class RoleBased : public AssignmentStrategy
+{
 private:
 	std::string role;
-public:	
+
+public:
 	RoleBased();
-	Worker assign(Item* item, WorkflowManager& manager) override;
+	Worker *assign(Item *item, WorkflowManager *manager) override;
 };
 
 #endif

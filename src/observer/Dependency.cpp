@@ -1,6 +1,10 @@
 #include "../../include/observer/Dependency.h"
+#include "../../include/composite/Item.h"
 
-Dependency::Dependency(Item *item) : dependentItem(item) {}
+Dependency::Dependency(Item *item) : dependentItem(item)
+{
+	item->incrementDependencies();
+}
 
 void Dependency::update(Event *event)
 {
@@ -10,5 +14,5 @@ void Dependency::update(Event *event)
 
 Dependency *Dependency::clone()
 {
-	return new Dependency(dependentItem);
+	return nullptr; // do not clone dependencies when cloning an item
 }

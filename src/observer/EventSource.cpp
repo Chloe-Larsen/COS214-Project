@@ -9,9 +9,13 @@ EventSource::EventSource(const EventSource &other)
 	for (Observer *observer : other.observers)
 	{
 		Observer *clone = observer->clone();
-		attach(clone);
+
+		if (clone != nullptr)
+			attach(clone);
 	}
 }
+
+EventSource::~EventSource() {}
 
 void EventSource::attach(Observer *observer)
 {

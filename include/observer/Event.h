@@ -15,7 +15,6 @@ private:
 
 public:
 	Event(EventType type, Item *source);
-
 	EventType getType();
 	Item *getSource();
 	std::string getTimestamp();

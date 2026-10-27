@@ -11,9 +11,8 @@ private:
 
 public:
 	Notification(EmailService *alertService);
-	
 	void update(Event *event) override;
-	Notification *clone();
+	Notification *clone() override;
 };
 
 #endif

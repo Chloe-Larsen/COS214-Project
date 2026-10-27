@@ -3,7 +3,7 @@
 #include "../../include/iterator/PriorityIterator.h"
 #include <memory>
 
-//helper detects cycles
+// helper detects cycles
 static bool containsComponent(WorkComponent *root, WorkComponent *target)
 {
     if (root == target)
@@ -17,11 +17,11 @@ static bool containsComponent(WorkComponent *root, WorkComponent *target)
     return false;
 }
 
-ItemGroup::ItemGroup(std::string id, std::string name, std::string status) : WorkComponent(id, name, status){}
+ItemGroup::ItemGroup(std::string name) : WorkComponent(name) {}
 
-ItemGroup::ItemGroup(ItemGroup &other) : WorkComponent(other)
+ItemGroup::ItemGroup(const ItemGroup &other) : WorkComponent(other)
 {
-   try
+    try
     {
         for (std::size_t i = 0; i < other.children.size(); ++i)
         {
@@ -38,11 +38,16 @@ ItemGroup::ItemGroup(ItemGroup &other) : WorkComponent(other)
     }
 }
 
+ItemGroup::ItemGroup() : WorkComponent(nullptr)
+{
+}
+
 ItemGroup::~ItemGroup()
 {
-	for(std::size_t i = 0; i < children.size(); ++i)	{
-		delete children[i];
-	}
+    for (std::size_t i = 0; i < children.size(); ++i)
+    {
+        delete children[i];
+    }
 }
 
 void ItemGroup::progress()
@@ -59,9 +64,10 @@ void ItemGroup::cancel()
 
 void ItemGroup::requestReview()
 {
-	for(size_t i = 0; i < children.size(); ++i)	{
-		children[i]->requestReview();
-	}
+    for (size_t i = 0; i < children.size(); ++i)
+    {
+        children[i]->requestReview();
+    }
 }
 
 void ItemGroup::add(WorkComponent *child)
@@ -78,15 +84,20 @@ void ItemGroup::add(WorkComponent *child)
 
 void ItemGroup::remove(WorkComponent *child)
 {
-    for (std::size_t i = 0; i < children.size(); ++i)    {
-        if (children[i] == child)        {
+    for (std::size_t i = 0; i < children.size(); ++i)
+    {
+        if (children[i] == child)
+        {
             children.erase(children.begin() + i);
             return; // Caller owns the detached child
         }
     }
 }
 
-ItemGroup *ItemGroup::clone() const { return new ItemGroup(*this); }
+ItemGroup *ItemGroup::clone() const
+{
+    return new ItemGroup(*this);
+}
 
 Iterator *ItemGroup::createIterator(std::string type)
 {
@@ -97,15 +108,16 @@ Iterator *ItemGroup::createIterator(std::string type)
     throw std::string("Unknown iterator type: " + type);
 }
 
-int ItemGroup::getChildCount() { 
+int ItemGroup::getChildCount()
+{
     int total = 0;
 
-    for (std::size_t i = 0; i < children.size(); ++i){
+    for (std::size_t i = 0; i < children.size(); ++i)
+    {
         total += children[i]->getChildCount();
     }
 
     return total;
-
 }
 
 WorkComponent *ItemGroup::getChild(int index) const

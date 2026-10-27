@@ -19,14 +19,19 @@ static std::time_t parseItemDeadline(const std::string &text)
     if (text.size() != 10 && text.size() != 19)
         throw std::string("Use YYYY-MM-DD for the deadline.");
 
-    for (std::size_t i = 0; i < text.size(); ++i){
+    for (std::size_t i = 0; i < text.size(); ++i)
+    {
         char separator = 0;
-        if (i == 4 || i == 7) separator = '-';
-        if (i == 10) separator = ' ';
-        if (i == 13 || i == 16) separator = ':';
+        if (i == 4 || i == 7)
+            separator = '-';
+        if (i == 10)
+            separator = ' ';
+        if (i == 13 || i == 16)
+            separator = ':';
         if ((separator && text[i] != separator) ||
             (!separator && (text[i] < '0' || text[i] > '9')))
-            throw std::string("Invalid deadline: " + text);}
+            throw std::string("Invalid deadline: " + text);
+    }
 
     std::tm date = {};
     int year = 0;
@@ -35,7 +40,8 @@ static std::time_t parseItemDeadline(const std::string &text)
     date.tm_year = year - 1900;
     date.tm_mon = (text[5] - '0') * 10 + text[6] - '0' - 1;
     date.tm_mday = (text[8] - '0') * 10 + text[9] - '0';
-    if (text.size() == 19)    {
+    if (text.size() == 19)
+    {
         date.tm_hour = (text[11] - '0') * 10 + text[12] - '0';
         date.tm_min = (text[14] - '0') * 10 + text[15] - '0';
         date.tm_sec = (text[17] - '0') * 10 + text[18] - '0';
@@ -63,13 +69,19 @@ Item::Item(std::string name, std::string deadline, int priority, Worker *assigne
 // PROTOTYPE: copy configuration, reset runtime state so instances are isolated.
 Item::Item(const Item &other) : WorkComponent(other), deadline(other.deadline), priority(other.priority), assignedTo(other.assignedTo), currentState(NULL), dependencies(other.dependencies), rejected(false), escalated(false)
 {
-	   currentState = dependencies > 0 ? static_cast<State *>(new Blocked())
-                                   : static_cast<State *>(new Available());
+    currentState = dependencies > 0 ? static_cast<State *>(new Blocked())
+                                    : static_cast<State *>(new Available());
+}
+
+Item::Item() : WorkComponent(nullptr), deadline(parseItemDeadline(nullptr)), priority(-1),
+               assignedTo(nullptr), currentState(nullptr), dependencies(0),
+               rejected(false), escalated(false)
+{
 }
 
 Item *Item::clone() const
 {
-	return new Item(*this);
+    return new Item(*this);
 }
 
 Item::~Item()
@@ -100,18 +112,20 @@ void Item::cancel()
 
 void Item::reject(std::string reason)
 {
-   rejectionReason = reason;
-   rejected = true;
+    rejectionReason = reason;
+    rejected = true;
 }
 
 void Item::incrementDependencies()
 {
     ++dependencies;
-    try    {
+    try
+    {
         if (dependencies == 1 && currentState)
             currentState->block(this);
     }
-    catch (...)    {
+    catch (...)
+    {
         --dependencies;
         throw;
     }
@@ -122,11 +136,13 @@ void Item::decrementDependencies()
     if (dependencies == 0)
         return;
     --dependencies;
-    try    {
+    try
+    {
         if (dependencies == 0 && currentState)
             currentState->unblock(this);
     }
-    catch (...){
+    catch (...)
+    {
         ++dependencies;
         throw;
     }
@@ -150,17 +166,17 @@ void Item::requestReview()
 
 bool Item::isEscalated() const
 {
-	return escalated;
+    return escalated;
 }
 
 bool Item::isRejected() const
 {
-	return rejected;
+    return rejected;
 }
 
 const std::string &Item::getRejectionReason() const
 {
-	return rejectionReason;
+    return rejectionReason;
 }
 
 void Item::escalate()
@@ -175,7 +191,7 @@ void Item::escalate()
 
 Worker *Item::getWorker()
 {
-	return assignedTo;
+    return assignedTo;
 }
 
 void Item::assignWorker(Worker *person)
@@ -185,7 +201,7 @@ void Item::assignWorker(Worker *person)
 
 State *Item::getState()
 {
-	return currentState;
+    return currentState;
 }
 
 void Item::setState(State *state)
@@ -202,14 +218,13 @@ void Item::setState(State *state)
 
 int Item::getPriority()
 {
-	return this->priority;
+    return this->priority;
 }
 
 void Item::setPriority(int priority)
 {
-	this->priority = priority;
+    this->priority = priority;
 }
-
 
 Iterator *Item::createIterator(std::string type)
 {
@@ -222,20 +237,19 @@ Iterator *Item::createIterator(std::string type)
     throw std::string("Unknown iterator type: " + type);
 }
 
-
 int Item::getChildCount()
 {
-	return 1;
+    return 1;
 }
 
 std::string Item::getStatus() const
 {
-	return currentState ? currentState->getName() : "UNINITIALISED";
+    return currentState ? currentState->getName() : "UNINITIALISED";
 }
 
 void Item::setDeadline(std::time_t deadline)
 {
-	this->deadline = deadline;   
+    this->deadline = deadline;
 }
 
 int Item::getDependencies() const

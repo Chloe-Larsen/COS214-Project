@@ -50,7 +50,7 @@ static std::time_t parseItemDeadline(const std::string &text)
 
 Item::Item(std::string name, std::string deadline, int priority, Worker *assignedTo)
     : WorkComponent(name), deadline(parseItemDeadline(deadline)), priority(priority),
-      assignedTo(nullptr), currentState(nullptr), dependencies(0),
+      assignedTo(nullptr), currentState(Available), dependencies(0),
       rejected(false), escalated(false)
 {
     currentState = new Available();
@@ -161,6 +161,9 @@ void Item::escalate()
     escalated = true;
     if (currentState)
         currentState->setEscalated();
+
+    Worker *superior = assignedTo ? assignedTo->getSupervisor() : nullptr;
+    if(superior != nullptr) superior->handleEscalation(this);
 }
 
 Worker *Item::getWorker()

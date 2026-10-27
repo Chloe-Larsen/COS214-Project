@@ -45,13 +45,21 @@ bool Worker::review(Item *item, int depth)
 
 void Worker::handleEscalation(Item *item)
 {
-	if (item == NULL)
-	{
-		return;
-	}
+    if (item == nullptr){
+        return;
+    }
 
-	item->escalate();				// item is now pending manual resolution
-	escalatedQueue.push_back(item); // e.g. HR picks it up from here
+    if (!item->isEscalated()){
+        item->escalate();
+    }
+
+    for (Item *queued : escalatedQueue){
+        if (queued == item){
+            return;
+        }
+    }
+
+    escalatedQueue.push_back(item);
 }
 
 int Worker::getWorkload()

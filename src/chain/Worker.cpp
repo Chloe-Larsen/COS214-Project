@@ -61,10 +61,19 @@ bool Worker::review(Item *item, int depth)
 
 void Worker::handleEscalation(Item *item)
 {
-	if (item == NULL)
-	{
-		return;
-	}
+    if (item == nullptr){
+        return;
+    }
+
+    if (!item->isEscalated()){
+        item->escalate();
+    }
+
+    for (Item *queued : escalatedQueue){
+        if (queued == item){
+            return;
+        }
+    }
 
 	item->assignWorker(this);
 	item->escalate();

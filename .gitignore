@@ -1,1 +1,4 @@
 COS214_Practical6_TIVIDY.pdf
+*.o
+/build
+/flat_src

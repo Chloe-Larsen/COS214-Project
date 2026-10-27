@@ -3,11 +3,9 @@
 #include "../../include/WorkflowManager.h"
 #include <stdexcept>
 
-RoleBased::RoleBased()
-{
-}
+RoleBased::RoleBased() {}
 
-Worker RoleBased::assign(Item *item, WorkflowManager &manager)
+Worker *RoleBased::assign(Item *item, WorkflowManager *manager)
 {
 	if (!item)
 		throw std::runtime_error("RoleBased: null item");
@@ -16,7 +14,7 @@ Worker RoleBased::assign(Item *item, WorkflowManager &manager)
 	if (!w)
 		throw std::runtime_error("RoleBased: item has no worker to evaluate");
 
-	return *w;
+	return w;
 }
 
-//no way to select by role? question not statement
+// no way to select by role? question not statement

@@ -1,4 +1,5 @@
 #include <chrono>
+#include <sstream>
 #include <iomanip>
 
 #include "../../include/observer/Event.h"

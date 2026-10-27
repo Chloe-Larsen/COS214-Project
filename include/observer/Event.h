@@ -3,8 +3,9 @@
 
 #include <string>
 
-#include "../composite/Item.h"
 #include "EventType.h"
+
+class Item;
 
 class Event
 {

@@ -1,5 +1,6 @@
 #include "../../include/iterator/PriorityIterator.h"
 #include "../../include/composite/ItemGroup.h"
+#include "../../include/composite/Item.h"
 
 bool PriorityComparator::operator()(WorkComponent *a, WorkComponent *b) const
 {

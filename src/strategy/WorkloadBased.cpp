@@ -3,11 +3,9 @@
 #include "../../include/WorkflowManager.h"
 #include <stdexcept>
 
-WorkloadBased::WorkloadBased()
-{
-}
+WorkloadBased::WorkloadBased() {}
 
-Worker WorkloadBased::assign(Item *item, WorkflowManager &manager)
+Worker *WorkloadBased::assign(Item *item, WorkflowManager *manager)
 {
 	if (!item)
 		throw std::runtime_error("WorkloadBased: null item");
@@ -16,5 +14,5 @@ Worker WorkloadBased::assign(Item *item, WorkflowManager &manager)
 	if (!w)
 		throw std::runtime_error("WorkloadBased: item has no worker to evaluate");
 
-	return *w;
+	return w;
 }

@@ -18,7 +18,6 @@ private:
 	State *currentState;	
 	int dependencies;
 	bool rejected;
-	bool escalated;
 	std::string rejectionReason;
 	Item &operator=(const Item &);
 

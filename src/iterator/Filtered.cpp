@@ -1,7 +1,7 @@
 #include "../../include/iterator/Filtered.h"
 #include "../../include/composite/ItemGroup.h"
 
-Filtered::Filtered(Iterator *inner, FilterCriteria c) : Iterator(nullptr), inner(inner), criteria(c), current(nullptr)
+Filtered::Filtered(Iterator *inner, FilterCriteria *c) : Iterator(nullptr), inner(inner), criteria(c), current(nullptr)
 {
 	first();
 }
@@ -19,10 +19,10 @@ bool Filtered::matches(WorkComponent *component) const
 
 	Item *item = dynamic_cast<Item *>(component);
 
-	if (criteria.getStatus() != ItemStatus::ANY)
+	if (criteria->getStatus() != ItemStatus::ANY)
 	{
 		std::string expectedStatus;
-		switch (criteria.getStatus())
+		switch (criteria->getStatus())
 		{
 		case ItemStatus::AVAILABLE:
 			expectedStatus = "AVAILABLE";
@@ -51,9 +51,9 @@ bool Filtered::matches(WorkComponent *component) const
 		}
 	}
 
-	if (criteria.getAssignedTo() != nullptr)
+	if (criteria->getAssignedTo() != nullptr)
 	{
-		if (!item || item->getWorker() != criteria.getAssignedTo())
+		if (!item || item->getWorker() != criteria->getAssignedTo())
 		{
 			return false;
 		}

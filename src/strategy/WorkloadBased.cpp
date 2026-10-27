@@ -1,11 +1,20 @@
 #include "../../include/strategy/WorkloadBased.h"
+#include "../../include/composite/Item.h"
+#include "../../include/WorkflowManager.h"
+#include <stdexcept>
 
 WorkloadBased::WorkloadBased()
 {
-	// TODO - implement WorkloadBased::WorkloadBased
-	throw "Not yet implemented";
 }
 
-Worker WorkloadBased::assign(Item item, WorkflowInstance instance)
+Worker WorkloadBased::assign(Item *item, WorkflowManager &manager)
 {
+	if (!item)
+		throw std::runtime_error("WorkloadBased: null item");
+
+	Worker *w = item->getWorker();
+	if (!w)
+		throw std::runtime_error("WorkloadBased: item has no worker to evaluate");
+
+	return *w;
 }

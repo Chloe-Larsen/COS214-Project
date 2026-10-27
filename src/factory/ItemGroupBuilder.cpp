@@ -1,16 +1,34 @@
 #include "../../include/factory/ItemGroupBuilder.h"
 
-ItemGroupBuilder::ItemGroupBuilder() {
-	// TODO - implement ItemGroupBuilder::ItemGroupBuilder
-	throw "Not yet implemented";
+ItemGroupBuilder::ItemGroupBuilder()
+{
+	itemGroup = createProduct();
 }
 
-WorkComponent* ItemGroupBuilder::createProduct() {
-	// TODO - implement ItemGroupBuilder::createProduct
-	throw "Not yet implemented";
+ItemGroupBuilder::~ItemGroupBuilder()
+{
+	if(itemGroup)
+		delete itemGroup;
 }
 
-ItemGroupBuilder* ItemGroupBuilder::addChild(WorkComponent* child) {
-	// TODO - implement ItemGroupBuilder::addChild
-	throw "Not yet implemented";
+ItemGroup *ItemGroupBuilder::createProduct()
+{
+	return new ItemGroup();
+}
+
+ItemGroupBuilder *ItemGroupBuilder::addChild(WorkComponent *child)
+{
+	itemGroup->add(child);
+	return this;
+}
+
+ItemGroupBuilder *ItemGroupBuilder::setName(std::string name)
+{
+	itemGroup->setName(name);
+	return this;
+}
+
+WorkComponent *ItemGroupBuilder::getProduct()
+{
+	return itemGroup;
 }

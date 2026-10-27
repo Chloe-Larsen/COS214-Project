@@ -25,6 +25,7 @@ private:
 public:
 	Item(std::string name, std::string deadline, int priority, Worker *assignedTo);
 	Item(const Item &other);
+	Item();
 	~Item();
 	void progress() override;
 	void cancel() override;
@@ -48,6 +49,7 @@ public:
 	Iterator *createIterator(std::string type) override;
 	int getChildCount() override;
 	std::string getStatus() const;
+	void setDeadline(std::time_t deadline);
 };
 
 #endif

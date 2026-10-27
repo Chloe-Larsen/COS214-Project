@@ -10,7 +10,7 @@ private:
 	Item *item;
 
 protected:
-	WorkComponent *createProduct();
+	Item *createProduct() override;
 
 public:
 	ItemBuilder();
@@ -21,6 +21,8 @@ public:
 	ItemBuilder *setPriority(int priority);
 	ItemBuilder *addNotifier();
 	ItemBuilder *addAuditLogger();
+	ItemBuilder *setName(std::string name) override;
+	WorkComponent *getProduct() override;
 };
 
 #endif

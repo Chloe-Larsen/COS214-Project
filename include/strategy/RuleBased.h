@@ -3,11 +3,11 @@
 
 #include "AssignmentStrategy.h"
 
-class RuleBased : AssignmentStrategy
+class RuleBased : public AssignmentStrategy
 {
 public:
 	RuleBased();
-	Worker assign(Item item, WorkflowInstance instance) override;
+	Worker assign(Item* item, WorkflowManager& manager) override;
 };
 
 #endif

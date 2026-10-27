@@ -7,9 +7,8 @@ class AuditLogger : public Observer
 {
 public:
 	AuditLogger();
-	
 	void update(Event *event) override;
-	AuditLogger *clone();
+	AuditLogger *clone() override;
 };
 
 #endif

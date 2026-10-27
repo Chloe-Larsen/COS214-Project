@@ -4,8 +4,6 @@
 
 AuditLogger::AuditLogger() : Observer()
 {
-	// TODO - implement AuditLogger::AuditLogger
-	throw "Not yet implemented";
 }
 
 void AuditLogger::update(Event *event)

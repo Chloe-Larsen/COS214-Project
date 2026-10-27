@@ -11,7 +11,7 @@ private:
 public:
 	Dependency(Item *item);
 	void update(Event *event) override;
-	Dependency *clone();
+	Dependency *clone() override;
 };
 
 #endif

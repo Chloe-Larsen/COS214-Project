@@ -1,7 +1,6 @@
 #include "../../include/command/WorkflowCommand.h"
 
-WorkflowCommand::WorkflowCommand(Item* reciever)
-    : reciever(reciever)
+WorkflowCommand::WorkflowCommand(Item* reciever): reciever(reciever)
 {
     if (reciever == nullptr)
     {

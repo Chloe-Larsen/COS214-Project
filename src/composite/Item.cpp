@@ -8,6 +8,9 @@
 #include "../../include/iterator/PriorityIterator.h"
 #include <cstdio>
 #include <stdexcept>
+#include <sstream>
+#include <iomanip>
+#include <ctime>
 
 static std::time_t parseItemDeadline(const std::string &text)
 {
@@ -77,6 +80,10 @@ Item::~Item()
 
 void Item::progress()
 {
+	if(currentState != NULL)
+    {
+        currentState->progress(this);
+    }
     if (dependencies != 0)
         throw std::string("Item still has unresolved dependencies: " + name);
     if (!currentState)
@@ -173,18 +180,7 @@ Worker *Item::getWorker()
 
 void Item::assignWorker(Worker *person)
 {
-    if (assignedTo == person)
-        return;
-    
-	if (assignedTo)
-        assignedTo->addWorkload(-1);
-
-    assignedTo = person;
-    
-	if (assignedTo)
-    {
-        assignedTo->addWorkload(1);
-    }
+	assignedTo = person;
 }
 
 State *Item::getState()

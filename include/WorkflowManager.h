@@ -14,25 +14,28 @@
 
 class WorkflowManager
 {
-
 private:
-	std::string id;
 	WorkComponent *root;
 	std::time_t createdAt;
-	std::string status;
-	Routing* routing;
-	AssignmentStrategy* assignmentStrategy;
-	std::vector<WorkflowCommand*> history;
-	WorkflowManager(const WorkflowManager&) = delete;
-	WorkflowManager& operator=(const WorkflowManager&) = delete;
+	Routing *routing;
+	AssignmentStrategy *assignmentStrategy;
+	std::vector<WorkflowCommand *> history;
+
+	WorkflowManager(const WorkflowManager &) = delete;
+	WorkflowManager &operator=(const WorkflowManager &) = delete;
 
 public:
 	WorkflowManager();
 	~WorkflowManager();
+
 	void progress();
 	void cancel();
 	void assignWork(Item *item);
-	Iterator *createIterator();
+
+	Iterator *createDependencyIterator();
+	Iterator *createPriorityIterator();
+	Iterator *createFilteredIterator(Iterator *iterator, FilterCriteria *criteria);
+
 	WorkComponent *selectNextAvailable();
 	void executeCommand(WorkflowCommand *command);
 	std::vector<WorkflowCommand *> getHistory();

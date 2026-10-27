@@ -1,7 +1,11 @@
 #include "../../include/chain/Worker.h"
 #include "../../include/composite/Item.h"
+#include "../../include/composite/ItemGroup.h"
+#include "../../include/iterator/DependencyIterator.h"
 
-Worker::Worker(std::string id, std::string name, std::string role, Worker *supervisor) : id(id), name(name), role(role), supervisor(supervisor), workload(0)
+#include <random>
+
+Worker::Worker(std::string id, std::string name, std::string role, Worker *supervisor) : id(id), name(name), role(role), supervisor(supervisor), workflowRoot(NULL)
 {
 	if (supervisor)
 	{
@@ -11,36 +15,48 @@ Worker::Worker(std::string id, std::string name, std::string role, Worker *super
 
 bool Worker::review(Item *item, int depth)
 {
-	if (item == NULL || depth < 0 || depth > MAX_CHAIN_DEPTH)
+	if (item == NULL || depth < 1 || depth > MAX_CHAIN_DEPTH)
 	{
 		return false;
 	}
 
-	// 1. This handler decides. A rejection terminates the chain immediately.
-	bool approve = policy ? policy(item) : true;
+	// Decides whether this worker approves or rejects
+	bool approve;
 
-	if (!approve)
+	if(policy)
+	{
+		approve = policy(item);
+	}
+	else
+	{
+		static std::random_device rd;
+		static std::mt19937 generator(rd());
+		static std::uniform_int_distribution<int> distribution(1, 100);
+
+		approve = distribution(generator) <= 80; // 80% chance of approval
+	}
+
+	// if this worker rejects, stop chain immediately
+	if(!approve)
 	{
 		item->reject(role + " " + name + " rejected the request");
 		return false;
 	}
 
-	// 2. Is this approval level enough for the item's importance?
-	int levelsRequired = item->getPriority() < 1 ? 1 : item->getPriority();
-
-	if (depth + 1 >= levelsRequired)
+	// this worker approved, if no more levels are required
+	if (depth == 1)
 	{
 		return true;
 	}
 
-	// 3. Not enough sign-offs yet: forward to superior, or escalate if none.
-	if (supervisor == NULL)
+	// more approvals required, forward to supervisor
+	if (supervisor != NULL)
 	{
-		handleEscalation(item);
-		return false;
+		return supervisor->review(item, depth - 1);
 	}
-
-	return supervisor->review(item, depth + 1);
+	
+	handleEscalation(item);
+	return false; // escalated, so not approved yet
 }
 
 void Worker::handleEscalation(Item *item)
@@ -59,21 +75,39 @@ void Worker::handleEscalation(Item *item)
         }
     }
 
-    escalatedQueue.push_back(item);
+	item->assignWorker(this);
+	item->escalate();
+
+	escalatedQueue.push_back(item);
+}
+
+void Worker::setWorkflowRoot(WorkComponent *root)
+{
+	workflowRoot = root;
 }
 
 int Worker::getWorkload()
 {
-	return workload;
-}
-
-void Worker::addWorkload(int delta)
-{
-	workload += delta;
-	if (workload < 0)
+	if(workflowRoot == NULL)
 	{
-		workload = 0;
+		return 0;
 	}
+
+	int count = 0;
+
+	DependencyIterator iterator(workflowRoot);
+
+	for(WorkComponent *component = iterator.first(); component != NULL; component = iterator.next())
+	{
+		Item *item = dynamic_cast<Item *>(component);
+
+		if(item && item->getWorker() == this)
+		{
+			count++;
+		}
+	}
+
+	return count;
 }
 
 void Worker::setSupervisor(Worker *s)
@@ -83,7 +117,10 @@ void Worker::setSupervisor(Worker *s)
 
 void Worker::addSubordinate(Worker *w)
 {
-	subordinates.push_back(w);
+	if(w != NULL)
+	{
+		subordinates.push_back(w);
+	}
 }
 
 void Worker::setDecisionPolicy(DecisionPolicy p)

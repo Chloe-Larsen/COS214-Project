@@ -9,7 +9,7 @@ struct PriorityComparator
 	bool operator()(WorkComponent *a, WorkComponent *b) const;
 };
 
-class PriorityIterator : Iterator
+class PriorityIterator : public Iterator
 {
 private:
 	std::priority_queue<WorkComponent *, std::vector<WorkComponent *>, PriorityComparator> queue;

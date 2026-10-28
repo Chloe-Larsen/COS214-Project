@@ -9,5 +9,6 @@ EmailServiceAdapter::~EmailServiceAdapter()
 
 void EmailServiceAdapter::sendEmail(std::string email, std::string subject, std::string body)
 {
-	legacyEmailService->send(email + ";" + subject + ";" + body); // legacy service accepts single string with all data
+	std::string htmlBody = "<h2>" + subject + "</h2>\n<p>To: <i>" + subject + "</i></p>\n<p>" + body + "</p>";
+	legacyEmailService->sendEmailHtmlBody(email, htmlBody);
 }

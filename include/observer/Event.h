@@ -3,8 +3,6 @@
 
 #include <string>
 
-#include "EventType.h"
-
 static const std::string KNOWN_EVENT_TYPES[] = {
 	"COMPLETED",
 	"APPROVED",

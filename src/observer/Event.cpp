@@ -4,6 +4,24 @@
 
 #include "../../include/observer/Event.h"
 
+const std::string KNOWN_EVENT_TYPES[] = {
+	"COMPLETED",
+	"APPROVED",
+	"REJECTED",
+	"ESCALATED",
+	"ASSIGNED"};
+
+const std::size_t KNOWN_EVENT_TYPE_COUNT =
+	sizeof(KNOWN_EVENT_TYPES) / sizeof(KNOWN_EVENT_TYPES[0]);
+
+bool Event::isValidType(const std::string &type)
+{
+	for (std::size_t i = 0; i < KNOWN_EVENT_TYPE_COUNT; ++i)
+		if (KNOWN_EVENT_TYPES[i] == type)
+			return true;
+	return false;
+}
+
 std::string getTimestamp()
 {
 	auto now = std::chrono::system_clock::now();
@@ -13,9 +31,13 @@ std::string getTimestamp()
 	return ss.str();
 }
 
-Event::Event(EventType type, Item *source) : type(type), source(source), timestamp(getTimestamp()) {}
+Event::Event(std::string type, Item *source) : type(type), source(source), timestamp(getTimestamp())
+{
+	if (!isValidType(type))
+		throw std::string("Unknown event type: " + type);
+}
 
-EventType Event::getType()
+std::string Event::getType()
 {
 	return this->type;
 }

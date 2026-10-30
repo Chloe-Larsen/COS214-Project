@@ -19,36 +19,12 @@ bool Filtered::matches(WorkComponent *component) const
 
 	Item *item = dynamic_cast<Item *>(component);
 
-	if (criteria->getStatus() != ItemStatus::ANY)
+	if (criteria->hasStatusFilter())
 	{
-		std::string expectedStatus;
-		switch (criteria->getStatus())
-		{
-		case ItemStatus::AVAILABLE:
-			expectedStatus = "AVAILABLE";
-			break;
-		case ItemStatus::IN_PROGRESS:
-			expectedStatus = "IN_PROGRESS";
-			break;
-		case ItemStatus::COMPLETED:
-			expectedStatus = "COMPLETED";
-			break;
-		case ItemStatus::APPROVED:
-			expectedStatus = "APPROVED";
-			break;
-		case ItemStatus::BLOCKED:
-			expectedStatus = "BLOCKED";
-			break;
-		case ItemStatus::CANCELLED:
-			expectedStatus = "CANCELLED";
-			break;
-		default:
-			break;
-		}
-		if (!expectedStatus.empty() && item->getStatus() != expectedStatus)
-		{
+		if (!item)
 			return false;
-		}
+		if (!criteria->allowsStatus(item->getStatus()))
+			return false;
 	}
 
 	if (criteria->getAssignedTo() != nullptr)
@@ -85,6 +61,7 @@ WorkComponent *Filtered::first()
 
 	inner->first();
 	advanceToNextMatch();
+	return current;
 }
 
 WorkComponent *Filtered::next()

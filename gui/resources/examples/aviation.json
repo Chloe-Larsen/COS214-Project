@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "name": "Aircraft maintenance dispatch",
+  "workers": [
+    {
+      "id": "aviation-worker",
+      "name": "Assigned operator",
+      "role": "Technician",
+      "email": "",
+      "supervisorId": "aviation-superior"
+    },
+    {
+      "id": "aviation-superior",
+      "name": "Authorised reviewer",
+      "role": "Supervisor",
+      "email": "",
+      "supervisorId": ""
+    }
+  ],
+  "components": [
+    {
+      "id": "aviation-root",
+      "parentId": "",
+      "name": "Aircraft maintenance dispatch",
+      "kind": "group"
+    },
+    {
+      "id": "aviation-stage",
+      "parentId": "aviation-root",
+      "name": "Required preparation",
+      "kind": "group"
+    },
+    {
+      "id": "assess",
+      "parentId": "aviation-stage",
+      "name": "Assess reported defect",
+      "kind": "item",
+      "state": "AVAILABLE",
+      "workerId": "aviation-worker",
+      "priority": 90,
+      "deadline": ""
+    },
+    {
+      "id": "repair",
+      "parentId": "aviation-stage",
+      "name": "Repair discrepancy",
+      "kind": "item",
+      "state": "BLOCKED",
+      "workerId": "aviation-worker",
+      "priority": 80,
+      "deadline": ""
+    },
+    {
+      "id": "inspect",
+      "parentId": "aviation-stage",
+      "name": "Verify maintenance work",
+      "kind": "item",
+      "state": "BLOCKED",
+      "workerId": "aviation-worker",
+      "priority": 70,
+      "deadline": ""
+    },
+    {
+      "id": "aviation-close",
+      "parentId": "aviation-root",
+      "name": "Confirm outcome",
+      "kind": "item",
+      "state": "BLOCKED",
+      "workerId": "aviation-superior",
+      "priority": 50
+    }
+  ],
+  "dependencies": [
+    {
+      "prerequisiteId": "assess",
+      "dependentId": "repair"
+    },
+    {
+      "prerequisiteId": "repair",
+      "dependentId": "inspect"
+    },
+    {
+      "prerequisiteId": "aviation-stage",
+      "dependentId": "aviation-close"
+    }
+  ],
+  "activity": [],
+  "assignmentStrategy": "RoleBased",
+  "strategyOptions": {
+    "role": "Technician",
+    "tieBreak": "workerId"
+  },
+  "engineData": {}
+}

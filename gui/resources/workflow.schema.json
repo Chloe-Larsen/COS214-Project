@@ -1,0 +1,227 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 65536,
+      "minLength": 1
+    },
+    "assignmentStrategy": {
+      "type": "string",
+      "maxLength": 65536
+    },
+    "strategyOptions": {
+      "type": "object",
+      "maxProperties": 1000,
+      "additionalProperties": {
+        "type": "string",
+        "maxLength": 65536
+      }
+    },
+    "engineData": {
+      "type": "object",
+      "maxProperties": 1000,
+      "additionalProperties": {
+        "type": "string",
+        "maxLength": 65536
+      }
+    },
+    "workers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 65536
+          },
+          "supervisorId": {
+            "type": "string",
+            "maxLength": 65536
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "role"
+        ]
+      },
+      "maxItems": 10000
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          },
+          "parentId": {
+            "type": "string",
+            "maxLength": 65536
+          },
+          "workerId": {
+            "type": "string",
+            "maxLength": 65536
+          },
+          "state": {
+            "type": "string",
+            "maxLength": 65536
+          },
+          "deadline": {
+            "type": "string",
+            "maxLength": 65536
+          },
+          "rejectionReason": {
+            "type": "string",
+            "maxLength": 65536
+          },
+          "kind": {
+            "enum": [
+              "item",
+              "group"
+            ]
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647
+          },
+          "rejected": {
+            "type": "boolean"
+          },
+          "escalated": {
+            "type": "boolean"
+          },
+          "notifier": {
+            "type": "object",
+            "maxProperties": 1000,
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 65536
+            }
+          },
+          "audit": {
+            "type": "object",
+            "maxProperties": 1000,
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 65536
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "kind"
+        ]
+      },
+      "maxItems": 10000
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "prerequisiteId": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          },
+          "dependentId": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          }
+        },
+        "required": [
+          "prerequisiteId",
+          "dependentId"
+        ]
+      },
+      "maxItems": 50000
+    },
+    "activity": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          },
+          "timestamp": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 65536,
+            "minLength": 1
+          },
+          "componentId": {
+            "type": "string",
+            "maxLength": 65536
+          },
+          "componentName": {
+            "type": "string",
+            "maxLength": 65536
+          }
+        },
+        "required": [
+          "id",
+          "timestamp",
+          "category",
+          "message"
+        ]
+      },
+      "maxItems": 100000
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "name",
+    "workers",
+    "components",
+    "dependencies"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TIVIDY GUI transport schema 1"
+}

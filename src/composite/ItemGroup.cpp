@@ -32,6 +32,13 @@ static bool containsComponent(WorkComponent *root, WorkComponent *target)
 
 ItemGroup::ItemGroup(std::string name) : WorkComponent(name) {}
 
+/**
+ * @brief Copy constructor used to create a deep copy of an ItemGroup.
+ * @param other The ItemGroup object being copied.
+ * @details Copies the group name and recursively clones every child
+ *          component. This ensures the cloned group does not share its
+ *          child objects with the original group.
+ */
 ItemGroup::ItemGroup(const ItemGroup &other) : WorkComponent(other)
 {
     try
@@ -107,6 +114,12 @@ void ItemGroup::remove(WorkComponent *child)
     }
 }
 
+/**
+ * @brief Creates a deep clone of this ItemGroup.
+ * @return Pointer to a newly allocated ItemGroup containing cloned children.
+ * @details Uses the copy constructor to recursively clone the group and
+ *          all its descendants.
+ */
 ItemGroup *ItemGroup::clone() const
 {
     return new ItemGroup(*this);

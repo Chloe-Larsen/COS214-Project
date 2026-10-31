@@ -76,7 +76,15 @@ Item::Item(std::string name, std::string deadline, int priority, Worker *assigne
       assignedTo(assignedTo), currentState(new Available()), dependencies(0),
       rejected(false) {}
 
+
 // PROTOTYPE: copy configuration, reset runtime state so instances are isolated.
+/**
+ * @brief Copy constructor used to create a cloned Item.
+ * @param other The Item object being copied.
+ * @details Copies the item's configuration, including its name, deadline,
+ *          priority, assigned worker and dependency count. Runtime state
+ *          is recreated so the cloned item has an independent State object.
+ */
 Item::Item(const Item &other) : WorkComponent(other), deadline(other.deadline), priority(other.priority), assignedTo(other.assignedTo), currentState(NULL), dependencies(other.dependencies), rejected(false)
 {
     currentState = dependencies > 0 ? new Blocked()
@@ -87,6 +95,12 @@ Item::Item() : WorkComponent(nullptr), deadline(parseItemDeadline(nullptr)), pri
                assignedTo(nullptr), currentState(nullptr), dependencies(0),
                rejected(false) {}
 
+/**
+ * @brief Creates a clone of this Item.
+ * @return Pointer to a newly allocated copy of this Item.
+ * @details Uses the copy constructor to create an independent Item object
+ *          based on the current item's configuration.
+ */
 Item *Item::clone() const
 {
     return new Item(*this);

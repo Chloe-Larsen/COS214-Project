@@ -1,9 +1,22 @@
+/**
+ * @file ItemGroup.cpp
+ * @brief Child ownership, recursive delegation and structural cloning.
+ * @ingroup tividy_composite
+ */
 #include "../../include/composite/ItemGroup.h"
 #include "../../include/iterator/DependencyIterator.h"
 #include "../../include/iterator/PriorityIterator.h"
 #include <memory>
 
 // helper detects cycles
+/**
+ * @brief Test pointer membership in a component subtree.
+ * @param[in] root Borrowed subtree root; null is permitted.
+ * @param[in] target Borrowed component identity to locate.
+ * @return True if root equals target or a descendant has the target identity.
+ * @details Iterates direct children and is used by add() to reject repeated
+ * insertion and ancestor cycles.
+ */
 static bool containsComponent(WorkComponent *root, WorkComponent *target)
 {
     if (root == target)

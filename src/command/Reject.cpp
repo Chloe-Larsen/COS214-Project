@@ -1,3 +1,9 @@
+/**
+ * @file Reject.cpp
+ * @brief Implementation of the Reject command participant.
+ * @ingroup tividy_command
+ */
+
 #include "../../include/command/Reject.h"
 
 Reject::Reject(Item *item) : WorkflowCommand(item), reason("Rejected by workflow command.")

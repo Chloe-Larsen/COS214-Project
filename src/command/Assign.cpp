@@ -1,3 +1,9 @@
+/**
+ * @file Assign.cpp
+ * @brief Implementation of the Assign command participant.
+ * @ingroup tividy_command
+ */
+
 #include "../../include/command/Assign.h"
 
 Assign::Assign(Item *item) : WorkflowCommand(item), worker(item->getWorker())

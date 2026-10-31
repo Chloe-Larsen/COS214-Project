@@ -1,3 +1,9 @@
+/**
+ * @file Progress.cpp
+ * @brief Implementation of the Progress command participant.
+ * @ingroup tividy_command
+ */
+
 #include "../../include/command/Progress.h"
 
 Progress::Progress(Item *item) : WorkflowCommand(item)

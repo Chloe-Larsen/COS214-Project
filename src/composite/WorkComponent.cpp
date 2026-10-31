@@ -1,3 +1,8 @@
+/**
+ * @file WorkComponent.cpp
+ * @brief Component naming and shared event-source construction.
+ * @ingroup tividy_composite
+ */
 #include "../../include/composite/WorkComponent.h"
 
 WorkComponent::WorkComponent(std::string name) : EventSource(), name(name)

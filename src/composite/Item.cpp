@@ -1,3 +1,10 @@
+/**
+ * @file Item.cpp
+ * @brief Leaf lifecycle, assignment and persistence.
+ * @ingroup tividy_composite
+ */
+
+
 #include "../../include/composite/Item.h"
 #include "../../include/chain/Worker.h"
 #include "../../include/state/State.h"
@@ -12,6 +19,13 @@
 #include <iomanip>
 #include <ctime>
 
+/**
+ * @brief Parse and validate the optional local deadline representation.
+ * @param[in] text Empty, YYYY-MM-DD, or YYYY-MM-DD HH:MM:SS.
+ * @return Zero for empty input; otherwise the local-time timestamp.
+ * @throws std::string If separators, digits, calendar fields or conversion fail.
+ * @details Rejects calendar values that mktime would usually normalise.
+ */
 static std::time_t parseItemDeadline(const std::string &text)
 {
     if (text.empty())

@@ -32,7 +32,7 @@ void DependencyIterator::pushChildren(WorkComponent *component)
 
 	int childCount = component->getChildCount();
 
-	for (int i = childCount - 1; i >= 0; ++i)
+	for (int i = childCount - 1; i >= 0; --i)
 	{
 		ItemGroup *group = dynamic_cast<ItemGroup *>(component);
 		if (group)

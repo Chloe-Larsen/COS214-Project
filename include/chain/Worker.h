@@ -37,9 +37,16 @@ class Worker
 		 */
 		typedef std::function<bool(Item *)> DecisionPolicy;
 
+		/** @brief Unique identifier of the worker. */
 		std::string id;
+
+		/** @brief Full name of the worker. */
 		std::string name;
+
+		/** @brief Email address of the worker. */
 		std::string email;
+
+		/** @brief Job role or position held by the worker. */
 		std::string role;
 
 		/** @brief The worker's direct supervisor, who receives forwarded approval requests. */

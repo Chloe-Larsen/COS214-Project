@@ -1,52 +1,40 @@
 /**
- * @file WorkflowCommand.h
- * @brief Abstract command interface for item operations.
+ * @file Escalate.h
+ * @brief Declares the command for escalating an item.
  * @ingroup tividy_command
  */
 
-#ifndef WORKFLOWCOMMAND_H
-#define WORKFLOWCOMMAND_H
-#include "../composite/Item.h"
-#include <string>
+#ifndef ESCALATE_H
+#define ESCALATE_H
+
+#include "WorkflowCommand.h"
+
 /**
- * @brief Escalation Command for an operation on one Item.
- * @details Concrete commands retain their request data and delegate execution to
- * the receiver.
+ * @brief Encapsulates an item escalation request.
+ * @details Transfers execution to the item's escalation operation.
  * @ingroup tividy_command
  */
-class WorkflowCommand
+class Escalate : public WorkflowCommand
 {
-protected:
-	/**
-	 * @brief Borrowed receiver
-	 * @details The item must outlive this command and every call to execute().
-	 */
-	Item *reciever;
-
 public:
-	/**
-	 * @brief Bind a command to a non-null item.
-	 * @param[in] reciever Borrowed item that will receive the operation.
-	 * @throws std::string If reciever is null.
-	 * @post The receiver remains owned by its workflow tree.
-	 */
-	WorkflowCommand(Item *reciever);
-	/**
-	 * @brief Destroy the command without deleting its receiver.
-	 * @details Uses WorkflowCommand pointers.
-	 */
-	virtual ~WorkflowCommand();
-	/**
-	 * @brief Execute the concrete operation on the receiver.
-	 * @details Validation and state changes belong to the receiver and its associated objects. Exceptions from the concrete operation propagate to the caller.
-	 * @pre The borrowed receiver and any other borrowed arguments are not destrcted.
-	 */
-	virtual void execute() = 0;
-	/**
-	 * @brief Return the command's operation name.
-	 * @return The concrete command name, such as "Assign" or "Progress".
-	 */
-	virtual std::string getName() = 0;
+    /**
+     * @brief Bind the escalation command to an item.
+     * @param[in] item Borrowed receiver that must outlive this command.
+     * @throws std::string If item is null.
+     */
+    Escalate(Item* item);
+
+    /**
+     * @brief Request escalation of the receiver.
+     * @details Calls Item::escalate() and receiver's handle exceptions.
+     */
+    void execute() override;
+
+    /**
+     * @brief Return the command name.
+     * @return "Escalate".
+     */
+    std::string getName() override;
 };
 
 #endif

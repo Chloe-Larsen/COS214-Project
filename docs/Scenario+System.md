@@ -1,119 +1,153 @@
-# Task 2: Define the Scenario and System
+**Task 2: Define the Scenario and System**
 
-Our chosen scenario is employee onboarding across HR, IT, Finance and Training. The same engine will support other processes through different workflow definitions and configurable rules.
+Our chosen scenario is employee onboarding across HR, IT, Finance and Training. TIVIDY coordinates the activities needed to prepare a new employee for work. The same engine can support other processes through different work structures, participants and assignment strategies.
 
-## Initial scope of TIVIDY
+**Initial scope of TIVIDY**
 
-TIVIDY will store reusable, versioned workflow definitions and manage independent running instances. A definition describes a process and its rules. An instance represents one execution with its own data, state, assignees, progress and history.
+TIVIDY organises a workflow as a tree of work components. An Item represents an individual activity, while an ItemGroup contains items or other groups. Both use the WorkComponent interface so that operations can be applied to individual activities or forwarded through a group.
 
-### Main responsibilities of the workflow manager
+The WorkflowManager coordinates the root work component, registered workers, assignment strategy, traversal and command execution. Builders support the construction of items and groups, while cloning allows existing work structures to be reused and configured for similar processes.
 
-The initial workflow manager will support the following:
+**Main responsibilities of the workflow manager**
 
-- Represent individual work items, stages and nested sub-processes, and traverse them for progress and pending-work views.
-- Make work available when its required prerequisites and routing conditions are satisfied, then assign it to eligible participants using configurable rules.
-- Enforce valid work-item actions and manage completion, rejection, cancellation and escalation.
-- Support sequential work, conditional routing, parallel branches, joins and rework loops.
-- Apply optional validation, security, priority and auditing behaviour to selected work items.
-- Execute participant actions through a consistent interface, retain history and support undo or rollback for eligible internal changes.
-- Publish events for dependency updates, notifications, auditing and monitoring.
-- Exchange data with external systems through a common interface.
+The initial system will support the following:
 
-### System boundaries
+- Represent individual work items, stages and nested sub-processes using items and groups.
+- Construct work with appropriate names, workers, deadlines, priorities and dependencies.
+- Traverse the work hierarchy and filter items by status or assigned worker.
+- Keep dependent work blocked until its required approvals have been received.
+- Assign work explicitly or select workers using role-based or workload-based assignment strategies.
+- Support sequential activities and independent branches through dependencies between work items.
+- Enforce state-dependent progression, blocking and cancellation.
+- Support review, rejection and escalation through a worker and supervisor hierarchy.
+- Execute assignment, progression, rejection, escalation and cancellation through commands, retaining an in-memory command history.
+- Allow events to be published to dependency, notification and audit observers.
+- Support email notification through a common interface and an adapter to a legacy email service.
 
-TIVIDY controls work availability, assignment, progression and tracking. Organisational approval limits and process rules are supplied through configurable policies. Participants make approval decisions, while external systems perform their own functions, such as creating accounts or registering employees for payroll.
+**System boundaries**
 
-### Workflow definitions and running instances
+TIVIDY controls work organisation, availability, assignment, progression and tracking. The organisation determines the required activities, responsibilities and review levels. Workers perform the activities, make review decisions and handle exceptions.
 
-| Information | Workflow definition | Running instance |
-|---|---|---|
-| **Identity** | Definition ID, name and version. | Instance ID and reference to the selected definition version. |
-| **Work** | Work-item templates, stages, sub-processes and dependencies. | Independent work items with their current states and completion progress. |
-| **Rules** | Required roles, validation rules, routing conditions, approval rules and deadline settings. | Selected branches, evaluated decisions and actual deadlines. |
-| **Data** | Required input fields and initial configuration. | Employee details, submitted documents, review results and service responses. |
-| **People** | Roles and participant eligibility requirements. | Actual assignees, decisions and workload information. |
-| **History** | Definition revision information. | Actions, timestamps, state changes, notifications and rollback checkpoints. |
+Departmental systems remain responsible for their specialised operations. For example, IT creates accounts, Finance registers employees for payroll, and HR maintains employee records. The responsible workers confirm the results of those activities in TIVIDY.
 
-Completing work in one instance leaves other instances unchanged. Published definitions remain unchanged. Any edits create a new version for future instances, while existing instances retain their original version.
+**Workflow information**
 
-### Parts of the system expected to vary
+| **Element** | **Information and responsibility** |
+|---|---|
+| **WorkflowManager** | Coordinates the root work component, creation time, registered workers, assignment strategy and command history. |
+| **Item** | Represents an individual activity with a name, deadline, priority, assigned worker, current state, outstanding dependency count and rejection information. |
+| **ItemGroup** | Organises child work components, which may be individual items or further groups. |
+| **Worker** | Represents a participant with an identity, name, role, supervisor, subordinates and an escalation queue. |
+| **Event** | Identifies a workflow occurrence through its type, source item and timestamp. |
 
-The structure of work, required roles, deadlines, approval limits, validation rules and external services will vary between different definitions. Optional behaviour can be attached to selected work items. Traversal may visit the whole hierarchy or selected work. Event subscribers can change independently of the workflow model.
+The item states are Blocked, Available, InProgress, Approved, Completed and Cancelled. Assignment is recorded separately from the lifecycle state. Rejection records a flag and reason, while escalation is tracked separately and can transfer responsibility to a supervisor.
 
-Routing and assignment vary independently. Routing determines which activity or branch proceeds next using sequential, parallel or conditional rules. Assignment selects an eligible participant using role, business-rule or workload rules. Different definition versions can also select compatible families of work components, routing policies and approval handlers without changing the main coordinator.
+**Parts of the system expected to vary**
 
-## Employee onboarding scenario
+Different processes can use different work hierarchies, dependencies, participants, deadlines and priorities. Assignment can vary between role-based and workload-based strategies. Traversal can use dependency or priority iterators, with filtering by status or assignee.
 
-### Organisation and environment
+Notification, dependency and audit observers can be attached where required. The email service implementation can also change behind its common interface.
+
+**Employee Onboarding Scenario**
+
+**Organisation and environment**
 
 The scenario takes place in a medium-sized organisation with HR, IT, Finance and Training departments. After an employee accepts an offer, HR verifies their information, obtains approval for the onboarding plan and coordinates departmental preparation.
 
-### Process being managed
+**Process being managed**
 
-The process coordinates the preparation required for a newly hired employee to join the organisation. It begins after the employee accepts an offer and HR opens an onboarding record. It ends when the required preparation and final record update are confirmed, or when the instance is rejected or cancelled.
+The process coordinates the preparation required for a newly hired employee to join the organisation. It begins when HR creates the employee’s onboarding work tree. It ends successfully when the required preparation, reviews and employee-record update have been confirmed. If onboarding must stop, HR cancels the remaining active work.
 
-Instance data includes the employee reference, department, job role, work location, start date and resource requirements. Each employee has a separate instance of the onboarding definition. The engine handles generic work items and policies.
+The employee’s department, job role, location, start date and resource requirements guide the selection and configuration of onboarding activities.
 
-### Participants and responsibilities
+**Participants and responsibilities**
 
-| Participant or role | Responsibility |
+| **Participant or role** | **Responsibility** |
 |---|---|
 | **New employee** | Submit requested information and documents, correct missing or incorrect details, and attend orientation. |
-| **HR officer** | Create the instance, verify information, coordinate corrections and perform the final readiness review. |
-| **Line manager** | Confirm the onboarding plan, required access and resources, and approve requests within their authority. |
-| **Director** | Handle requests beyond the manager's approval authority or escalations assigned to their level. |
-| **IT staff** | Prepare accounts, role-appropriate access and required equipment. |
-| **Finance or payroll staff** | Verify supplied payroll information and confirm payroll registration. |
+| **HR officer** | Create and organise onboarding work, verify information, coordinate corrections and perform the final readiness review. |
+| **Line manager** | Review the onboarding plan, confirm required access and resources, and handle reviews or escalations assigned to their level. |
+| **Director** | Handle reviews and escalations passed to their level through the supervisor hierarchy. |
+| **IT staff** | Prepare accounts, role-appropriate access and equipment, and confirm the results. |
+| **Finance or payroll staff** | Verify payroll information, register the employee in the departmental system and confirm completion. |
 | **Training coordinator** | Arrange the initial orientation briefing and record its completion. |
 
-### Major pieces of work
+**Major pieces of work**
 
-1. **Prepare the instance for onboarding.** HR selects a definition version, creates the instance and stores the employee reference, department, job role, work location, start date and resource requirements. Required preparation items become available and are assigned to eligible participants.
+**1. Create onboarding work**
 
-2. **Check information and obtain approval.** The employee supplies the requested information, and HR checks that it is complete and valid. Missing or incorrect information returns to the employee for correction and another HR review. The onboarding plan proceeds to an authorised approver only after the required information is accepted. Approval starts departmental preparation, a revision request returns the plan for correction, and final rejection ends the instance.
+HR creates the onboarding group and its required activities. Builders configure item names, workers, deadlines, priorities and observers. Similar existing items or groups may be cloned and adjusted for the employee.
 
-3. **Prepare the employee in parallel.** After approval, the workflow activates three independent branches that can progress while the others remain active:
+**2. Verify employee information**
 
-   - **IT preparation:** Prepare the required account, access and equipment. This is a nested sub-process whose internal activities have their own dependencies. Account creation must finish before account access is granted.
-   - **Payroll preparation:** Verify the submitted payroll information and obtain confirmation of registration.
-   - **Orientation:** Schedule and complete the initial orientation briefing. The briefing can occur independently of account preparation.
+The employee supplies the requested information and documents. HR checks that the information is complete and correct.
 
-4. **Join the branches and review readiness.** The three branches join before HR's final review. IT preparation, payroll registration, orientation and any additional work activated by the selected route must be complete. HR checks the recorded results. A defect returns to the responsible department for correction and another review.
+Missing or incorrect information leads to a recorded rejection reason and a request for correction. HR coordinates another review after the employee provides the corrected information. Dependent work remains blocked until the required approval has been obtained.
 
-5. **Record the outcome and close the instance.** Once HR accepts the required results, the external employee record is updated. Confirmation of that update allows TIVIDY to mark the instance complete and publish an event for monitoring, auditing and completion notices.
+**3. Review the onboarding plan**
 
-### Important decisions and routing points
+The onboarding plan identifies the required access, equipment and other preparation. Review requests pass through the worker and supervisor hierarchy for the required number of approval levels.
 
-- If required information is missing or invalid, route it back to the employee for correction and another HR review. Accepted information proceeds to approval.
-- Use the plan's resource requirements and configured approval authority to select the approver. An authorised approval proceeds, a revision request loops back for correction, and final rejection ends the instance.
-- Use work location and job role to activate additional tasks. For example, remote work requires remote-access preparation, while on-site work requires site-access preparation. Only selected tasks contribute to the completion conditions.
-- IT, payroll and orientation run as parallel workflow branches. Their join waits for every required branch and any activated additional tasks. Parallel progression does not require separate execution threads.
+Each required reviewer makes a decision. A rejection stops the review chain and records a reason. HR then coordinates corrections or decides whether onboarding should be cancelled. Requests that cannot be resolved through the available hierarchy require escalation and follow-up.
 
-### Approvals and dependencies
+**4. Carry out departmental preparation**
 
-The approval chain begins with the manager. A request outside the manager's authority passes to the director. The first handler with sufficient authority decides the request. An explicit rejection ends the approval route. If neither handler has sufficient authority, the request remains pending for HR to resolve.
+Once the relevant approval dependencies have been satisfied, departmental preparation can proceed through independent branches:
 
-HR verification must finish before approval. Approval must occur before departmental preparation. All required branches and any activated additional tasks must finish before HR's final readiness review. The employee-record update must be confirmed before successful closure. Overdue work may trigger reminders, reassignment or escalation according to the rules attached to the work.
+- **IT preparation:** Create the required account, configure access and prepare equipment. Account approval is a prerequisite for the dependent access activity.
+- **Payroll preparation:** Verify payroll information, register the employee in the departmental system and confirm the result.
+- **Orientation:** Schedule and complete an initial briefing that can take place independently of account preparation.
 
-### Failures and exception routes
+HR includes any additional activities required for the employee. For example, remote employees may require remote-access preparation, while on-site employees may require site-access preparation.
 
-| Condition | Workflow response |
+**5. Check final readiness**
+
+HR’s final readiness item depends on approval of the required departmental preparation items. Approval of the IT branch alone is insufficient; payroll, orientation and any additional required work must also satisfy their approval dependencies.
+
+HR checks the departmental results and confirms that the required activities have reached their completion stage. Problems are returned to the responsible department for correction and another review.
+
+**6. Confirm the employee-record update**
+
+After the readiness review is accepted, HR updates the employee’s organisational record outside TIVIDY and confirms the corresponding final task.
+
+Onboarding is considered successful when all required preparation, reviews and final activities have been confirmed.
+
+**Important decisions and dependencies**
+
+HR selects the required tasks when constructing the onboarding tree. The employee’s circumstances determine which additional activities are included. Only the selected activities become prerequisites for later work.
+
+Information verification precedes approval of the onboarding plan. Plan approval precedes departmental preparation. Within IT preparation, account approval precedes the dependent access activity. The final readiness item depends on the required departmental approvals. Independent branches can remain active at the same time. When ItemGroup forwards a progress operation, it calls its children in order.Dependencies determine whether work can proceed, while the assignment strategy selects the worker responsible for it.
+
+**Reviews and escalation**
+
+Workers are linked to supervisors. A review request can require approval through several levels of this hierarchy. Each required reviewer must approve the request for the chain to succeed. An explicit rejection stops the chain and records its reason.
+
+If the required review cannot be completed through the available hierarchy, the request requires escalation and follow-up. A supervisor handling an escalation can take responsibility for the item and place it in their escalation queue. Escalation and Rejection are recorded separately from the item’s lifecycle state. HR decides whether the work should be corrected or the remaining onboarding activities cancelled.
+
+Deadlines record target dates. HR or another responsible participant identifies overdue work and arranges reassignment or escalation where appropriate.
+
+**Failures and exception routes**
+
+| **Condition** | **Workflow response** |
 |---|---|
-| **Missing or invalid information** | Request correction, record the reason and repeat verification before approval. |
-| **Approval requires revision** | Return the plan for correction and review it again. |
-| **Approval is finally rejected** | Record the reason, stop pending downstream work and retain the rejected outcome. |
-| **Assignee is unavailable or deadline has passed** | Keep the work pending, reassign it or escalate it according to the configured policy. |
-| **Departmental preparation fails or is incomplete** | Keep the final join blocked and retry or correct the affected work. |
-| **Required external update fails** | Record the response and retry or escalate the update. Keep successful closure blocked until confirmation is received. |
-| **Notification delivery fails** | Record the delivery failure and arrange a retry without reversing completed business work. |
-| **Employee withdraws or HR cancels** | Cancel remaining internal work, retain the history and arrange cleanup of external resources already created. |
+| **Missing or invalid information** | Record the reason, request correction and arrange another review before dependent work proceeds. |
+| **Approval requires revision** | Return the work for correction and submit it for review again. |
+| **Approval is finally rejected** | Retain the rejection reason. HR decides whether to stop onboarding and cancel the remaining active work. |
+| **Required review level is unavailable** | Escalate the item for follow-up through the worker hierarchy. |
+| **Assignee is unavailable or a deadline has passed** | Arrange reassignment or escalation as appropriate. |
+| **Departmental preparation fails or is incomplete** | Correct the departmental problem and obtain the required approval before downstream work proceeds. |
+| **Required external update fails** | Keep the corresponding activity unfinished while the responsible department resolves the problem and confirms the update. |
+| **Notification problem occurs** | Investigate the email service separately and keep the work-item outcome based on the actual work performed. |
+| **Employee withdraws or HR cancels** | Cancel remaining active work where permitted by its state and arrange departmental cleanup of resources already created. |
 
-Undo or rollback preserves the audit history and applies only to eligible internal changes. External actions require separate cleanup or compensation, such as deactivating an account created before cancellation.
+**External systems**
 
-### External systems
+The Notification observer uses the EmailService interface to produce assignment, completion, approval, rejection and escalation notices. EmailServiceAdapter translates the subject and body into the HTML format accepted by LegacyEmailService. The current legacy service demonstrates delivery by writing the message to console output.
 
-An email service sends assignment, correction, escalation and completion notices. An employee-record or legacy contact-record system receives the final onboarding update. IT provisioning and payroll registration supply confirmation or failure results. Adapters allow these different systems to use a common interface with TIVIDY.
+**Expected outcome**
 
-### Expected outcome of the workflow
+Successful onboarding leaves the employee’s information accepted, the onboarding plan reviewed and approved, IT preparation confirmed, payroll registration confirmed, orientation completed, and the final readiness review and employee-record update finished. 
 
-A successfully completed instance records accepted employee information, an approved onboarding plan, completed IT preparation, confirmed payroll registration, completed orientation and a confirmed employee-record update. Its history explains who performed each action and when. Rejected and cancelled instances retain their reasons and the work already performed.
+The work tree shows the activities and their outcomes. Assigned workers and rejection reasons provide context for follow-up. Commands executed through WorkflowManager remain in its in-memory history, while published events can produce timestamped audit output.
+
+If onboarding stops, the remaining active work is cancelled where permitted by its state. Departments remain responsible for cleaning up any accounts, equipment or registrations already created.

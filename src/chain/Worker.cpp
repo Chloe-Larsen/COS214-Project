@@ -79,12 +79,12 @@ bool Worker::review(Item *item, int depth)
 	}
 
 	// more approvals required, forward to supervisor
-	if (supervisor != NULL)
+	if (supervisor != nullptr)
 	{
 		return supervisor->review(item, depth - 1);
 	}
 	
-	handleEscalation(item);
+	item->escalate();
 	return false; // escalated, so not approved yet
 }
 
@@ -102,10 +102,6 @@ void Worker::handleEscalation(Item *item)
         return;
     }
 
-    if (!item->isEscalated()){
-        item->escalate();
-    }
-
     for (Item *queued : escalatedQueue){
         if (queued == item){
             return;
@@ -113,8 +109,6 @@ void Worker::handleEscalation(Item *item)
     }
 
 	item->assignWorker(this);
-	item->escalate();
-
 	escalatedQueue.push_back(item);
 }
 

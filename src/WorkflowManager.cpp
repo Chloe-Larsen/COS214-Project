@@ -3,6 +3,7 @@
 #include "WorkflowManager.h"
 #include "../include/command/Assign.h"
 #include "../include/command/Cancel.h"
+#include "../include/command/Progress.h"
 #include "../include/command/WorkflowCommand.h"
 #include "../include/composite/WorkComponent.h"
 #include "../include/iterator/DependencyIterator.h"
@@ -31,14 +32,14 @@ void WorkflowManager::progress()
 {
     if (!root)
         throw "The workflow has no root component.";
-    root->progress();
+    executeCommand(new Progress(root));
 }
 
 void WorkflowManager::cancel()
 {
     if (!root)
         throw "The workflow has no root component.";
-    root->cancel();
+    executeCommand(new Cancel(root));
 }
 
 void WorkflowManager::assignWork(Item *item)

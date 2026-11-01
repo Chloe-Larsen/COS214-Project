@@ -11,7 +11,6 @@ if (manager == nullptr || item == nullptr)
         return nullptr;
     }
 
-    // Find the least-loaded worker across the whole pool.
     Worker *best = nullptr;
     int bestLoad = 0;
 
@@ -30,9 +29,5 @@ if (manager == nullptr || item == nullptr)
         }
     }
 
-    if (best != nullptr)
-    {
-        item->assignWorker(best);
-    }
     return best;
 }

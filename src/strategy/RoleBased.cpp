@@ -45,9 +45,5 @@ Worker *RoleBased::assign(Item *item, WorkflowManager *manager)
 		}
 	}
 
-	if (best != nullptr)
-	{
-		item->assignWorker(best);
-	}
 	return best;
 }

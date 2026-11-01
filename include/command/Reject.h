@@ -18,6 +18,12 @@
 class Reject : public WorkflowCommand {
 private:
 	/**
+	 * @brief The item to reject.
+	 * @details The item must outlive this command and every call to execute().
+	 */
+	Item *item;
+
+	/**
 	 * @brief Owned rejection reason passed to the receiver.
 	 */
 	std::string reason;

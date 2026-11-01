@@ -5,13 +5,13 @@
  */
 #include "../../include/command/Escalate.h"
 
-Escalate::Escalate(Item *item) : WorkflowCommand(item)
+Escalate::Escalate(Item *item) : item(item)
 {
 }
 
 void Escalate::execute()
 {
-    reciever->escalate();
+    item->escalate();
 }
 
 std::string Escalate::getName()

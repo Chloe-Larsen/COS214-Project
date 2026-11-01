@@ -17,20 +17,13 @@
 class WorkflowCommand
 {
 protected:
-	/**
-	 * @brief Borrowed receiver; the original member spelling is preserved.
-	 * @details The item must outlive this command and every call to execute().
-	 */
-	Item *reciever;
+	
 
 public:
 	/**
-	 * @brief Bind a command to a non-null item.
-	 * @param[in] reciever Borrowed item that will receive the operation.
-	 * @throws std::string If reciever is null.
-	 * @post The receiver remains owned by its workflow tree.
+	 * @brief Create a new command.
 	 */
-	WorkflowCommand(Item *reciever);
+	WorkflowCommand();
 	/**
 	 * @brief Destroy the command without deleting its receiver.
 	 * @details Virtual destruction supports ownership through WorkflowCommand pointers.

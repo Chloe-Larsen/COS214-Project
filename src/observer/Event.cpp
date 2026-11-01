@@ -4,16 +4,6 @@
 
 #include "../../include/observer/Event.h"
 
-const std::string KNOWN_EVENT_TYPES[] = {
-	"COMPLETED",
-	"APPROVED",
-	"REJECTED",
-	"ESCALATED",
-	"ASSIGNED"};
-
-const std::size_t KNOWN_EVENT_TYPE_COUNT =
-	sizeof(KNOWN_EVENT_TYPES) / sizeof(KNOWN_EVENT_TYPES[0]);
-
 bool Event::isValidType(const std::string &type)
 {
 	for (std::size_t i = 0; i < KNOWN_EVENT_TYPE_COUNT; ++i)

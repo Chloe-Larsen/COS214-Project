@@ -17,6 +17,12 @@
  */
 class Assign : public WorkflowCommand
 {
+private:
+	/**
+	 * @brief The item to assign a worker to.
+	 * @details The item must outlive this command and every call to execute().
+	 */
+	Item *item;
 public:
 	/**
 	 * @brief Capture the item's current worker as the assignment target.

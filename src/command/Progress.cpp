@@ -6,13 +6,13 @@
 
 #include "../../include/command/Progress.h"
 
-Progress::Progress(Item *item) : WorkflowCommand(item)
+Progress::Progress(WorkComponent *workComponent) : workComponent(workComponent)
 {
 }
 
 void Progress::execute()
 {
-    reciever->progress();
+    workComponent->progress();
 }
 
 std::string Progress::getName()

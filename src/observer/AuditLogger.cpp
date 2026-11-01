@@ -7,7 +7,7 @@ AuditLogger::AuditLogger() : Observer() {}
 
 void AuditLogger::update(Event *event)
 {
-	std::cout << "(" << event->getTimestamp() << ") [AUDIT LOG > " << event->getSource()->getName() << "] " << eventTypeToString(event->getType()) << std::endl;
+	std::cout << "(" << event->getTimestamp() << ") [AUDIT LOG > " << event->getSource()->getName() << "] " << event->getType() << std::endl;
 }
 
 AuditLogger *AuditLogger::clone()

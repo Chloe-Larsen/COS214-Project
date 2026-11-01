@@ -16,13 +16,20 @@
  */
 class Cancel : public WorkflowCommand
 {
+private:
+	/**
+	 * @brief The work component to cancel.
+	 * @details The item must outlive this command and every call to execute().
+	 */
+	WorkComponent* workComponent;
+
 public:
 	/**
-	 * @brief Bind the operation to an item.
-	 * @param[in] item Borrowed, non-null receiver that must outlive this command.
-	 * @throws std::string If item is null.
+	 * @brief Bind the operation to a work component.
+	 * @param[in] workComponent Borrowed, non-null receiver that must outlive this command.
+	 * @throws std::string If workComponent is null.
 	 */
-	Cancel(Item* item);
+	Cancel(WorkComponent* workComponent);
 	/**
 	 * @brief Cancel the receiver through its current State.
 	 * @throws std::runtime_error If the item is already COMPLETED or CANCELLED.

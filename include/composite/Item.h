@@ -38,11 +38,7 @@ private:
 	/**
 	 * @brief Exclusively owned current lifecycle state.
 	 */
-	std::unique_ptr<State> currentState;
-    /**
-     * @brief Exclusively owned active state retained while BLOCKED.
-     */
-    std::unique_ptr<State> resumeState;	
+	State* currentState;
 	/**
 	 * @brief Number of unresolved prerequisite Items.
 	 */

@@ -1,6 +1,8 @@
 #include <memory>
 
 #include "WorkflowManager.h"
+#include "../include/command/Assign.h"
+#include "../include/command/Cancel.h"
 #include "../include/command/WorkflowCommand.h"
 #include "../include/composite/WorkComponent.h"
 #include "../include/iterator/DependencyIterator.h"
@@ -46,7 +48,7 @@ void WorkflowManager::assignWork(Item *item)
 
     // use strategy to get the worker to assign to the work
     Worker *worker = assignmentStrategy->assign(item, this);
-    item->assignWorker(worker);
+    executeCommand(new Assign(item, worker));
 }
 
 Iterator *WorkflowManager::createDependencyIterator()
@@ -66,7 +68,9 @@ Iterator *WorkflowManager::createFilteredIterator(Iterator *iterator, FilterCrit
 
 WorkComponent *WorkflowManager::selectNextAvailable()
 {
-    Iterator *iterator = createFilteredIterator(createPriorityIterator(), new FilterCriteria(ItemStatus::AVAILABLE));
+    FilterCriteria *fc = new FilterCriteria();
+    fc->setStatus("AVAILABLE");
+    Iterator *iterator = createFilteredIterator(createPriorityIterator(), fc);
     WorkComponent *workComponent = iterator->next();
     delete iterator;
     return workComponent;

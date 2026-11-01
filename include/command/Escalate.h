@@ -16,6 +16,13 @@
  */
 class Escalate : public WorkflowCommand
 {
+private:
+	/**
+	 * @brief The item to cancel.
+	 * @details The item must outlive this command and every call to execute().
+	 */
+	Item *item;
+    
 public:
     /**
      * @brief Bind the escalation command to an item.

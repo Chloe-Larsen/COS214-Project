@@ -5,14 +5,15 @@
  */
 #include "../../include/command/Cancel.h"
 
-Cancel::Cancel(Item *item) : WorkflowCommand(item)
+Cancel::Cancel(WorkComponent *workComponent) : workComponent(workComponent)
 {
 }
 
 void Cancel::execute()
 {
-    reciever->cancel();
+    workComponent->cancel();
 }
+
 std::string Cancel::getName()
 {
     return "Cancel";

@@ -16,13 +16,20 @@
  */
 class Progress : public WorkflowCommand
 {
+private:
+	/**
+	 * @brief The work component to progress.
+	 * @details The item must outlive this command and every call to execute().
+	 */
+	WorkComponent* workComponent;
+
 public:
 	/**
 	 * @brief Bind the operation to an item.
-	 * @param[in] item Borrowed, non-null receiver that does not destruct with this command.
+	 * @param[in] workComponent Borrowed, non-null receiver that does not destruct with this command.
 	 * @throws std::string If item is null.
 	 */
-	Progress(Item* item);
+	Progress(WorkComponent* workComponent);
 	/**
 	 * @brief Ask the receiver to perform one permitted state transition.
 	 * @throws std::runtime_error If dependencies remain unresolved or the item is

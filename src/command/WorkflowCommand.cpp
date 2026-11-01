@@ -1,16 +1,12 @@
 /**
  * @file WorkflowCommand.cpp
  * @brief Implementation of the WorkflowCommand command participant.
-  * @ingroup tividy_command
+ * @ingroup tividy_command
  */
 #include "../../include/command/WorkflowCommand.h"
 
-WorkflowCommand::WorkflowCommand(Item* reciever): reciever(reciever)
+WorkflowCommand::WorkflowCommand()
 {
-    if (reciever == nullptr)
-    {
-        throw std::string("A command needs an Item receiver.");
-    }
 }
 
 WorkflowCommand::~WorkflowCommand()

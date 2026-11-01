@@ -7,7 +7,14 @@ class AuditLogger : public Observer
 {
 public:
 	AuditLogger();
+
+	/**
+	 * @brief Logs the event as an audit log.
+	 * 
+	 * @param event The event to log.
+	 */
 	void update(Event *event) override;
+
 	AuditLogger *clone() override;
 };
 

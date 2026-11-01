@@ -1,20 +1,53 @@
 #include "../../include/strategy/RoleBased.h"
 #include "../../include/composite/Item.h"
 #include "../../include/WorkflowManager.h"
-#include <stdexcept>
+#include "../../include/chain/Worker.h"
 
-RoleBased::RoleBased() {}
+RoleBased::RoleBased(const std::string &role) : role(role) {}
 
 Worker *RoleBased::assign(Item *item, WorkflowManager *manager)
 {
-	if (!item)
-		throw std::runtime_error("RoleBased: null item");
+	if (manager == nullptr || item == nullptr)
+	{
+		return nullptr;
+	}
 
-	Worker *w = item->getWorker();
-	if (!w)
-		throw std::runtime_error("RoleBased: item has no worker to evaluate");
+	if (role.empty())
+	{
+		return nullptr;
+	}
 
-	return w;
+	Worker *current = item->getWorker();
+	if (current != nullptr && current->getRole() == role)
+	{
+		return current;
+	}
+
+	Worker *best = nullptr;
+	int bestLoad = 0;
+
+	for (Worker *worker : manager->getWorkers())
+	{
+		if (worker == nullptr)
+		{
+			continue;
+		}
+		if (worker->getRole() != role)
+		{
+			continue;
+		}
+
+		const int load = worker->getWorkload();
+		if (best == nullptr || load < bestLoad)
+		{
+			best = worker;
+			bestLoad = load;
+		}
+	}
+
+	if (best != nullptr)
+	{
+		item->assignWorker(best);
+	}
+	return best;
 }
-
-// no way to select by role? question not statement

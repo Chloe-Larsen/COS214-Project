@@ -1,0 +1,4 @@
+/build*/
+/Makefile.Debug
+/Makefile.Release
+/.qmake.stash

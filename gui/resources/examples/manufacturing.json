@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "name": "Production order",
+  "workers": [
+    {
+      "id": "manufacturing-worker",
+      "name": "Assigned operator",
+      "role": "Production operator",
+      "email": "",
+      "supervisorId": "manufacturing-superior"
+    },
+    {
+      "id": "manufacturing-superior",
+      "name": "Authorised reviewer",
+      "role": "Supervisor",
+      "email": "",
+      "supervisorId": ""
+    }
+  ],
+  "components": [
+    {
+      "id": "manufacturing-root",
+      "parentId": "",
+      "name": "Production order",
+      "kind": "group"
+    },
+    {
+      "id": "manufacturing-stage",
+      "parentId": "manufacturing-root",
+      "name": "Required preparation",
+      "kind": "group"
+    },
+    {
+      "id": "materials",
+      "parentId": "manufacturing-stage",
+      "name": "Check materials",
+      "kind": "item",
+      "state": "AVAILABLE",
+      "workerId": "manufacturing-worker",
+      "priority": 90,
+      "deadline": ""
+    },
+    {
+      "id": "produce",
+      "parentId": "manufacturing-stage",
+      "name": "Produce order",
+      "kind": "item",
+      "state": "BLOCKED",
+      "workerId": "manufacturing-worker",
+      "priority": 80,
+      "deadline": ""
+    },
+    {
+      "id": "quality",
+      "parentId": "manufacturing-stage",
+      "name": "Inspect product quality",
+      "kind": "item",
+      "state": "BLOCKED",
+      "workerId": "manufacturing-worker",
+      "priority": 70,
+      "deadline": ""
+    },
+    {
+      "id": "manufacturing-close",
+      "parentId": "manufacturing-root",
+      "name": "Confirm outcome",
+      "kind": "item",
+      "state": "BLOCKED",
+      "workerId": "manufacturing-superior",
+      "priority": 50
+    }
+  ],
+  "dependencies": [
+    {
+      "prerequisiteId": "materials",
+      "dependentId": "produce"
+    },
+    {
+      "prerequisiteId": "produce",
+      "dependentId": "quality"
+    },
+    {
+      "prerequisiteId": "manufacturing-stage",
+      "dependentId": "manufacturing-close"
+    }
+  ],
+  "activity": [],
+  "assignmentStrategy": "RoleBased",
+  "strategyOptions": {
+    "role": "Production operator",
+    "tieBreak": "workerId"
+  },
+  "engineData": {}
+}

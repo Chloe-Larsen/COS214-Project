@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['scenarios_0',['Project Scenarios',['../md_README.html#autotoc_md2',1,'']]],
-  ['started_1',['Getting Started',['../md_README.html#autotoc_md12',1,'']]],
-  ['structure_2',['Project Structure',['../md_README.html#autotoc_md30',1,'']]],
-  ['system_3',['TIVIDY – Workflow Management System',['../md_README.html',1,'']]]
+  ['jsoncodec_0',['JsonCodec',['../classtividy_1_1JsonCodec.html',1,'tividy']]],
+  ['jsoncodec_2ecpp_1',['JsonCodec.cpp',['../JsonCodec_8cpp.html',1,'']]],
+  ['jsoncodec_2eh_2',['JsonCodec.h',['../JsonCodec_8h.html',1,'']]]
 ];

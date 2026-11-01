@@ -1,6 +1,26 @@
 var searchData=
 [
-  ['–_20aircraft_20maintenance_20dispatch_0',['1. Aviation – Aircraft Maintenance Dispatch',['../md_README.html#autotoc_md3',1,'']]],
-  ['–_20production_20order_20management_1',['2. Manufacturing – Production Order Management',['../md_README.html#autotoc_md4',1,'']]],
-  ['–_20workflow_20management_20system_2',['TIVIDY – Workflow Management System',['../md_README.html',1,'']]]
+  ['observer_0',['observer',['../classObserver.html',1,'Observer'],['../classObserver.html#a19c43f80a38a332a6f694783df3c9835',1,'Observer::Observer()']]],
+  ['observer_2ecpp_1',['Observer.cpp',['../Observer_8cpp.html',1,'']]],
+  ['observer_2eh_2',['Observer.h',['../Observer_8h.html',1,'']]],
+  ['of_20the_20system_20expected_20to_20vary_3',['Parts of the system expected to vary',['../md_docs_2Scenario_09System.html#autotoc_md5',1,'']]],
+  ['of_20the_20workflow_20manager_4',['Main responsibilities of the workflow manager',['../md_docs_2Scenario_09System.html#autotoc_md2',1,'']]],
+  ['of_20tividy_5',['Initial scope of TIVIDY',['../md_docs_2Scenario_09System.html#autotoc_md1',1,'']]],
+  ['of_20work_6',['Major pieces of work',['../md_docs_2Scenario_09System.html#autotoc_md10',1,'']]],
+  ['ok_7',['ok',['../structtividy_1_1OperationResult.html#a5c7e42a07b2f907eb38979d639f027dc',1,'tividy::OperationResult']]],
+  ['onboarding_20plan_8',['3. Review the onboarding plan',['../md_docs_2Scenario_09System.html#autotoc_md13',1,'']]],
+  ['onboarding_20scenario_9',['Employee Onboarding Scenario',['../md_docs_2Scenario_09System.html#autotoc_md6',1,'']]],
+  ['onboarding_20work_10',['1. Create onboarding work',['../md_docs_2Scenario_09System.html#autotoc_md11',1,'']]],
+  ['openfile_11',['openFile',['../classtividy_1_1WorkflowController.html#a199525fb997e1a5feb684899ab21d146',1,'tividy::WorkflowController']]],
+  ['operation_12',['operation',['../structtividy_1_1OperationRequest.html#a0004dbfefe03a57b8289166005fffd73',1,'tividy::OperationRequest::operation'],['../namespacetividy.html#a274a6a9e4f2514dc6d6c5d615c09d1f4',1,'tividy::Operation']]],
+  ['operationname_13',['operationName',['../namespacetividy.html#a7a9e8315cc49860baf96720dd01b9e6e',1,'tividy']]],
+  ['operationrequest_14',['OperationRequest',['../structtividy_1_1OperationRequest.html',1,'tividy']]],
+  ['operationresult_15',['OperationResult',['../structtividy_1_1OperationResult.html',1,'tividy']]],
+  ['operator_28_29_16',['operator()',['../structPriorityComparator.html#a069e3d9206019b5b92d5254c74b4c0c5',1,'PriorityComparator']]],
+  ['options_17',['options',['../structtividy_1_1OperationRequest.html#aed5c14f5af8ac6b53def41cf8f90368e',1,'tividy::OperationRequest']]],
+  ['order_18',['order',['../structtividy_1_1CoreWorkflowGateway_1_1Storage.html#a4d48099da6a204ed16112c8ad02d922d',1,'tividy::CoreWorkflowGateway::Storage']]],
+  ['order_20management_19',['2. Manufacturing – Production Order Management',['../md_README.html#autotoc_md30',1,'']]],
+  ['organisation_20and_20environment_20',['Organisation and environment',['../md_docs_2Scenario_09System.html#autotoc_md7',1,'']]],
+  ['out_20departmental_20preparation_21',['4. Carry out departmental preparation',['../md_docs_2Scenario_09System.html#autotoc_md14',1,'']]],
+  ['outcome_22',['Expected outcome',['../md_docs_2Scenario_09System.html#autotoc_md21',1,'']]]
 ];

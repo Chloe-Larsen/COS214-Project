@@ -47,8 +47,17 @@ zip:
 	cd $(FLAT_DIR) && zip -j ../$(ZIP_NAME) *
 	@rm -rf $(FLAT_DIR)
 
+# Build the core (workflow engine) image
 docker:
-	sudo docker build -t taskforge .
+	docker build -t tividy .
+
+# Build the Qt GUI image (needs the gui/ folder)
+docker-gui:
+	docker build --target gui -t tividy-gui .
+
+# Run the core image
+docker-run: docker
+	docker run --rm tividy
 
 gdb:
 	gdb ./$(TARGET)

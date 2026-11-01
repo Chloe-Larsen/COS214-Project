@@ -15,7 +15,11 @@ EventSource::EventSource(const EventSource &other)
 	}
 }
 
-EventSource::~EventSource() {}
+EventSource::~EventSource()
+{
+	for (Observer *observer : observers)
+		delete observer;
+}
 
 void EventSource::attach(Observer *observer)
 {
@@ -31,4 +35,5 @@ void EventSource::notify(Event *event)
 {
 	for (Observer *observer : observers)
 		observer->update(event);
+	delete event;
 }

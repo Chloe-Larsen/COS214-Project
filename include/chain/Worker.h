@@ -78,7 +78,7 @@ class Worker
 		 * If a supervisor is provided, this worker is automatically added
 		 * to that supervisor's subordinate list.
 		 */
-		Worker(std::string id, std::string name, std::string role, Worker *supervisor = NULL);
+		Worker(std::string id, std::string name, std::string role, Worker *supervisor = nullptr);
 
 		/**
 		 * @brief Reviews an item as part of the approval chain.

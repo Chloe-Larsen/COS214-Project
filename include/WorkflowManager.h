@@ -25,7 +25,7 @@ private:
 	WorkflowManager &operator=(const WorkflowManager &) = delete;
 
 public:
-	WorkflowManager();
+	WorkflowManager(WorkComponent* root);
 	~WorkflowManager();
 
 	/**
@@ -109,6 +109,13 @@ public:
 	 * @return An item builder.
 	 */
 	ItemGroupBuilder *createItemGroupBuilder();
+
+	/**
+	 * @brief Set the strategy used to assign workers to items.
+	 * 
+	 * @param strategy The assignment strategy to use.
+	 */
+	void setAssignmentStrategy(AssignmentStrategy* strategy);
 };
 
 #endif

@@ -1,5 +1,5 @@
 #include "../../include/state/InProgress.h"
-#include "../../include/state/Approved.h"
+#include "../../include/state/Completed.h"
 #include "../../include/state/Cancelled.h"
 #include "../../include/state/Blocked.h"
 #include "../../include/composite/Item.h"
@@ -10,7 +10,8 @@ InProgress::InProgress() : isEscalated(false)
 
 void InProgress::progress(Item *item)
 {
-	item->setState(new Approved());
+	item->notify(new Event("COMPLETED", item));
+	item->setState(new Completed());
 }
 
 void InProgress::cancel(Item *item)

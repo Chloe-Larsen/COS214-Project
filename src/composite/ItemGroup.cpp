@@ -58,7 +58,7 @@ ItemGroup::ItemGroup(const ItemGroup &other) : WorkComponent(other)
     }
 }
 
-ItemGroup::ItemGroup() : WorkComponent(nullptr)
+ItemGroup::ItemGroup() : WorkComponent("New Item Group")
 {
 }
 

@@ -36,8 +36,6 @@ PriorityIterator::PriorityIterator(WorkComponent *root) : Iterator(root), curren
 /** @brief Deconstructor */
 PriorityIterator::~PriorityIterator()
 {
-	if (current)
-		delete current;
 }
 
 /**

@@ -1,0 +1,6 @@
+/*
+    Test entry file.
+*/
+
+#define CATCH_CONFIG_MAIN
+#include "catch.h"

@@ -12,7 +12,7 @@ bool Event::isValidType(const std::string &type)
 	return false;
 }
 
-std::string getTimestamp()
+std::string createTimestamp()
 {
 	auto now = std::chrono::system_clock::now();
 	auto in_time_t = std::chrono::system_clock::to_time_t(now);
@@ -21,7 +21,7 @@ std::string getTimestamp()
 	return ss.str();
 }
 
-Event::Event(std::string type, Item *source) : type(type), source(source), timestamp(getTimestamp())
+Event::Event(std::string type, Item *source) : type(type), source(source), timestamp(createTimestamp())
 {
 	if (!isValidType(type))
 		throw std::string("Unknown event type: " + type);

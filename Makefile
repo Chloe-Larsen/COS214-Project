@@ -1,5 +1,6 @@
 CXX      := g++
 CXXFLAGS := -std=c++11 -Wall -Wextra -Iinclude -g
+LDFLAGS  := -fsanitize=address
 BUILD_DIR:= build
 TARGET   := program
 ZIP_NAME := submission.zip
@@ -8,6 +9,11 @@ ZIP_RESOURCES := Makefile README.md docs # other files/directories to include in
 
 # 1. Find all .cpp files inside the src/ directory
 SRCS     := $(shell find src -type f -name '*.cpp' 2>/dev/null)
+
+# Test configuration (dynamically finds all tests and source files minus main.cpp)
+TEST_TARGET    := run_tests
+TEST_SRCS      := $(shell find tests -type f -name '*.cpp' 2>/dev/null)
+TEST_CODE_SRCS := $(filter-out src/main.cpp, $(SRCS))
 
 # 2. Map src/foo.cpp -> build/foo.o
 OBJS     := $(patsubst src/%.cpp, $(BUILD_DIR)/%.o, $(SRCS))
@@ -65,8 +71,13 @@ gdb:
 valgrind:
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TARGET)
 
+test:
+	@mkdir -p $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -Itests $(TEST_CODE_SRCS) $(TEST_SRCS) -o $(TEST_TARGET)
+	./$(TEST_TARGET)
+
 # Clean build output
 clean:
-	rm -rf $(BUILD_DIR) $(TARGET) *.o $(ZIP_NAME) $(FLAT_DIR)
+	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_TARGET) *.o $(ZIP_NAME) $(FLAT_DIR)
 
-.PHONY: all clean docker docker-gui docker-run gdb valgrind zip
+.PHONY: all clean docker docker-gui docker-run gdb valgrind test zip

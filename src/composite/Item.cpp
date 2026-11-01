@@ -4,7 +4,6 @@
  * @ingroup tividy_composite
  */
 
-
 #include "../../include/composite/Item.h"
 #include "../../include/chain/Worker.h"
 #include "../../include/state/State.h"
@@ -76,7 +75,6 @@ Item::Item(std::string name, std::string deadline, int priority, Worker *assigne
       assignedTo(assignedTo), currentState(new Available()), dependencies(0),
       rejected(false) {}
 
-
 // PROTOTYPE: copy configuration, reset runtime state so instances are isolated.
 /**
  * @brief Copy constructor used to create a cloned Item.
@@ -85,14 +83,12 @@ Item::Item(std::string name, std::string deadline, int priority, Worker *assigne
  *          priority, assigned worker and dependency count. Runtime state
  *          is recreated so the cloned item has an independent State object.
  */
-Item::Item(const Item &other) : WorkComponent(other), deadline(other.deadline), priority(other.priority), assignedTo(other.assignedTo), currentState(NULL), dependencies(other.dependencies), rejected(false)
+Item::Item(const Item &other) : WorkComponent(other), deadline(other.deadline), priority(other.priority), assignedTo(other.assignedTo), currentState(new Available()), dependencies(other.dependencies), rejected(false)
 {
-    currentState = dependencies > 0 ? new Blocked()
-                                    : static_cast<State *>(new Available());
 }
 
-Item::Item() : WorkComponent(nullptr), deadline(parseItemDeadline(nullptr)), priority(-1),
-               assignedTo(nullptr), currentState(nullptr), dependencies(0),
+Item::Item() : WorkComponent("New Item"), deadline(parseItemDeadline("")), priority(-1),
+               assignedTo(nullptr), currentState(new Available()), dependencies(0),
                rejected(false) {}
 
 /**
@@ -108,18 +104,13 @@ Item *Item::clone() const
 
 Item::~Item()
 {
-    assignWorker(nullptr);
-    delete currentState;
+    if (currentState != nullptr)
+        delete currentState;
 }
 
+#include <iostream>
 void Item::progress()
 {
-    if (currentState != NULL)
-    {
-        currentState->progress(this);
-    }
-    if (dependencies != 0)
-        throw std::string("Item still has unresolved dependencies: " + name);
     if (!currentState)
         throw std::string("Set a State before progressing item: " + name);
     currentState->progress(this);
@@ -136,6 +127,7 @@ void Item::reject(std::string reason)
 {
     rejectionReason = reason;
     rejected = true;
+    notify(new Event("REJECTED", this));
 }
 
 void Item::incrementDependencies()
@@ -182,6 +174,7 @@ void Item::requestReview()
     if (assignedTo->getSupervisor()->review(this, 0))
     {
         setState(new Approved());
+        notify(new Event("APPROVED", this));
     }
 }
 
@@ -205,6 +198,8 @@ void Item::escalate()
     if (currentState)
         currentState->setEscalated();
 
+    notify(new Event("ESCALATED", this));
+
     Worker *superior = assignedTo ? assignedTo->getSupervisor() : nullptr;
     if (superior != nullptr)
         superior->handleEscalation(this);
@@ -217,7 +212,11 @@ Worker *Item::getWorker()
 
 void Item::assignWorker(Worker *person)
 {
-    assignedTo = person;
+    if (person != nullptr)
+    {
+        assignedTo = person;
+        notify(new Event("ASSIGNED", this));
+    }
 }
 
 State *Item::getState()

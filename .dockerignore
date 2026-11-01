@@ -3,24 +3,23 @@
 .gitignore
 .gitattributes
 
-# Build output (rebuilt inside the image)
-build
-gui/build
-gui/build*
+# Build output
+build/
+gui/build/
 program
 *.o
 *.d
-flat_src
+
+# Generated files
+*.zip
+*.bak
+flat_src/
 submission.zip
 
-# Documentation and design files are not needed to build or run
-docs
-*.pdf
-*.md
-Dockerfile
-.dockerignore
+# Documentation
+docs/
 
-# Editor / OS noise
-.vscode
-.idea
+# Editor / OS files
+.vscode/
+.idea/
 .DS_Store

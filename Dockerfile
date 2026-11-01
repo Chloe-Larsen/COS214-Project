@@ -36,7 +36,7 @@ FROM ubuntu:${UBUNTU_VERSION} AS gui
 # Runtime Qt libraries only (libqt5gui5t64 brings in the xcb platform plugin deps)
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        libqt5widgets5t64 libqt5concurrent5t64 libqt5gui5t64 \
+        libqt5widgets5t64 libqt5concurrent5t64 libqt5gui5t64 fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
 RUN useradd --create-home --shell /bin/bash tividy

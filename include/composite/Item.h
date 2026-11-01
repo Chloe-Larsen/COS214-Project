@@ -38,7 +38,7 @@ private:
 	/**
 	 * @brief Exclusively owned current lifecycle state.
 	 */
-	State* currentState;
+	State *currentState;
 	/**
 	 * @brief Number of unresolved prerequisite Items.
 	 */
@@ -47,10 +47,10 @@ private:
 	 * @brief Whether a rejection has been recorded and not made by progression or a review request.
 	 */
 	bool rejected;
-    /**
-     * @brief Persistent flag indicating that the item has been escalated.
-     */
-    bool escalated;
+	/**
+	 * @brief Persistent flag indicating that the item has been escalated.
+	 */
+	bool escalated;
 	/**
 	 * @brief Text describing why Item has been rejected.
 	 */
@@ -178,28 +178,11 @@ public:
 	 * @return Borrowed non-null State pointer.
 	 */
 	State *getState();
-        /**
-         * @brief Describe the state retained while the item is blocked.
-         * @return AVAILABLE or IN_PROGRESS when retained; otherwise an empty string.
-         */
-        std::string getResumeStatus() const;
-        /**
-         * @brief Restore persisted execution fields without replaying historical events.
-         * @param[in] state Canonical lifecycle name, or empty to default to AVAILABLE.
-         * @param[in] pending Nonnegative number of unresolved prerequisites.
-         * @param[in] rejected Rejection flag to restore.
-         * @param[in] escalated Escalation flag to restore.
-         * @param[in] reason Stored reason; nonempty when rejected is true.
-         * @param[in] resume Saved AVAILABLE or IN_PROGRESS state for a BLOCKED item;
-         * empty defaults to AVAILABLE and is required for non-BLOCKED input states.
-         * @throws std::invalid_argument If a state, dependency count, rejection reason
-         * or resume-state combination is invalid.
-         * @details BLOCKED requires pending prerequisites. AVAILABLE or IN_PROGRESS
-         * input with pending prerequisites is restored as BLOCKED with that state saved.
-         * Does not change the name, deadline, priority or assignee.
-         */
-        void restoreSnapshot(const std::string &state, int pending, bool rejected, bool escalated,
-                         const std::string &reason, const std::string &resume = "");
+	/**
+	 * @brief Describe the state retained while the item is blocked.
+	 * @return AVAILABLE or IN_PROGRESS when retained; otherwise an empty string.
+	 */
+	std::string getResumeStatus() const;
 	/**
 	 * @brief Transfer ownership of a non-null lifecycle state.
 	 * @param[in] state State that the item will exclusively own.

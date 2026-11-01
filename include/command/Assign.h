@@ -23,6 +23,12 @@ private:
 	 * @details The item must outlive this command and every call to execute().
 	 */
 	Item *item;
+
+	/**
+	 * @brief Borrowed worker captured when this command is constructed.
+	 */
+	Worker *worker;
+
 public:
 	/**
 	 * @brief Capture the item's current worker as the assignment target.
@@ -31,7 +37,7 @@ public:
 	 * @note The target is captured during construction. If the item is unassigned,
 	 * construction succeeds but execute() rejects the missing worker.
 	 */
-	Assign(Item* item);
+	Assign(Item *item);
 	/**
 	 * @brief Capture an explicitly selected worker.
 	 * @param[in] item Borrowed, non-null receiver.
@@ -52,11 +58,6 @@ public:
 	 * @return "Assign".
 	 */
 	std::string getName() override;
-	private:
-    /**
-     * @brief Borrowed worker captured when this command is constructed.
-     */
-    Worker* worker;
 };
 
 #endif

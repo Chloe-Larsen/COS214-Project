@@ -69,4 +69,4 @@ valgrind:
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET) *.o $(ZIP_NAME) $(FLAT_DIR)
 
-.PHONY: all clean docker gdb valgrind zip
+.PHONY: all clean docker docker-gui docker-run gdb valgrind zip

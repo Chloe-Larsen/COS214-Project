@@ -4,7 +4,7 @@
 
 TIVIDY is a generic Workflow Management System developed in C++11. It provides a reusable engine for creating, managing, assigning, tracking, and processing workflows.
 
-The system demonstrates how a single workflow engine can support different industries without changing its underlying functionality.
+The system demonstrates how a single workflow engine can support different industries without changing its underlying functionality. It includes a command-line application and a graphical user interface developed using Qt 5.
 
 ## Team Members
 
@@ -41,6 +41,7 @@ Both scenarios use the same underlying workflow engine.
 - Apply different assignment and workflow-routing strategies.
 - Notify observers when workflow events occur.
 - Integrate with external systems through adapters.
+- Provide a graphical interface using Qt 5.
 - Support both Aviation and Manufacturing workflows.
 
 ## Design Patterns
@@ -62,27 +63,42 @@ TIVIDY uses ten GoF design patterns:
 
 ## Technologies and Dependencies
 
+### Core Application
+
 - C++11
 - GNU Compiler Collection (G++)
 - GNU Make
-- Docker (for containerised execution)
 
-Optional development tools:
+### Graphical User Interface
 
+- Qt 5
+- Qt Widgets
+- Qt Concurrent
+- pkg-config
+
+### Containerisation and Development Tools
+
+- Docker
 - GDB – debugging
 - Valgrind – memory checking
 - Visual Paradigm – UML diagrams
 
 ### Installing Dependencies
 
-On Ubuntu or WSL, install the required compiler and build tools:
+On Ubuntu or WSL, install the core dependencies:
 
 ```bash
 sudo apt update
 sudo apt install build-essential g++ make
 ```
 
-Optional tools:
+To build the GUI, install the additional Qt dependencies:
+
+```bash
+sudo apt install pkg-config qtbase5-dev qtbase5-dev-tools
+```
+
+Optional development tools:
 
 ```bash
 sudo apt install gdb valgrind
@@ -102,21 +118,23 @@ Navigate into the project directory:
 cd COS214-Project
 ```
 
-### 2. Build the Project
+### 2. Build the Core Application
 
 Build the application using the Makefile:
-
-```bash
-make
-```
-
-If you want to build the program using the specific program target:
 
 ```bash
 make program
 ```
 
-### 3. Run the Application
+Alternatively, use:
+
+```bash
+make
+```
+
+The `make` command builds and runs the application.
+
+### 3. Run the Core Application
 
 Run the compiled executable:
 
@@ -126,8 +144,6 @@ Run the compiled executable:
 
 Follow the application's prompts to interact with the workflow system.
 
-Select or configure the relevant scenario to demonstrate the Aviation or Manufacturing workflow.
-
 ### 4. Clean the Build
 
 Remove generated build files using:
@@ -135,6 +151,44 @@ Remove generated build files using:
 ```bash
 make clean
 ```
+
+## Graphical User Interface (GUI)
+
+TIVIDY includes a graphical user interface developed using Qt 5. The GUI provides a visual way to interact with the workflow management system alongside the command-line application.
+
+### Building the GUI
+
+After installing the Qt dependencies, build the GUI using:
+
+```bash
+make -C gui
+```
+
+### Running the GUI
+
+After a successful build, launch the GUI:
+
+```bash
+./gui/build/tividy-gui
+```
+
+### GUI Docker Image
+
+The Dockerfile includes a separate build target for the graphical interface.
+
+Build the GUI image:
+
+```bash
+docker build --target gui -t tividy-gui .
+```
+
+Run the GUI container:
+
+```bash
+docker run --rm tividy-gui
+```
+
+**Note:** Displaying the GUI from Docker requires a graphical display environment to be configured. Starting the container alone does not automatically make the GUI window appear on the host machine.
 
 ## Testing
 
@@ -175,18 +229,37 @@ Also verify:
 - External service adapters.
 - Iteration through workflow items.
 - Cloning of workflow components.
+- GUI interaction and workflow operations.
 
-Optional memory checking can be performed with Valgrind if a suitable Makefile target is available:
+### Memory Checking
+
+Valgrind can be used to check for memory leaks:
 
 ```bash
-valgrind ./program
+make valgrind
+```
+
+### Debugging
+
+GDB can be started using:
+
+```bash
+make gdb
 ```
 
 ## Docker
 
-The project includes a Dockerfile for containerised execution.
+The project includes a multi-stage Dockerfile for building and running the core application and graphical interface separately.
 
-Build the Docker image:
+### Core Application
+
+Build the core Docker image:
+
+```bash
+make docker
+```
+
+Alternatively:
 
 ```bash
 docker build -t tividy .
@@ -195,8 +268,30 @@ docker build -t tividy .
 Run the container:
 
 ```bash
+make docker-run
+```
+
+Alternatively:
+
+```bash
 docker run --rm tividy
 ```
+
+### GUI Application
+
+Build the GUI Docker image:
+
+```bash
+make docker-gui
+```
+
+Alternatively:
+
+```bash
+docker build --target gui -t tividy-gui .
+```
+
+The GUI container requires a graphical display environment to show its window.
 
 ## Project Structure
 
@@ -209,6 +304,11 @@ COS214-Project/
 │   ├── TIVIDY-Demo.pptx
 │   ├── umlImages/
 │   └── visualParadigm/
+│
+├── gui/
+│   ├── Makefile
+│   ├── src/
+│   └── ...
 │
 ├── include/
 ├── src/

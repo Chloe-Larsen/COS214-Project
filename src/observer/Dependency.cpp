@@ -8,7 +8,7 @@ Dependency::Dependency(Item *item) : dependentItem(item)
 
 void Dependency::update(Event *event)
 {
-	if (event->getType() == EventType::APPROVED)
+	if (event->getType() == "APPROVED")
 		dependentItem->decrementDependencies();
 }
 

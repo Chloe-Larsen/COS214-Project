@@ -1,0 +1,355 @@
+\chapter{TIVIDY – Workflow Management System}
+\hypertarget{md_README}{}\label{md_README}\index{TIVIDY – Workflow Management System@{TIVIDY – Workflow Management System}}
+\label{md_README_autotoc_md0}%
+\Hypertarget{md_README_autotoc_md0}%
+ {\bfseries{One Engine. Two Industries. Connected Workflows.}}
+
+TIVIDY is a generic Workflow Management System developed in C++11. It provides a reusable engine for creating, managing, assigning, tracking, and processing workflows.
+
+The system demonstrates how a single workflow engine can support different industries without changing its underlying functionality. It includes a command-\/line application and a graphical user interface developed using Qt 5.\hypertarget{md_README_autotoc_md1}{}\doxysection{\texorpdfstring{Team Members}{Team Members}}\label{md_README_autotoc_md1}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Name   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Student Number    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Name   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Student Number    }\\\cline{1-2}
+\endhead
+Caleb Jennings   &25173805    \\\cline{1-2}
+Anchen Kruger   &25073703    \\\cline{1-2}
+Chloe Larsen   &25004141    \\\cline{1-2}
+Caitlin Moodley   &25128443    \\\cline{1-2}
+Shanna Reinecke   &25008260   \\\cline{1-2}
+\end{longtabu}
+\hypertarget{md_README_autotoc_md2}{}\doxysection{\texorpdfstring{Project Scenarios}{Project Scenarios}}\label{md_README_autotoc_md2}
+TIVIDY demonstrates its functionality through two industry scenarios\+:\hypertarget{md_README_autotoc_md3}{}\doxysubsection{\texorpdfstring{1. Aviation – Aircraft Maintenance Dispatch}{1. Aviation – Aircraft Maintenance Dispatch}}\label{md_README_autotoc_md3}
+Manages aircraft maintenance workflows, including maintenance tasks, worker assignments, approvals, dependencies, and task progress.\hypertarget{md_README_autotoc_md4}{}\doxysubsection{\texorpdfstring{2. Manufacturing – Production Order Management}{2. Manufacturing – Production Order Management}}\label{md_README_autotoc_md4}
+Manages production workflows, including production tasks, resource assignments, approvals, dependencies, and workflow progress.
+
+Both scenarios use the same underlying workflow engine.\hypertarget{md_README_autotoc_md5}{}\doxysection{\texorpdfstring{Features}{Features}}\label{md_README_autotoc_md5}
+
+\begin{DoxyItemize}
+\item Create and manage workflow items.
+\item Organise tasks into hierarchical groups.
+\item Assign tasks to workers.
+\item Track task status and progress.
+\item Manage task dependencies.
+\item Support approvals, rejections, cancellations, and escalations.
+\item Apply different assignment and workflow-\/routing strategies.
+\item Notify observers when workflow events occur.
+\item Integrate with external systems through adapters.
+\item Provide a graphical interface using Qt 5.
+\item Support both Aviation and Manufacturing workflows.
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md6}{}\doxysection{\texorpdfstring{Design Patterns}{Design Patterns}}\label{md_README_autotoc_md6}
+TIVIDY uses ten GoF design patterns\+:
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Design Pattern   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Purpose    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Design Pattern   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Purpose    }\\\cline{1-2}
+\endhead
+Composite   &Organises individual items and groups into a hierarchy.    \\\cline{1-2}
+Iterator   &Traverses workflow items using different iteration approaches.    \\\cline{1-2}
+State   &Manages workflow item states and state transitions.    \\\cline{1-2}
+Strategy   &Supports interchangeable assignment and routing strategies.    \\\cline{1-2}
+Factory Method   &Creates workflow components through builder classes.    \\\cline{1-2}
+Prototype   &Supports cloning workflow components.    \\\cline{1-2}
+Command   &Encapsulates workflow actions as command objects.    \\\cline{1-2}
+Observer   &Notifies interested objects about workflow events.    \\\cline{1-2}
+Adapter   &Connects the system to external services through compatible interfaces.    \\\cline{1-2}
+Chain of Responsibility   &Passes approval requests through a chain of workers.   \\\cline{1-2}
+\end{longtabu}
+\hypertarget{md_README_autotoc_md7}{}\doxysection{\texorpdfstring{Technologies and Dependencies}{Technologies and Dependencies}}\label{md_README_autotoc_md7}
+\hypertarget{md_README_autotoc_md8}{}\doxysubsection{\texorpdfstring{Core Application}{Core Application}}\label{md_README_autotoc_md8}
+
+\begin{DoxyItemize}
+\item C++11
+\item GNU Compiler Collection (G++)
+\item GNU Make
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md9}{}\doxysubsection{\texorpdfstring{Graphical User Interface}{Graphical User Interface}}\label{md_README_autotoc_md9}
+
+\begin{DoxyItemize}
+\item Qt 5
+\item Qt Widgets
+\item Qt Concurrent
+\item pkg-\/config
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md10}{}\doxysubsection{\texorpdfstring{Containerisation and Development Tools}{Containerisation and Development Tools}}\label{md_README_autotoc_md10}
+
+\begin{DoxyItemize}
+\item Docker
+\item GDB – debugging
+\item Valgrind – memory checking
+\item Visual Paradigm – UML diagrams
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md11}{}\doxysubsection{\texorpdfstring{Installing Dependencies}{Installing Dependencies}}\label{md_README_autotoc_md11}
+On Ubuntu or WSL, install the core dependencies\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sudo\ apt\ update}
+\DoxyCodeLine{sudo\ apt\ install\ build-\/essential\ g++\ make}
+
+\end{DoxyCode}
+
+
+To build the GUI, install the additional Qt dependencies\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sudo\ apt\ install\ pkg-\/config\ qtbase5-\/dev\ qtbase5-\/dev-\/tools}
+
+\end{DoxyCode}
+
+
+Optional development tools\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sudo\ apt\ install\ gdb\ valgrind}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md12}{}\doxysection{\texorpdfstring{Getting Started}{Getting Started}}\label{md_README_autotoc_md12}
+\hypertarget{md_README_autotoc_md13}{}\doxysubsection{\texorpdfstring{1. Clone the Repository}{1. Clone the Repository}}\label{md_README_autotoc_md13}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{git\ clone\ https://github.com/Chloe-\/Larsen/COS214-\/Project.git}
+
+\end{DoxyCode}
+
+
+Navigate into the project directory\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cd\ COS214-\/Project}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md14}{}\doxysubsection{\texorpdfstring{2. Build the Core Application}{2. Build the Core Application}}\label{md_README_autotoc_md14}
+Build the application using the Makefile\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make\ program}
+
+\end{DoxyCode}
+
+
+Alternatively, use\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make}
+
+\end{DoxyCode}
+
+
+The {\ttfamily make} command builds and runs the application.\hypertarget{md_README_autotoc_md15}{}\doxysubsection{\texorpdfstring{3. Run the Core Application}{3. Run the Core Application}}\label{md_README_autotoc_md15}
+Run the compiled executable\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./program}
+
+\end{DoxyCode}
+
+
+Follow the application\textquotesingle{}s prompts to interact with the workflow system.\hypertarget{md_README_autotoc_md16}{}\doxysubsection{\texorpdfstring{4. Clean the Build}{4. Clean the Build}}\label{md_README_autotoc_md16}
+Remove generated build files using\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make\ clean}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md17}{}\doxysection{\texorpdfstring{Graphical User Interface (\+GUI)}{Graphical User Interface (GUI)}}\label{md_README_autotoc_md17}
+TIVIDY includes a graphical user interface developed using Qt 5. The GUI provides a visual way to interact with the workflow management system alongside the command-\/line application.\hypertarget{md_README_autotoc_md18}{}\doxysubsection{\texorpdfstring{Building the GUI}{Building the GUI}}\label{md_README_autotoc_md18}
+After installing the Qt dependencies, build the GUI using\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make\ -\/C\ gui}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md19}{}\doxysubsection{\texorpdfstring{Running the GUI}{Running the GUI}}\label{md_README_autotoc_md19}
+After a successful build, launch the GUI\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./gui/build/tividy-\/gui}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md20}{}\doxysubsection{\texorpdfstring{GUI Docker Image}{GUI Docker Image}}\label{md_README_autotoc_md20}
+The Dockerfile includes a separate build target for the graphical interface.
+
+Build the GUI image\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{docker\ build\ -\/-\/target\ gui\ -\/t\ tividy-\/gui\ .}
+
+\end{DoxyCode}
+
+
+Run the GUI container\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{docker\ run\ -\/-\/rm\ tividy-\/gui}
+
+\end{DoxyCode}
+
+
+{\bfseries{Note\+:}} Displaying the GUI from Docker requires a graphical display environment to be configured. Starting the container alone does not automatically make the GUI window appear on the host machine.\hypertarget{md_README_autotoc_md21}{}\doxysection{\texorpdfstring{Testing}{Testing}}\label{md_README_autotoc_md21}
+Testing should be performed on both industry scenarios to verify that the shared workflow engine behaves correctly.\hypertarget{md_README_autotoc_md22}{}\doxysubsection{\texorpdfstring{Aviation Testing}{Aviation Testing}}\label{md_README_autotoc_md22}
+Verify that the system can\+:
+
+
+\begin{DoxyItemize}
+\item Create aircraft maintenance tasks.
+\item Group related maintenance tasks.
+\item Assign tasks to workers.
+\item Process approvals and rejections.
+\item Handle task dependencies.
+\item Track task progress and completion.
+\item Escalate approval requests when necessary.
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md23}{}\doxysubsection{\texorpdfstring{Manufacturing Testing}{Manufacturing Testing}}\label{md_README_autotoc_md23}
+Verify that the system can\+:
+
+
+\begin{DoxyItemize}
+\item Create production order tasks.
+\item Group related production tasks.
+\item Assign tasks to workers.
+\item Process approvals and rejections.
+\item Handle task dependencies.
+\item Track task progress and completion.
+\item Escalate approval requests when necessary.
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md24}{}\doxysubsection{\texorpdfstring{General Testing}{General Testing}}\label{md_README_autotoc_md24}
+Also verify\+:
+
+
+\begin{DoxyItemize}
+\item Workflow state transitions.
+\item Assignment and routing strategies.
+\item Command execution.
+\item Observer notifications.
+\item External service adapters.
+\item Iteration through workflow items.
+\item Cloning of workflow components.
+\item GUI interaction and workflow operations.
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md25}{}\doxysubsection{\texorpdfstring{Memory Checking}{Memory Checking}}\label{md_README_autotoc_md25}
+Valgrind can be used to check for memory leaks\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make\ valgrind}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md26}{}\doxysubsection{\texorpdfstring{Debugging}{Debugging}}\label{md_README_autotoc_md26}
+GDB can be started using\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make\ gdb}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md27}{}\doxysection{\texorpdfstring{Docker}{Docker}}\label{md_README_autotoc_md27}
+The project includes a multi-\/stage Dockerfile for building and running the core application and graphical interface separately.\hypertarget{md_README_autotoc_md28}{}\doxysubsection{\texorpdfstring{Core Application}{Core Application}}\label{md_README_autotoc_md28}
+Build the core Docker image\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make\ docker}
+
+\end{DoxyCode}
+
+
+Alternatively\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{docker\ build\ -\/t\ tividy\ .}
+
+\end{DoxyCode}
+
+
+Run the container\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make\ docker-\/run}
+
+\end{DoxyCode}
+
+
+Alternatively\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{docker\ run\ -\/-\/rm\ tividy}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md29}{}\doxysubsection{\texorpdfstring{GUI Application}{GUI Application}}\label{md_README_autotoc_md29}
+Build the GUI Docker image\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{make\ docker-\/gui}
+
+\end{DoxyCode}
+
+
+Alternatively\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{docker\ build\ -\/-\/target\ gui\ -\/t\ tividy-\/gui\ .}
+
+\end{DoxyCode}
+
+
+The GUI container requires a graphical display environment to show its window.\hypertarget{md_README_autotoc_md30}{}\doxysection{\texorpdfstring{Project Structure}{Project Structure}}\label{md_README_autotoc_md30}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{COS214-\/Project/}
+\DoxyCodeLine{│}
+\DoxyCodeLine{├──\ docs/}
+\DoxyCodeLine{│\ \ \ ├──\ COS214\ -\/\ Project.pdf}
+\DoxyCodeLine{│\ \ \ ├──\ Scenario+System.md}
+\DoxyCodeLine{│\ \ \ ├──\ TIVIDY-\/Demo.pptx}
+\DoxyCodeLine{│\ \ \ ├──\ umlImages/}
+\DoxyCodeLine{│\ \ \ └──\ visualParadigm/}
+\DoxyCodeLine{│}
+\DoxyCodeLine{├──\ gui/}
+\DoxyCodeLine{│\ \ \ ├──\ Makefile}
+\DoxyCodeLine{│\ \ \ ├──\ src/}
+\DoxyCodeLine{│\ \ \ └──\ ...}
+\DoxyCodeLine{│}
+\DoxyCodeLine{├──\ include/}
+\DoxyCodeLine{├──\ src/}
+\DoxyCodeLine{│}
+\DoxyCodeLine{├──\ Dockerfile}
+\DoxyCodeLine{├──\ Makefile}
+\DoxyCodeLine{└──\ README.md}
+
+\end{DoxyCode}
+\hypertarget{md_README_autotoc_md31}{}\doxysection{\texorpdfstring{Documentation}{Documentation}}\label{md_README_autotoc_md31}
+Additional project documentation is available in the {\ttfamily docs/} directory\+:
+
+
+\begin{DoxyItemize}
+\item {\bfseries{COS214 -\/ Project.\+pdf}} – Project documentation.
+\item {\bfseries{Scenario+\+System.md}} – Industry scenarios and system description.
+\item {\bfseries{TIVIDY-\/\+Demo.\+pptx}} – Project demonstration presentation.
+\item {\bfseries{uml\+Images/}} – UML diagrams.
+\item {\bfseries{visual\+Paradigm/}} – Editable Visual Paradigm diagram files.
+\end{DoxyItemize}\hypertarget{md_README_autotoc_md32}{}\doxysection{\texorpdfstring{Project Goal}{Project Goal}}\label{md_README_autotoc_md32}
+TIVIDY demonstrates how design patterns can be combined to create a flexible and reusable workflow management engine.
+
+By separating the workflow engine from industry-\/specific scenarios, the system can support different business processes while maintaining the same core functionality. 

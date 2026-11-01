@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['workflow_20management_20system_0',['TIVIDY – Workflow Management System',['../md_README.html',1,'']]]
+  ['gui_0',['TIVIDY GUI',['../md_gui_2README.html',1,'']]]
 ];

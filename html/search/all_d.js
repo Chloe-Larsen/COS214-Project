@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['patterns_0',['Design Patterns',['../md_README.html#autotoc_md6',1,'']]],
-  ['production_20order_20management_1',['2. Manufacturing – Production Order Management',['../md_README.html#autotoc_md4',1,'']]],
-  ['project_20goal_2',['Project Goal',['../md_README.html#autotoc_md32',1,'']]],
-  ['project_20scenarios_3',['Project Scenarios',['../md_README.html#autotoc_md2',1,'']]],
-  ['project_20structure_4',['Project Structure',['../md_README.html#autotoc_md30',1,'']]]
+  ['handleescalation_0',['handleEscalation',['../classWorker.html#a95708a8782ce9dccd389a4fc16a1788e',1,'Worker']]],
+  ['hasstatusfilter_1',['hasStatusFilter',['../classFilterCriteria.html#ae04ec905d79188bbc042d6b66668fb67',1,'FilterCriteria']]],
+  ['headerdata_2',['headerdata',['../classtividy_1_1ActivityModel.html#a651aa875c48e785b46b33880b5178810',1,'tividy::ActivityModel::headerData()'],['../classtividy_1_1WorkflowTreeModel.html#a8331baaec72b58d361254839a4e7c71f',1,'tividy::WorkflowTreeModel::headerData()']]],
+  ['height_3',['height',['../structtividy_1_1GraphLayoutResult.html#a53ff3503ecd21a586eeac0d72668b883',1,'tividy::GraphLayoutResult']]]
 ];

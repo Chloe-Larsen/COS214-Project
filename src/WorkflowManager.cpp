@@ -47,7 +47,9 @@ void WorkflowManager::assignWork(Item *item)
 
     // use strategy to get the worker to assign to the work
     Worker *worker = assignmentStrategy->assign(item, this);
-    executeCommand(new Assign(item, worker));
+
+    if (worker != nullptr)
+        executeCommand(new Assign(item, worker));
 }
 
 Iterator *WorkflowManager::createDependencyIterator()

@@ -7,7 +7,7 @@
 #include "state/Available.h"
 #include "observer/Dependency.h"
 
-TEST_CASE("Basic item operations", "[item]")
+TEST_CASE("Item methods", "[item]")
 {
     SECTION("Item progression works correctly")
     {

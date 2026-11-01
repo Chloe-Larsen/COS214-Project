@@ -10,8 +10,8 @@
 #include "../include/iterator/PriorityIterator.h"
 #include "../include/iterator/Filtered.h"
 
-WorkflowManager::WorkflowManager()
-    : root(nullptr), createdAt(std::time(nullptr)),
+WorkflowManager::WorkflowManager(WorkComponent *root)
+    : root(root), createdAt(std::time(nullptr)),
       assignmentStrategy(nullptr) {}
 
 WorkflowManager::~WorkflowManager()
@@ -103,6 +103,7 @@ std::vector<Worker *> WorkflowManager::getWorkers()
 void WorkflowManager::addWorker(Worker *worker)
 {
     workers.push_back(worker);
+    worker->setWorkflowRoot(root);
 }
 
 ItemBuilder *WorkflowManager::createItemBuilder()
@@ -113,4 +114,11 @@ ItemBuilder *WorkflowManager::createItemBuilder()
 ItemGroupBuilder *WorkflowManager::createItemGroupBuilder()
 {
     return new ItemGroupBuilder();
+}
+
+void WorkflowManager::setAssignmentStrategy(AssignmentStrategy *strategy)
+{
+    if (assignmentStrategy != nullptr)
+        delete assignmentStrategy;
+    assignmentStrategy = strategy;
 }

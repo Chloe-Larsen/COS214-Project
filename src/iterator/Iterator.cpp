@@ -11,6 +11,4 @@ Iterator::Iterator(WorkComponent *root) : root(root)
 /** @brief Virtual destructor. Deletes the root if non-null */
 Iterator::~Iterator()
 {
-	if (root != nullptr)
-		delete root;
 }

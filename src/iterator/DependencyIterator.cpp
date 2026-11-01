@@ -15,8 +15,6 @@ DependencyIterator::DependencyIterator(WorkComponent *root) : Iterator(root), cu
 /** @brief Destructor */
 DependencyIterator::~DependencyIterator()
 {
-	if (current != nullptr)
-		delete current;
 }
 
 /**

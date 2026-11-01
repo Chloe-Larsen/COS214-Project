@@ -212,11 +212,9 @@ Worker *Item::getWorker()
 
 void Item::assignWorker(Worker *person)
 {
+    assignedTo = person;
     if (person != nullptr)
-    {
-        assignedTo = person;
         notify(new Event("ASSIGNED", this));
-    }
 }
 
 State *Item::getState()

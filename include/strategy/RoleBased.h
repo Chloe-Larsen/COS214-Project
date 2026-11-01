@@ -9,7 +9,7 @@ private:
 	std::string role;
 
 public:
-	RoleBased();
+	RoleBased(const std::string &role);
 	Worker *assign(Item *item, WorkflowManager *manager) override;
 };
 

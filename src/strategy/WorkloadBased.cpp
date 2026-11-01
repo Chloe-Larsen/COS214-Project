@@ -1,18 +1,38 @@
 #include "../../include/strategy/WorkloadBased.h"
 #include "../../include/composite/Item.h"
 #include "../../include/WorkflowManager.h"
-#include <stdexcept>
 
 WorkloadBased::WorkloadBased() {}
 
 Worker *WorkloadBased::assign(Item *item, WorkflowManager *manager)
 {
-	if (!item)
-		throw std::runtime_error("WorkloadBased: null item");
+if (manager == nullptr || item == nullptr)
+    {
+        return nullptr;
+    }
 
-	Worker *w = item->getWorker();
-	if (!w)
-		throw std::runtime_error("WorkloadBased: item has no worker to evaluate");
+    // Find the least-loaded worker across the whole pool.
+    Worker *best = nullptr;
+    int bestLoad = 0;
 
-	return w;
+    for (Worker *worker : manager->getWorkers())
+    {
+        if (worker == nullptr)
+        {
+            continue;
+        }
+
+        const int load = worker->getWorkload();
+        if (best == nullptr || load < bestLoad)
+        {
+            best = worker;
+            bestLoad = load;
+        }
+    }
+
+    if (best != nullptr)
+    {
+        item->assignWorker(best);
+    }
+    return best;
 }

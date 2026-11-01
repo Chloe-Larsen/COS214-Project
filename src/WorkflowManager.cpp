@@ -9,14 +9,12 @@
 
 WorkflowManager::WorkflowManager()
     : root(nullptr), createdAt(std::time(nullptr)),
-      routing(nullptr), assignmentStrategy(nullptr) {}
+      assignmentStrategy(nullptr) {}
 
 WorkflowManager::~WorkflowManager()
 {
     if (root != nullptr)
         delete root;
-    if (routing != nullptr)
-        delete routing;
     if (assignmentStrategy != nullptr)
         delete assignmentStrategy;
     for (WorkflowCommand *workflowCommand : commandHistory)

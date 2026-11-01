@@ -8,7 +8,6 @@
 #include "command/WorkflowCommand.h"
 #include "iterator/FilterCriteria.h"
 #include "composite/WorkComponent.h"
-#include "strategy/Routing.h"
 #include "strategy/AssignmentStrategy.h"
 #include "factory/ItemBuilder.h"
 #include "factory/ItemGroupBuilder.h"
@@ -18,7 +17,6 @@ class WorkflowManager
 private:
 	WorkComponent *root;
 	std::time_t createdAt;
-	Routing *routing;
 	AssignmentStrategy *assignmentStrategy;
 	std::vector<WorkflowCommand *> commandHistory;
 	std::vector<Worker *> workers;

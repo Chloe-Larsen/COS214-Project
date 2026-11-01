@@ -1,0 +1,26 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Build output (rebuilt inside the image)
+build
+gui/build
+gui/build*
+program
+*.o
+*.d
+flat_src
+submission.zip
+
+# Documentation and design files are not needed to build or run
+docs
+*.pdf
+*.md
+Dockerfile
+.dockerignore
+
+# Editor / OS noise
+.vscode
+.idea
+.DS_Store

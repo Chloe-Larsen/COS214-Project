@@ -176,19 +176,31 @@ After a successful build, launch the GUI:
 
 The Dockerfile includes a separate build target for the graphical interface.
 
-Build the GUI image:
+Build the GUI image using the Makefile:
+
+```bash
+make docker-gui
+```
+
+Alternatively:
 
 ```bash
 docker build --target gui -t tividy-gui .
 ```
 
-Run the GUI container:
+Run the GUI container on Windows using WSLg:
 
 ```bash
-docker run --rm tividy-gui
+docker run --rm \
+  -e DISPLAY=:0 \
+  -e WAYLAND_DISPLAY=wayland-0 \
+  -e XDG_RUNTIME_DIR=/mnt/wslg/runtime-dir \
+  -v /mnt/wslg:/mnt/wslg \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  tividy-gui
 ```
 
-**Note:** Displaying the GUI from Docker requires a graphical display environment to be configured. Starting the container alone does not automatically make the GUI window appear on the host machine.
+**Note:** The GUI Docker container requires a graphical display environment. The command above is configured for Windows with WSLg. Other operating systems may require different display configuration.
 
 ## Testing
 
@@ -274,7 +286,7 @@ make docker-run
 Alternatively:
 
 ```bash
-docker run --rm tividy
+docker run --rm -it tividy
 ```
 
 ### GUI Application
@@ -291,7 +303,19 @@ Alternatively:
 docker build --target gui -t tividy-gui .
 ```
 
-The GUI container requires a graphical display environment to show its window.
+Run the GUI container on Windows using WSLg:
+
+```bash
+docker run --rm \
+  -e DISPLAY=:0 \
+  -e WAYLAND_DISPLAY=wayland-0 \
+  -e XDG_RUNTIME_DIR=/mnt/wslg/runtime-dir \
+  -v /mnt/wslg:/mnt/wslg \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  tividy-gui
+```
+
+The GUI requires a graphical display environment. The command above is intended for Windows systems using WSLg.
 
 ## Project Structure
 
@@ -299,12 +323,6 @@ The GUI container requires a graphical display environment to show its window.
 COS214-Project/
 │
 ├── docs/
-│   ├── COS214 - Project.pdf
-│   ├── Scenario+System.md
-│   ├── TIVIDY-Demo.pptx
-│   ├── umlImages/
-│   └── visualParadigm/
-│
 ├── gui/
 │   ├── Makefile
 │   ├── src/
@@ -313,6 +331,7 @@ COS214-Project/
 ├── include/
 ├── src/
 │
+├── .dockerignore
 ├── Dockerfile
 ├── Makefile
 └── README.md

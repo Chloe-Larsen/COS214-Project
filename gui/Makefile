@@ -31,6 +31,7 @@ CORE_SOURCES := $(addprefix $(CORE_ROOT)/src/,\
     state/Cancelled.cpp \
     observer/Observer.cpp \
     observer/EventSource.cpp \
+    observer/Event.cpp \
     iterator/Iterator.cpp \
     iterator/DependencyIterator.cpp \
     iterator/PriorityIterator.cpp \

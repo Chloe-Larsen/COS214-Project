@@ -7,7 +7,7 @@ class Observer
 {
 public:
 	Observer();
-	~Observer();
+	virtual ~Observer();
 
 	/**
 	 * @brief Update this observer so that it can appropriately handle the event.
